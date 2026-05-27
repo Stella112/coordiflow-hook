@@ -146,6 +146,12 @@ input {
   gap: 8px;
 }
 
+.network-presets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .persona-buttons button {
   min-height: 38px;
   border-color: rgba(255, 255, 255, 0.16);
@@ -154,8 +160,17 @@ input {
   font-weight: 700;
 }
 
+.network-presets button {
+  min-height: 38px;
+  border-color: rgba(89, 169, 255, 0.35);
+  background: rgba(89, 169, 255, 0.08);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .persona-buttons button.selected,
-.persona-card.selected {
+.persona-card.selected,
+.network-presets button.selected {
   border-color: rgba(72, 224, 164, 0.8);
   box-shadow: 0 0 0 2px rgba(72, 224, 164, 0.12);
 }

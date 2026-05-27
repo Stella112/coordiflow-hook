@@ -1,0 +1,45 @@
+{
+  "chainId": 196,
+  "network": "xlayer-mainnet",
+  "rpc": "https://rpc.xlayer.tech",
+  "deployer": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+  "v4Stack": {
+    "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+    "poolManager": "0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32",
+    "positionManager": "0xcF1eAFC6928dC385A342E7c6491D371d2871458B",
+    "universalRouter": "0xDa00ae15D3a71466517129255255dB7c0C0956d3"
+  },
+  "coordiFlow": {
+    "hook": "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
+    "launchToken": "0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081",
+    "quoteToken": "0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5",
+    "rewardsVault": "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
+    "poolId": "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
+    "launchTokenIsCurrency0": true,
+    "seedParticipant": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19"
+  },
+  "transactions": {
+    "hookDeploy": "0x13c511c91a6e4a900407d70ecd968452df4caba10b8192f9ab36b2b842bf9ff4",
+    "launchTokenDeploy": "0xcde5a8f295303b0cc777b8837ac372a32b726cffdb90f6638c87ed83719350b2",
+    "quoteTokenDeploy": "0x4d13fa0d9fbb31292cf5eb198903e8f609cbc4aeadc77f3eea5ff16f682ed8d5",
+    "rewardsVaultDeploy": "0xdac8df3e48d7c8e9e14dfcfcfddd943169e2e10a06b3dfcffeff3566b54dd57a",
+    "vaultSetHook": "0xdb98e54f0dc88d21220772910a5720ffb08c42e40925244545b00ee9f2e40ae3",
+    "hookSetRewardsVault": "0x7e2809ce389a3e233a58b1eb9cd1134130121c7beeed1dba8a9359a84cb8b0a4",
+    "poolConfigure": "0xfbbecdd34c189d53e2a396cdfde90f15811ab466bb9ee9cc4ddba872486f8db2",
+    "positionManagerMulticall": "0x95604d427f5ef2dec26fe79adfd92f1e61b7de8f85ae8b7b3662f6a555624e1d",
+    "rewardFunding": "0x53efd2424f36576b47a6a029ab28afa0814398cbbbc429fe33c94ac2eb53783a"
+  },
+  "verification": {
+    "hookBytecodePresent": true,
+    "poolState": {
+      "uniqueParticipants": 1,
+      "positiveParticipants": 1,
+      "restrictedParticipants": 0,
+      "phase": 0,
+      "coordinationScore": 100,
+      "liquidityReleaseBps": 0,
+      "lastMarketSignalBps": 0
+    },
+    "rewardsVaultPoolBalanceWei": "1000000000000000"
+  }
+}

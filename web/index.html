@@ -13,7 +13,7 @@
           <p class="eyebrow">CoordiFlow</p>
           <h1>Not all coordination is equal.</h1>
           <p class="subhead">
-            Live X Layer testnet launch market. Personas, score, rewards, and phase are read directly from the hook.
+            Live X Layer launch market. Personas, score, rewards, and phase are read directly from deployed contracts.
           </p>
         </div>
         <button id="connectWallet" type="button">Connect Wallet</button>
@@ -27,7 +27,7 @@
               id="hookAddress"
               autocomplete="off"
               spellcheck="false"
-              value="0xDee0822330A786313E46A4f6d9E2d58c33B20AC0"
+              value="0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0"
             />
           </label>
           <label>
@@ -36,7 +36,7 @@
               id="poolId"
               autocomplete="off"
               spellcheck="false"
-              value="0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2"
+              value="0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577"
             />
           </label>
           <label>
@@ -45,7 +45,7 @@
               id="vaultAddress"
               autocomplete="off"
               spellcheck="false"
-              value="0x90407637D45588F0663b722438C6452c637c51d2"
+              value="0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D"
             />
           </label>
           <label>
@@ -63,9 +63,13 @@
             <button type="button" data-wallet="0x7d481820489ae41C705564FEB7C75130AD06Bcf6">Stabilizer</button>
             <button class="danger" type="button" data-wallet="0x0Db499F22fEd9c1c557785620C23594101c5f0A0">Restricted</button>
           </div>
+          <div class="network-presets" aria-label="Live deployment presets">
+            <button class="selected" type="button" data-preset="mainnet">X Layer Mainnet</button>
+            <button type="button" data-preset="testnet">X Layer Testnet</button>
+          </div>
           <label>
             RPC endpoint
-            <input id="rpcUrl" autocomplete="off" spellcheck="false" value="https://testrpc.xlayer.tech/terigon" />
+            <input id="rpcUrl" autocomplete="off" spellcheck="false" value="https://rpc.xlayer.tech" />
           </label>
           <button id="refreshState" type="button">Refresh On-Chain State</button>
           <p id="status" class="status">Waiting for deployed contract addresses.</p>
@@ -79,7 +83,7 @@
               <strong id="coordinationScore">-</strong>
               <span id="phaseLabel">Phase -</span>
             </div>
-            <div class="verification-badge">Verified on X Layer testnet</div>
+            <div id="networkBadge" class="verification-badge">Verified on X Layer mainnet</div>
           </section>
 
           <section class="panel stage-panel">

@@ -6,6 +6,24 @@ const selectors = {
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
+const deployments = {
+  mainnet: {
+    label: "X Layer mainnet",
+    hook: "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
+    poolId: "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
+    vault: "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
+    rpc: "https://rpc.xlayer.tech",
+    wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+  },
+  testnet: {
+    label: "X Layer testnet",
+    hook: "0xDee0822330A786313E46A4f6d9E2d58c33B20AC0",
+    poolId: "0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2",
+    vault: "0x90407637D45588F0663b722438C6452c637c51d2",
+    rpc: "https://testrpc.xlayer.tech/terigon",
+    wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+  },
+};
 const personaSummaries = {
   Unclassified: "No meaningful launch behavior has been recorded for this wallet yet.",
   Seeder: "This wallet added early liquidity and helped seed the market.",
@@ -40,6 +58,7 @@ const els = {
   swapCount: document.querySelector("#swapCount"),
   liquidityActions: document.querySelector("#liquidityActions"),
   rapidRoundTrips: document.querySelector("#rapidRoundTrips"),
+  networkBadge: document.querySelector("#networkBadge"),
   canvas: document.querySelector("#signalCanvas"),
 };
 
@@ -72,6 +91,28 @@ document.querySelectorAll("[data-wallet]").forEach((button) => {
     refresh();
   });
 });
+document.querySelectorAll("[data-preset]").forEach((button) => {
+  button.addEventListener("click", () => {
+    applyDeployment(button.dataset.preset);
+    refresh();
+  });
+});
+
+function applyDeployment(name) {
+  const deployment = deployments[name];
+  if (!deployment) return;
+
+  els.hookAddress.value = deployment.hook;
+  els.poolId.value = deployment.poolId;
+  els.vaultAddress.value = deployment.vault;
+  els.rpcUrl.value = deployment.rpc;
+  els.walletAddress.value = deployment.wallet;
+  els.networkBadge.textContent = `Verified on ${deployment.label}`;
+  document.querySelectorAll("[data-preset]").forEach((button) => {
+    button.classList.toggle("selected", button.dataset.preset === name);
+  });
+  highlightSelectedWallet(deployment.wallet);
+}
 
 async function refresh() {
   try {

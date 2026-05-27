@@ -150,7 +150,26 @@ forge script script/04_RunCoordiFlowScenario.s.sol:RunCoordiFlowScenarioScript \
   --broadcast
 ```
 
-Use `xlayer_mainnet` after testnet is fully validated.
+Use `xlayer_mainnet` for the official X Layer mainnet deployment.
+
+## X Layer Mainnet Deployment
+
+Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.json`.
+
+- Hook: `0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0`
+- Pool ID: `0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577`
+- Launch token: `0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081`
+- Quote token: `0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5`
+- Rewards vault: `0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D`
+- PoolManager: `0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32`
+- PositionManager: `0xcF1eAFC6928dC385A342E7c6491D371d2871458B`
+- Permit2: `0x000000000022D473030F116dDEE9F6B43aC78BA3`
+
+Mainnet verification reads:
+
+- Hook bytecode is present at the deployed hook address.
+- `poolState`: 1 unique participant, 1 positive participant, coordination score 100.
+- Rewards vault pool balance: `1000000000000000` wei.
 
 ## X Layer Testnet Deployment
 
@@ -187,4 +206,4 @@ The dashboard requires:
 - wallet address
 - X Layer RPC endpoint
 
-The checked-in dashboard is prefilled with the current X Layer testnet deployment. It does not simulate data. It reads `poolState`, `walletStats`, and reward claims directly from deployed contracts.
+The checked-in dashboard is prefilled with the current X Layer mainnet deployment and includes a testnet preset. It does not simulate data. It reads `poolState`, `walletStats`, and reward claims directly from deployed contracts.
