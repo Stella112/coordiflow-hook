@@ -105,8 +105,8 @@ contract CoordiFlowHook is BaseHook {
     error OnlyOwner();
     error SwapCapExceeded(uint256 amount, uint256 cap);
 
-    constructor(IPoolManager _poolManager) BaseHook(_poolManager) {
-        owner = msg.sender;
+    constructor(IPoolManager _poolManager, address owner_) BaseHook(_poolManager) {
+        owner = owner_;
     }
 
     modifier onlyOwner() {
@@ -255,7 +255,9 @@ contract CoordiFlowHook is BaseHook {
             _touch(poolId, wallet, stats);
             stats.liquidityActions++;
             _refreshPersona(poolId, wallet, stats);
-            _accrueCoordinationReward(poolId, wallet, stats.persona, uint256(params.liquidityDelta), _configOrDefault(poolId).rewardBps);
+            _accrueCoordinationReward(
+                poolId, wallet, stats.persona, uint256(params.liquidityDelta), _configOrDefault(poolId).rewardBps
+            );
         }
 
         return BaseHook.beforeAddLiquidity.selector;
@@ -323,7 +325,8 @@ contract CoordiFlowHook is BaseHook {
 
     function _classify(WalletStats memory stats, int16 walletSignalBps) internal view returns (Persona) {
         if (walletSignalBps <= -2_500) return Persona.Restricted;
-        if (walletSignalBps >= 2_500 && stats.swapCount > 0 && stats.cumulativeBuyVolume >= stats.cumulativeSellVolume) {
+        if (walletSignalBps >= 2_500 && stats.swapCount > 0 && stats.cumulativeBuyVolume >= stats.cumulativeSellVolume)
+        {
             return Persona.Builder;
         }
         if (stats.rapidRoundTrips >= 2) return Persona.Restricted;
@@ -403,14 +406,14 @@ contract CoordiFlowHook is BaseHook {
         }
     }
 
-    function _walletSignal(PoolId poolId, address wallet) internal view returns (IExchangeOSSignalProvider.Signal memory) {
+    function _walletSignal(PoolId poolId, address wallet)
+        internal
+        view
+        returns (IExchangeOSSignalProvider.Signal memory)
+    {
         if (address(signalProvider) == address(0)) {
             return IExchangeOSSignalProvider.Signal({
-                available: false,
-                walletSignalBps: 0,
-                marketSignalBps: 0,
-                updatedAt: 0,
-                source: bytes32(0)
+                available: false, walletSignalBps: 0, marketSignalBps: 0, updatedAt: 0, source: bytes32(0)
             });
         }
 
@@ -418,11 +421,7 @@ contract CoordiFlowHook is BaseHook {
             return signal;
         } catch {
             return IExchangeOSSignalProvider.Signal({
-                available: false,
-                walletSignalBps: 0,
-                marketSignalBps: 0,
-                updatedAt: 0,
-                source: bytes32(0)
+                available: false, walletSignalBps: 0, marketSignalBps: 0, updatedAt: 0, source: bytes32(0)
             });
         }
     }
@@ -446,7 +445,9 @@ contract CoordiFlowHook is BaseHook {
         uint256 activityAmount,
         uint16 rewardBps
     ) internal {
-        if (address(rewardsVault) == address(0) || rewardBps == 0 || !_isPositive(persona)) return;
+        if (address(rewardsVault) == address(0) || rewardBps == 0 || !_isPositive(persona)) {
+            return;
+        }
 
         uint256 rewardAmount = (activityAmount * rewardBps) / 10_000;
         rewardsVault.accrueReward(poolId, wallet, rewardAmount);

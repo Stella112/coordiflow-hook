@@ -1,7 +1,7 @@
 const selectors = {
   poolState: "0xe0b01bac",
   walletStats: "0x378a7a4c",
-  claimable: "0xf4b38c30",
+  claimable: "0x4499f5b3",
   owner: "0x8da5cb5b",
 };
 
@@ -51,7 +51,7 @@ els.connectWallet.addEventListener("click", async () => {
 
   const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
   els.walletAddress.value = accounts[0] || "";
-  setStatus("Wallet connected. Add hook and pool addresses, then refresh.");
+  setStatus("Wallet connected. Refresh to load verified state.");
 });
 
 els.refreshState.addEventListener("click", refresh);

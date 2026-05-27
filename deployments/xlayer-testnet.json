@@ -1,0 +1,19 @@
+{
+  "chainId": 1952,
+  "network": "xlayer-testnet",
+  "rpc": "https://testrpc.xlayer.tech/terigon",
+  "deployer": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+  "v4Stack": {
+    "permit2": "0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9",
+    "poolManager": "0xEAC4fcF2fB22E9887c830cD3EF78F1d28fC3BbCf",
+    "positionManager": "0x8DE4b634760F7942A20B7fA994AAc72F03ce4751",
+    "swapRouter": "0xbDfdAAbc7286D2F5D96f786D261Ac7093Cd644Ee"
+  },
+  "coordiFlow": {
+    "hook": "0xDee0822330A786313E46A4f6d9E2d58c33B20AC0",
+    "launchToken": "0x31316Ec55D0f843357F22A8533b467A69b427b26",
+    "quoteToken": "0xB779178fF3269f4404263Adb930507978887b53b",
+    "rewardsVault": "0x90407637D45588F0663b722438C6452c637c51d2",
+    "poolId": "0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2"
+  }
+}

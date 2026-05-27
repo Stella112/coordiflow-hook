@@ -35,6 +35,8 @@ The hook turns launch participation into market state. Wallets become Seeder, Bu
 - `src/CoordiFlowToken.sol` is a launch token contract for an on-chain CoordiFlow launch asset.
 - `script/00_DeployCoordiFlowHook.s.sol` mines and deploys the hook at a valid Uniswap v4 hook-permission address.
 - `script/01_DeployCoordiFlowToken.s.sol` deploys the launch token.
+- `script/02_DeployRewardsVault.s.sol` deploys and connects the rewards vault.
+- `script/03_CreateCoordiFlowPool.s.sol` initializes a real dynamic-fee v4 pool, configures the hook, mints liquidity, and can fund rewards.
 - `web/` is a no-fake-data dashboard that reads hook state from X Layer RPC.
 
 ## Local Secret Setup
@@ -66,7 +68,7 @@ TOKEN_SUPPLY=1000000000000000000000000
 For X Layer testnet, this repo can deploy its own test v4 stack. The current deterministic Permit2 address already has bytecode on X Layer testnet:
 
 ```env
-TEST_PERMIT2=0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9
+PERMIT2=0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9
 ```
 
 ## Build And Test
@@ -106,7 +108,36 @@ forge script script/00_DeployCoordiFlowHook.s.sol:DeployCoordiFlowHookScript \
   --broadcast
 ```
 
+Deploy and connect the rewards vault:
+
+```bash
+forge script script/02_DeployRewardsVault.s.sol:DeployRewardsVaultScript \
+  --rpc-url xlayer_testnet \
+  --broadcast
+```
+
+Create the real CoordiFlow pool and add liquidity:
+
+```bash
+forge script script/03_CreateCoordiFlowPool.s.sol:CreateCoordiFlowPoolScript \
+  --rpc-url xlayer_testnet \
+  --broadcast
+```
+
 Use `xlayer_mainnet` after testnet is fully validated.
+
+## X Layer Testnet Deployment
+
+Current deployed testnet addresses are recorded in `deployments/xlayer-testnet.json`.
+
+- Hook: `0xDee0822330A786313E46A4f6d9E2d58c33B20AC0`
+- Pool ID: `0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2`
+- Launch token: `0x31316Ec55D0f843357F22A8533b467A69b427b26`
+- Quote token: `0xB779178fF3269f4404263Adb930507978887b53b`
+- Rewards vault: `0x90407637D45588F0663b722438C6452c637c51d2`
+- PoolManager: `0xEAC4fcF2fB22E9887c830cD3EF78F1d28fC3BbCf`
+- PositionManager: `0x8DE4b634760F7942A20B7fA994AAc72F03ce4751`
+- Permit2: `0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9`
 
 ## Dashboard
 
@@ -123,4 +154,4 @@ The dashboard requires:
 - wallet address
 - X Layer RPC endpoint
 
-It does not simulate data. It reads `poolState` and `walletStats` directly from the deployed hook.
+The checked-in dashboard is prefilled with the current X Layer testnet deployment. It does not simulate data. It reads `poolState`, `walletStats`, and reward claims directly from deployed contracts.

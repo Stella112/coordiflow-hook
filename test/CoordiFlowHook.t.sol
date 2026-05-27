@@ -50,7 +50,7 @@ contract CoordiFlowHookTest is BaseTest {
                     | Hooks.BEFORE_REMOVE_LIQUIDITY_FLAG
             ) ^ (0xC0F10 << 136)
         );
-        bytes memory constructorArgs = abi.encode(poolManager);
+        bytes memory constructorArgs = abi.encode(poolManager, address(this));
         deployCodeTo("CoordiFlowHook.sol:CoordiFlowHook", constructorArgs, flags);
         hook = CoordiFlowHook(flags);
 

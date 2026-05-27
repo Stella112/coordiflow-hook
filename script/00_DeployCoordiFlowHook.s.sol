@@ -13,6 +13,7 @@ import {CoordiFlowHook} from "../src/CoordiFlowHook.sol";
 contract DeployCoordiFlowHookScript is Script {
     function run() public {
         uint256 privateKey = vm.envUint("PRIVATE_KEY");
+        address deployer = vm.addr(privateKey);
         IPoolManager poolManager = IPoolManager(vm.envAddress("POOL_MANAGER"));
 
         uint160 flags = uint160(
@@ -20,17 +21,18 @@ contract DeployCoordiFlowHookScript is Script {
                 | Hooks.BEFORE_REMOVE_LIQUIDITY_FLAG
         );
 
-        bytes memory constructorArgs = abi.encode(poolManager);
+        bytes memory constructorArgs = abi.encode(poolManager, deployer);
         (address expectedHookAddress, bytes32 salt) =
             HookMiner.find(CREATE2_FACTORY, flags, type(CoordiFlowHook).creationCode, constructorArgs);
 
         vm.startBroadcast(privateKey);
-        CoordiFlowHook hook = new CoordiFlowHook{salt: salt}(poolManager);
+        CoordiFlowHook hook = new CoordiFlowHook{salt: salt}(poolManager, deployer);
         vm.stopBroadcast();
 
         require(address(hook) == expectedHookAddress, "CoordiFlow hook address mismatch");
 
         console2.log("CoordiFlowHook", address(hook));
         console2.log("PoolManager", address(poolManager));
+        console2.log("Owner", deployer);
     }
 }
