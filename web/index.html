@@ -12,6 +12,9 @@
         <div>
           <p class="eyebrow">CoordiFlow</p>
           <h1>Not all coordination is equal.</h1>
+          <p class="subhead">
+            Live X Layer testnet launch market. Personas, score, rewards, and phase are read directly from the hook.
+          </p>
         </div>
         <button id="connectWallet" type="button">Connect Wallet</button>
       </section>
@@ -58,7 +61,7 @@
             <button type="button" data-wallet="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19">Seeder</button>
             <button type="button" data-wallet="0xCD5aB02bF3B5fBEB12d118B25e53692dc4321fd2">Builder</button>
             <button type="button" data-wallet="0x7d481820489ae41C705564FEB7C75130AD06Bcf6">Stabilizer</button>
-            <button type="button" data-wallet="0x0Db499F22fEd9c1c557785620C23594101c5f0A0">Restricted</button>
+            <button class="danger" type="button" data-wallet="0x0Db499F22fEd9c1c557785620C23594101c5f0A0">Restricted</button>
           </div>
           <label>
             RPC endpoint
@@ -75,6 +78,21 @@
               <p>Coordination Score</p>
               <strong id="coordinationScore">-</strong>
               <span id="phaseLabel">Phase -</span>
+            </div>
+            <div class="verification-badge">Verified on X Layer testnet</div>
+          </section>
+
+          <section class="panel stage-panel">
+            <div class="stage-copy">
+              <p class="eyebrow">Market Maturity</p>
+              <h2 id="stageTitle">Awaiting State</h2>
+            </div>
+            <div class="stage-track" aria-label="Market phase progression">
+              <div id="stageFill" class="stage-fill"></div>
+              <span data-stage="0">Phase 0</span>
+              <span data-stage="1">Phase 1</span>
+              <span data-stage="2">Phase 2</span>
+              <span data-stage="3">Phase 3</span>
             </div>
           </section>
 
@@ -109,6 +127,7 @@
             <div>
               <p class="eyebrow">Live Wallet Persona</p>
               <h2 id="personaName">Unloaded</h2>
+              <p id="personaSummary" class="persona-summary">Select a participant to read its hook-recorded behavior.</p>
             </div>
             <div class="persona-stats">
               <span>Buys <strong id="buyVolume">-</strong></span>
@@ -117,6 +136,29 @@
               <span>LP actions <strong id="liquidityActions">-</strong></span>
               <span>Rapid round trips <strong id="rapidRoundTrips">-</strong></span>
             </div>
+          </section>
+
+          <section class="persona-roster">
+            <article class="persona-card" data-wallet="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19">
+              <span>Seeder</span>
+              <strong>Early liquidity</strong>
+              <code>0xE665...8e19</code>
+            </article>
+            <article class="persona-card" data-wallet="0xCD5aB02bF3B5fBEB12d118B25e53692dc4321fd2">
+              <span>Builder</span>
+              <strong>Repeated constructive buys</strong>
+              <code>0xCD5a...1fd2</code>
+            </article>
+            <article class="persona-card" data-wallet="0x7d481820489ae41C705564FEB7C75130AD06Bcf6">
+              <span>Stabilizer</span>
+              <strong>Healthy market interaction</strong>
+              <code>0x7d48...Bcf6</code>
+            </article>
+            <article class="persona-card restricted" data-wallet="0x0Db499F22fEd9c1c557785620C23594101c5f0A0">
+              <span>Restricted</span>
+              <strong>Rapid round-trip flow</strong>
+              <code>0x0Db4...f0A0</code>
+            </article>
           </section>
         </section>
       </section>

@@ -6,6 +6,13 @@ const selectors = {
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
+const personaSummaries = {
+  Unclassified: "No meaningful launch behavior has been recorded for this wallet yet.",
+  Seeder: "This wallet added early liquidity and helped seed the market.",
+  Builder: "This wallet shows repeated constructive participation.",
+  Stabilizer: "This wallet has healthy market interaction without toxic round trips.",
+  Restricted: "This wallet triggered toxic-flow rules such as rapid round trips or sell-heavy behavior.",
+};
 
 const els = {
   hookAddress: document.querySelector("#hookAddress"),
@@ -18,6 +25,8 @@ const els = {
   refreshState: document.querySelector("#refreshState"),
   coordinationScore: document.querySelector("#coordinationScore"),
   phaseLabel: document.querySelector("#phaseLabel"),
+  stageTitle: document.querySelector("#stageTitle"),
+  stageFill: document.querySelector("#stageFill"),
   uniqueParticipants: document.querySelector("#uniqueParticipants"),
   positiveParticipants: document.querySelector("#positiveParticipants"),
   restrictedParticipants: document.querySelector("#restrictedParticipants"),
@@ -25,6 +34,7 @@ const els = {
   marketSignal: document.querySelector("#marketSignal"),
   claimableRewards: document.querySelector("#claimableRewards"),
   personaName: document.querySelector("#personaName"),
+  personaSummary: document.querySelector("#personaSummary"),
   buyVolume: document.querySelector("#buyVolume"),
   sellVolume: document.querySelector("#sellVolume"),
   swapCount: document.querySelector("#swapCount"),
@@ -58,6 +68,7 @@ els.refreshState.addEventListener("click", refresh);
 document.querySelectorAll("[data-wallet]").forEach((button) => {
   button.addEventListener("click", () => {
     els.walletAddress.value = button.dataset.wallet;
+    highlightSelectedWallet(button.dataset.wallet);
     refresh();
   });
 });
@@ -120,6 +131,7 @@ function renderPoolState(words) {
   els.restrictedParticipants.textContent = latestState.restricted.toString();
   els.liquidityRelease.textContent = `${Number(latestState.releaseBps) / 100}%`;
   els.marketSignal.textContent = `${latestState.marketSignal > 0 ? "+" : ""}${latestState.marketSignal.toString()} bps`;
+  renderStage();
 }
 
 async function renderRewards(poolId, wallet) {
@@ -141,8 +153,10 @@ function renderWalletStats(words) {
   const liquidityActions = words[8];
   const rapidRoundTrips = words[9];
   const persona = Number(words[10]);
+  const personaName = personas[persona] || "Unknown";
 
-  els.personaName.textContent = personas[persona] || "Unknown";
+  els.personaName.textContent = personaName;
+  els.personaSummary.textContent = personaSummaries[personaName] || "Persona unavailable.";
   els.buyVolume.textContent = formatTokenUnits(buyVolume);
   els.sellVolume.textContent = formatTokenUnits(sellVolume);
   els.swapCount.textContent = swapCount.toString();
@@ -161,23 +175,46 @@ function drawSignal() {
   const restricted = Number(latestState.restricted);
 
   ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#0b1018";
+  const gradient = ctx.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "#0b1018");
+  gradient.addColorStop(0.55, "#121b24");
+  gradient.addColorStop(1, "#081016");
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 
-  for (let i = 0; i < 80; i++) {
-    const x = (i / 79) * width;
-    const y = height / 2 + Math.sin(i * 0.42 + positive) * 64 * quality;
+  ctx.strokeStyle = "rgba(255,255,255,0.055)";
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= width; x += 60) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, height);
+    ctx.stroke();
+  }
+  for (let y = 0; y <= height; y += 46) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
+
+  for (let i = 0; i < 96; i++) {
+    const x = (i / 95) * width;
+    const y = height / 2 + Math.sin(i * 0.42 + positive) * 64 * quality + Math.cos(i * 0.18) * 22;
     const radius = 2 + ((i + positive) % 7) * quality;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = i % 5 === 0 ? "#59a9ff" : "#48e0a4";
+    ctx.fillStyle = i % 5 === 0 ? "#59a9ff" : i % 7 === 0 ? "#f5bf5b" : "#48e0a4";
     ctx.globalAlpha = 0.24 + quality * 0.64;
     ctx.fill();
   }
 
   ctx.globalAlpha = 1;
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "#48e0a4";
+  ctx.lineWidth = 4;
+  const lineGradient = ctx.createLinearGradient(0, 0, width, 0);
+  lineGradient.addColorStop(0, "#59a9ff");
+  lineGradient.addColorStop(0.5, "#48e0a4");
+  lineGradient.addColorStop(1, "#f5bf5b");
+  ctx.strokeStyle = lineGradient;
   ctx.beginPath();
   for (let x = 0; x <= width; x += 10) {
     const y = height / 2 + Math.sin(x / 54 + positive) * 68 * quality;
@@ -185,6 +222,25 @@ function drawSignal() {
     else ctx.lineTo(x, y);
   }
   ctx.stroke();
+
+  const ringX = width - 132;
+  const ringY = height - 116;
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = "rgba(255,255,255,0.1)";
+  ctx.beginPath();
+  ctx.arc(ringX, ringY, 52, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = "#48e0a4";
+  ctx.beginPath();
+  ctx.arc(ringX, ringY, 52, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * quality);
+  ctx.stroke();
+  ctx.fillStyle = "#eef4f8";
+  ctx.font = "700 22px system-ui";
+  ctx.textAlign = "center";
+  ctx.fillText(`${Math.round(quality * 100)}%`, ringX, ringY + 8);
+  ctx.font = "600 11px system-ui";
+  ctx.fillStyle = "#8fa0ad";
+  ctx.fillText("QUALITY", ringX, ringY + 28);
 
   if (restricted > 0) {
     ctx.strokeStyle = "#ff6b6b";
@@ -199,6 +255,27 @@ function drawSignal() {
       ctx.stroke();
     }
   }
+}
+
+function renderStage() {
+  const phase = Number(latestState.phase);
+  const titles = [
+    "Observation",
+    "Early Coordination",
+    "Expansion",
+    "Mature Launch",
+  ];
+  els.stageTitle.textContent = titles[phase] || "Unknown Phase";
+  els.stageFill.style.width = `${Math.min(100, (phase / 3) * 100)}%`;
+  document.querySelectorAll("[data-stage]").forEach((node) => {
+    node.classList.toggle("active", Number(node.dataset.stage) <= phase);
+  });
+}
+
+function highlightSelectedWallet(wallet) {
+  document.querySelectorAll("[data-wallet]").forEach((node) => {
+    node.classList.toggle("selected", node.dataset.wallet?.toLowerCase() === wallet.toLowerCase());
+  });
 }
 
 function decodeWords(hex) {
@@ -243,4 +320,6 @@ function setStatus(message) {
   els.status.textContent = message;
 }
 
+highlightSelectedWallet(els.walletAddress.value);
 drawSignal();
+refresh();

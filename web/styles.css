@@ -20,8 +20,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(72, 224, 164, 0.12), transparent 34rem),
-    linear-gradient(135deg, #080a0f 0%, #10151d 52%, #0b1118 100%);
+    radial-gradient(circle at 8% 4%, rgba(72, 224, 164, 0.16), transparent 30rem),
+    radial-gradient(circle at 84% 12%, rgba(89, 169, 255, 0.12), transparent 28rem),
+    linear-gradient(135deg, #080a0f 0%, #10151d 48%, #0b1118 100%);
   color: var(--text);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -77,6 +78,14 @@ h2 {
 h1 {
   font-size: clamp(30px, 6vw, 58px);
   line-height: 0.98;
+}
+
+.subhead {
+  max-width: 760px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 h2 {
@@ -145,6 +154,18 @@ input {
   font-weight: 700;
 }
 
+.persona-buttons button.selected,
+.persona-card.selected {
+  border-color: rgba(72, 224, 164, 0.8);
+  box-shadow: 0 0 0 2px rgba(72, 224, 164, 0.12);
+}
+
+.persona-buttons button.danger.selected,
+.persona-card.restricted.selected {
+  border-color: rgba(255, 107, 107, 0.85);
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.13);
+}
+
 .main-grid {
   display: grid;
   gap: 18px;
@@ -181,6 +202,91 @@ canvas {
   line-height: 1;
 }
 
+.verification-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: 1px solid rgba(72, 224, 164, 0.42);
+  border-radius: 999px;
+  background: rgba(10, 18, 24, 0.72);
+  color: var(--green);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stage-panel {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+}
+
+.stage-copy h2 {
+  font-size: 24px;
+}
+
+.stage-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  min-height: 74px;
+  align-items: end;
+}
+
+.stage-track::before,
+.stage-fill {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 18px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.stage-track::before {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.stage-fill {
+  width: 0;
+  right: auto;
+  background: linear-gradient(90deg, var(--blue), var(--green), var(--amber));
+  transition: width 260ms ease;
+}
+
+.stage-track span {
+  position: relative;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stage-track span::before {
+  content: "";
+  position: absolute;
+  top: -31px;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: #0d121a;
+}
+
+.stage-track span.active {
+  color: var(--text);
+}
+
+.stage-track span.active::before {
+  border-color: var(--green);
+  background: var(--green);
+}
+
 .metrics {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -212,6 +318,13 @@ canvas {
   padding: 20px;
 }
 
+.persona-summary {
+  max-width: 360px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .persona-stats {
   display: grid;
   grid-template-columns: repeat(5, minmax(90px, 1fr));
@@ -234,6 +347,45 @@ canvas {
   font-size: 18px;
 }
 
+.persona-roster {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.persona-card {
+  min-height: 140px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(23, 31, 42, 0.94), rgba(12, 18, 25, 0.94));
+  cursor: pointer;
+  padding: 16px;
+}
+
+.persona-card span {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.persona-card strong {
+  display: block;
+  min-height: 44px;
+  margin: 12px 0 16px;
+  line-height: 1.25;
+}
+
+.persona-card code {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+}
+
+.persona-card.restricted span {
+  color: var(--red);
+}
+
 @media (max-width: 920px) {
   .topbar,
   .workspace,
@@ -250,8 +402,13 @@ canvas {
   }
 
   .metrics,
-  .persona-stats {
+  .persona-stats,
+  .persona-roster {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stage-panel {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -262,7 +419,8 @@ canvas {
   }
 
   .metrics,
-  .persona-stats {
+  .persona-stats,
+  .persona-roster {
     grid-template-columns: 1fr;
   }
 }
