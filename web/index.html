@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoordiFlow</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">CoordiFlow</p>
+          <h1>Not all coordination is equal.</h1>
+        </div>
+        <button id="connectWallet" type="button">Connect Wallet</button>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel controls">
+          <label>
+            Hook contract
+            <input id="hookAddress" autocomplete="off" spellcheck="false" placeholder="0x..." />
+          </label>
+          <label>
+            Pool ID
+            <input id="poolId" autocomplete="off" spellcheck="false" placeholder="0x... bytes32" />
+          </label>
+          <label>
+            Wallet
+            <input id="walletAddress" autocomplete="off" spellcheck="false" placeholder="0x..." />
+          </label>
+          <label>
+            RPC endpoint
+            <input id="rpcUrl" autocomplete="off" spellcheck="false" value="https://testrpc.xlayer.tech/terigon" />
+          </label>
+          <button id="refreshState" type="button">Refresh On-Chain State</button>
+          <p id="status" class="status">Waiting for deployed contract addresses.</p>
+        </aside>
+
+        <section class="main-grid">
+          <section class="panel signal">
+            <canvas id="signalCanvas" width="900" height="460" aria-label="Coordination signal visualization"></canvas>
+            <div class="signal-overlay">
+              <p>Coordination Score</p>
+              <strong id="coordinationScore">-</strong>
+              <span id="phaseLabel">Phase -</span>
+            </div>
+          </section>
+
+          <section class="metrics">
+            <article class="metric">
+              <span>Unique participants</span>
+              <strong id="uniqueParticipants">-</strong>
+            </article>
+            <article class="metric">
+              <span>Positive personas</span>
+              <strong id="positiveParticipants">-</strong>
+            </article>
+            <article class="metric">
+              <span>Restricted wallets</span>
+              <strong id="restrictedParticipants">-</strong>
+            </article>
+            <article class="metric">
+              <span>Liquidity release</span>
+              <strong id="liquidityRelease">-</strong>
+            </article>
+          </section>
+
+          <section class="panel persona-panel">
+            <div>
+              <p class="eyebrow">Live Wallet Persona</p>
+              <h2 id="personaName">Unloaded</h2>
+            </div>
+            <div class="persona-stats">
+              <span>Buys <strong id="buyVolume">-</strong></span>
+              <span>Sells <strong id="sellVolume">-</strong></span>
+              <span>Swaps <strong id="swapCount">-</strong></span>
+              <span>LP actions <strong id="liquidityActions">-</strong></span>
+              <span>Rapid round trips <strong id="rapidRoundTrips">-</strong></span>
+            </div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
