@@ -161,6 +161,8 @@ Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.j
 - Launch token: `0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081`
 - Quote token: `0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5`
 - Rewards vault: `0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D`
+- Rehypothecation vault: `0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb`
+- Strategy reserve: `0xDc22FfCDfc4d14D35bF64E0c41FB608Ad2912808`
 - Builder agent: `0x0F80054095F3A4cb2A2d14b7326303102B56D137`
 - Stabilizer agent: `0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3`
 - Restricted agent: `0x64dD322ac2eADb4864c014E5206683a73B8055cd`
@@ -174,6 +176,7 @@ Mainnet verification reads:
 - `poolState`: 4 unique participants, 4 positive participants, 1 restricted participant, coordination score 400.
 - Mainnet personas: Builder `2`, Stabilizer `3`, Restricted `4`.
 - Rewards vault pool balance after real reward accrual: `525076889504992` wei.
+- Rehypothecation proof: `10 CQUOTE` deposited by a positive persona, `3 CQUOTE` currently deployed in the strategy reserve, and `0.0001 OKB` claimable yield accrued on-chain.
 
 ## X Layer Testnet Deployment
 

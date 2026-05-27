@@ -23,6 +23,17 @@
       "restricted": "0x64dD322ac2eADb4864c014E5206683a73B8055cd"
     }
   },
+  "rehypothecation": {
+    "vault": "0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb",
+    "strategyReserve": "0xDc22FfCDfc4d14D35bF64E0c41FB608Ad2912808",
+    "underlying": "0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5",
+    "depositor": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+    "depositAmount": "10000000000000000000",
+    "availableAssets": "7000000000000000000",
+    "deployedAssets": "3000000000000000000",
+    "yieldPool": "100000000000000",
+    "claimableYield": "100000000000000"
+  },
   "transactions": {
     "hookDeploy": "0x13c511c91a6e4a900407d70ecd968452df4caba10b8192f9ab36b2b842bf9ff4",
     "launchTokenDeploy": "0xcde5a8f295303b0cc777b8837ac372a32b726cffdb90f6638c87ed83719350b2",
@@ -44,6 +55,19 @@
       "restrictedBuy": "0x5179036ecf54c1b2fb424c2ff56407823da88b84a532b71af67024f0d0e94a4f",
       "restrictedSell1": "0x864b869a1b21d4349ccb16525b16a15a94ddc681e1553e10f7a2b0b835796413",
       "restrictedSell2": "0x61cf0be73f73b352909f086b42e10e81187e4be7591fb6049dd93c79659286e4"
+    },
+    "rehypothecationDeploy": {
+      "strategyReserveDeploy": "0xd554379c044be1456e67f868744896f1f0b85eb2ccfed8aa83d9e9f90baa6985",
+      "vaultDeploy": "0xddc9c4d7f47c05af36f4bf0aea52d4ce4756d3847f35d4cb9bd7260f5b802d51",
+      "reserveSetVault": "0x8d70fac569f1fab7e7c00c6247c52b9a0bc92383a6164ed73a21645a49ce64ed"
+    },
+    "rehypothecationProof": {
+      "approve": "0xd00eb424c4cfb6129cac624946726068a3836a98ef5a0a7aa7051d44d56014f3",
+      "deposit": "0x5556329b0655518e427c0438e86d683f3eee7a0a8534e690d55e5ddd155ced75",
+      "deployToStrategy": "0x174f551b7fc2faff13fddb1fbf149fa91d0c57d7dc967036fd9b39a1f12a9b97",
+      "returnFromStrategy": "0x76f85c0c0240ae58db8aa99d0896c474792fef8542aa132ce277c947daf2b3c1",
+      "fundYield": "0xbb7f7446eef47b0fccf5a6f6a75ba86063a03eea199835163f0fd61b0a946b25",
+      "accrueYield": "0xdd3c0e1f651328c364ce6bdc99aafcf93bc42dd728fd9e954cc0a5b4e266c738"
     }
   },
   "verification": {

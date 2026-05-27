@@ -3,6 +3,12 @@ const selectors = {
   walletStats: "0x378a7a4c",
   claimable: "0x4499f5b3",
   owner: "0x8da5cb5b",
+  deposits: "0xfc7e286d",
+  claimableYield: "0x3180afec",
+  totalDeposits: "0x7d882097",
+  availableAssets: "0x20124bce",
+  deployedAssets: "0x1efa1881",
+  yieldPool: "0x8f188dd4",
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
@@ -12,6 +18,7 @@ const deployments = {
     hook: "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
     poolId: "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
     vault: "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
+    rehypothecationVault: "0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb",
     rpc: "https://rpc.xlayer.tech",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
     participants: {
@@ -26,6 +33,7 @@ const deployments = {
     hook: "0xDee0822330A786313E46A4f6d9E2d58c33B20AC0",
     poolId: "0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2",
     vault: "0x90407637D45588F0663b722438C6452c637c51d2",
+    rehypothecationVault: "",
     rpc: "https://testrpc.xlayer.tech/terigon",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
     participants: {
@@ -48,6 +56,7 @@ const els = {
   hookAddress: document.querySelector("#hookAddress"),
   poolId: document.querySelector("#poolId"),
   vaultAddress: document.querySelector("#vaultAddress"),
+  rehypothecationVault: document.querySelector("#rehypothecationVault"),
   walletAddress: document.querySelector("#walletAddress"),
   rpcUrl: document.querySelector("#rpcUrl"),
   status: document.querySelector("#status"),
@@ -63,6 +72,9 @@ const els = {
   liquidityRelease: document.querySelector("#liquidityRelease"),
   marketSignal: document.querySelector("#marketSignal"),
   claimableRewards: document.querySelector("#claimableRewards"),
+  idleDeposits: document.querySelector("#idleDeposits"),
+  deployedAssets: document.querySelector("#deployedAssets"),
+  claimableYield: document.querySelector("#claimableYield"),
   personaName: document.querySelector("#personaName"),
   personaSummary: document.querySelector("#personaSummary"),
   buyVolume: document.querySelector("#buyVolume"),
@@ -117,6 +129,7 @@ function applyDeployment(name) {
   els.hookAddress.value = deployment.hook;
   els.poolId.value = deployment.poolId;
   els.vaultAddress.value = deployment.vault;
+  els.rehypothecationVault.value = deployment.rehypothecationVault;
   els.rpcUrl.value = deployment.rpc;
   els.walletAddress.value = deployment.wallet;
   els.networkBadge.textContent = `Verified on ${deployment.label}`;
@@ -143,6 +156,7 @@ async function refresh() {
     renderPoolState(decodeWords(poolState));
     renderWalletStats(decodeWords(walletStats));
     await renderRewards(poolId, wallet);
+    await renderRehypothecation(wallet);
     drawSignal();
 
     setStatus("Loaded verified on-chain state.");
@@ -200,6 +214,27 @@ async function renderRewards(poolId, wallet) {
   assertAddress(vault, "Rewards vault");
   const result = await ethCall(vault, selectors.claimable + strip0x(poolId) + padAddress(wallet));
   els.claimableRewards.textContent = `${formatTokenUnits(decodeWords(result)[0])} OKB`;
+}
+
+async function renderRehypothecation(wallet) {
+  const vault = els.rehypothecationVault.value.trim();
+  if (!vault) {
+    els.idleDeposits.textContent = "Not set";
+    els.deployedAssets.textContent = "Not set";
+    els.claimableYield.textContent = "Not set";
+    return;
+  }
+
+  assertAddress(vault, "Rehypothecation vault");
+  const [deposits, deployed, yieldAmount] = await Promise.all([
+    ethCall(vault, selectors.deposits + padAddress(wallet)),
+    ethCall(vault, selectors.deployedAssets),
+    ethCall(vault, selectors.claimableYield + padAddress(wallet)),
+  ]);
+
+  els.idleDeposits.textContent = `${formatTokenUnits(decodeWords(deposits)[0])} CQUOTE`;
+  els.deployedAssets.textContent = `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE`;
+  els.claimableYield.textContent = `${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB`;
 }
 
 function renderWalletStats(words) {
