@@ -1,10 +1,14 @@
 # CoordiFlow
 
-CoordiFlow is a behavior-aware Uniswap v4 launch protocol on X Layer.
+CoordiFlow is a behavior-aware Uniswap v4 launch protocol on X Layer, designed for Flap-style modular token launches.
 
 Tagline: **Not all coordination is equal.**
 
-The hook turns launch participation into market state. Wallets become Seeder, Builder, Stabilizer, or Restricted based on real pool behavior, and those personas influence per-swap fees, launch phase, coordination score, and liquidity-release state.
+The hook turns launch participation into market state. Wallets become Seeder, Builder, Stabilizer, or Restricted based on real pool behavior, and those personas influence per-swap fees, launch phase, coordination score, liquidity-release state, and rewards.
+
+One-liner:
+
+> CoordiFlow is a Uniswap v4 Hook on X Layer that turns Flap-style token launches into behavior-aware coordination markets, where liquidity, fees, rewards, and market stages respond to the quality of participation, not just volume.
 
 ## Product Stack
 
@@ -14,6 +18,12 @@ The hook turns launch participation into market state. Wallets become Seeder, Bu
 - coordination score
 - dynamic fees and caps
 - market stage unlocks
+
+**Flap Launch Compatibility**
+
+- designed to attach to standard Uniswap v4 pools created by modular launch flows
+- complements Flap-style token creation and trading with behavior-aware launch logic
+- supports programmable fee and liquidity-release mechanics at the hook layer
 
 **X Layer Intelligence Layer**
 
@@ -26,6 +36,14 @@ The hook turns launch participation into market state. Wallets become Seeder, Bu
 - Seeders, Builders, and Stabilizers can earn from a funded rewards vault
 - unhealthy/restricted flow does not earn
 - future modules can route hook fees, penalties, or idle-liquidity rewards into the vault
+
+## Flap Positioning
+
+CoordiFlow is positioned as a coordination layer for Flap-powered launches.
+
+Flap can handle the simple token creation and early trading flow. CoordiFlow adds the missing behavior-aware market layer at the Uniswap v4 hook level: it watches how wallets participate, classifies launch behavior, adjusts fees and caps, advances market stages, and routes rewards toward constructive participants.
+
+This repo does not claim a private Flap API integration. The MVP is intentionally built as a pure Uniswap v4 Hook so it can be attached to any compatible v4 launch pool, including Flap-style launch flows on X Layer.
 
 ## What Is Built
 
