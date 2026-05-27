@@ -1,6 +1,7 @@
 const selectors = {
   poolState: "0xe0b01bac",
   walletStats: "0x378a7a4c",
+  claimable: "0xf4b38c30",
   owner: "0x8da5cb5b",
 };
 
@@ -9,6 +10,7 @@ const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted
 const els = {
   hookAddress: document.querySelector("#hookAddress"),
   poolId: document.querySelector("#poolId"),
+  vaultAddress: document.querySelector("#vaultAddress"),
   walletAddress: document.querySelector("#walletAddress"),
   rpcUrl: document.querySelector("#rpcUrl"),
   status: document.querySelector("#status"),
@@ -20,6 +22,8 @@ const els = {
   positiveParticipants: document.querySelector("#positiveParticipants"),
   restrictedParticipants: document.querySelector("#restrictedParticipants"),
   liquidityRelease: document.querySelector("#liquidityRelease"),
+  marketSignal: document.querySelector("#marketSignal"),
+  claimableRewards: document.querySelector("#claimableRewards"),
   personaName: document.querySelector("#personaName"),
   buyVolume: document.querySelector("#buyVolume"),
   sellVolume: document.querySelector("#sellVolume"),
@@ -36,6 +40,7 @@ let latestState = {
   positive: 0n,
   restricted: 0n,
   releaseBps: 0n,
+  marketSignal: 0n,
 };
 
 els.connectWallet.addEventListener("click", async () => {
@@ -64,6 +69,7 @@ async function refresh() {
 
     renderPoolState(decodeWords(poolState));
     renderWalletStats(decodeWords(walletStats));
+    await renderRewards(poolId, wallet);
     drawSignal();
 
     setStatus("Loaded verified on-chain state.");
@@ -98,6 +104,7 @@ function renderPoolState(words) {
     phase: words[3],
     score: words[4],
     releaseBps: words[5],
+    marketSignal: signed16(words[6]),
   };
 
   els.coordinationScore.textContent = latestState.score.toString();
@@ -106,6 +113,19 @@ function renderPoolState(words) {
   els.positiveParticipants.textContent = latestState.positive.toString();
   els.restrictedParticipants.textContent = latestState.restricted.toString();
   els.liquidityRelease.textContent = `${Number(latestState.releaseBps) / 100}%`;
+  els.marketSignal.textContent = `${latestState.marketSignal > 0 ? "+" : ""}${latestState.marketSignal.toString()} bps`;
+}
+
+async function renderRewards(poolId, wallet) {
+  const vault = els.vaultAddress.value.trim();
+  if (!vault) {
+    els.claimableRewards.textContent = "Not set";
+    return;
+  }
+
+  assertAddress(vault, "Rewards vault");
+  const result = await ethCall(vault, selectors.claimable + strip0x(poolId) + padAddress(wallet));
+  els.claimableRewards.textContent = `${formatTokenUnits(decodeWords(result)[0])} OKB`;
 }
 
 function renderWalletStats(words) {
@@ -206,6 +226,11 @@ function formatTokenUnits(value) {
   const whole = value / 10n ** 18n;
   const fraction = (value % 10n ** 18n).toString().padStart(18, "0").slice(0, 4);
   return `${whole}.${fraction}`;
+}
+
+function signed16(word) {
+  const masked = Number(word & 0xffffn);
+  return BigInt(masked >= 0x8000 ? masked - 0x10000 : masked);
 }
 
 function setStatus(message) {

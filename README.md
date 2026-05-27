@@ -6,9 +6,32 @@ Tagline: **Not all coordination is equal.**
 
 The hook turns launch participation into market state. Wallets become Seeder, Builder, Stabilizer, or Restricted based on real pool behavior, and those personas influence per-swap fees, launch phase, coordination score, and liquidity-release state.
 
+## Product Stack
+
+**CoordiFlow Core Hook**
+
+- persona scoring
+- coordination score
+- dynamic fees and caps
+- market stage unlocks
+
+**X Layer Intelligence Layer**
+
+- optional `IExchangeOSSignalProvider` adapter
+- wallet and market signal boosts
+- disabled unless a real on-chain/provider source is configured
+
+**Coordination Rewards Layer**
+
+- Seeders, Builders, and Stabilizers can earn from a funded rewards vault
+- unhealthy/restricted flow does not earn
+- future modules can route hook fees, penalties, or idle-liquidity rewards into the vault
+
 ## What Is Built
 
 - `src/CoordiFlowHook.sol` tracks real wallet behavior per pool.
+- `src/interfaces/IExchangeOSSignalProvider.sol` defines the optional X Layer intelligence adapter.
+- `src/CoordiFlowRewardsVault.sol` holds and pays real claimable rewards for positive coordination.
 - `src/CoordiFlowToken.sol` is a launch token contract for an on-chain CoordiFlow launch asset.
 - `script/00_DeployCoordiFlowHook.s.sol` mines and deploys the hook at a valid Uniswap v4 hook-permission address.
 - `script/01_DeployCoordiFlowToken.s.sol` deploys the launch token.

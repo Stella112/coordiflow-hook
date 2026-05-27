@@ -65,7 +65,8 @@ contract CoordiFlowHookTest is BaseTest {
             builderFee: 1500,
             restrictedFee: 10000,
             maxSwapAmount: 5e18,
-            rapidRoundTripWindow: 10 minutes
+            rapidRoundTripWindow: 10 minutes,
+            rewardBps: 0
         });
 
         int24 tickLower = TickMath.minUsableTick(poolKey.tickSpacing);
@@ -95,7 +96,7 @@ contract CoordiFlowHookTest is BaseTest {
     function testSeederFromEarlyLiquidity() public view {
         assertEq(uint8(hook.personaOf(poolKey, alice)), uint8(CoordiFlowHook.Persona.Seeder));
 
-        (uint32 uniqueParticipants, uint32 positiveParticipants,,,,) = hook.poolState(poolId);
+        (uint32 uniqueParticipants, uint32 positiveParticipants,,,,,) = hook.poolState(poolId);
         assertEq(uniqueParticipants, 1);
         assertEq(positiveParticipants, 1);
     }
@@ -107,7 +108,7 @@ contract CoordiFlowHookTest is BaseTest {
 
         assertEq(uint8(hook.personaOf(poolKey, bob)), uint8(CoordiFlowHook.Persona.Builder));
 
-        (uint32 uniqueParticipants, uint32 positiveParticipants,,,,) = hook.poolState(poolId);
+        (uint32 uniqueParticipants, uint32 positiveParticipants,,,,,) = hook.poolState(poolId);
         assertEq(uniqueParticipants, 2);
         assertEq(positiveParticipants, 2);
     }
