@@ -40,6 +40,12 @@ TOKEN_SUPPLY=1000000000000000000000000
 
 `POOL_MANAGER` must be the official or hackathon-provided Uniswap v4 PoolManager on X Layer, or the PoolManager address from a V4 stack deployed for the hackathon.
 
+For X Layer testnet, this repo can deploy its own test v4 stack. The current deterministic Permit2 address already has bytecode on X Layer testnet:
+
+```env
+TEST_PERMIT2=0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9
+```
+
 ## Build And Test
 
 ```bash
@@ -50,6 +56,16 @@ forge build
 This repo uses `via_ir = true` because the Uniswap v4 dependency graph can hit stack-depth limits without it.
 
 ## Deploy
+
+Deploy a test Uniswap v4 stack on X Layer testnet:
+
+```bash
+forge script script/00_DeployXLayerTestV4Stack.s.sol:DeployXLayerTestV4StackScript \
+  --rpc-url xlayer_testnet \
+  --broadcast
+```
+
+After that script succeeds, copy its `PoolManager` output into `POOL_MANAGER` for testnet hook deployment.
 
 Deploy the token:
 
