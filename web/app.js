@@ -55,6 +55,12 @@ els.connectWallet.addEventListener("click", async () => {
 });
 
 els.refreshState.addEventListener("click", refresh);
+document.querySelectorAll("[data-wallet]").forEach((button) => {
+  button.addEventListener("click", () => {
+    els.walletAddress.value = button.dataset.wallet;
+    refresh();
+  });
+});
 
 async function refresh() {
   try {

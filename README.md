@@ -142,6 +142,14 @@ forge script script/03_CreateCoordiFlowPool.s.sol:CreateCoordiFlowPoolScript \
   --broadcast
 ```
 
+Run real participant swaps for the dashboard persona walkthrough:
+
+```bash
+forge script script/04_RunCoordiFlowScenario.s.sol:RunCoordiFlowScenarioScript \
+  --rpc-url xlayer_testnet \
+  --broadcast
+```
+
 Use `xlayer_mainnet` after testnet is fully validated.
 
 ## X Layer Testnet Deployment
@@ -156,6 +164,13 @@ Current deployed testnet addresses are recorded in `deployments/xlayer-testnet.j
 - PoolManager: `0xEAC4fcF2fB22E9887c830cD3EF78F1d28fC3BbCf`
 - PositionManager: `0x8DE4b634760F7942A20B7fA994AAc72F03ce4751`
 - Permit2: `0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9`
+
+Verified participant personas from real testnet swaps:
+
+- Seeder: `0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19`
+- Builder: `0xCD5aB02bF3B5fBEB12d118B25e53692dc4321fd2`
+- Stabilizer: `0x7d481820489ae41C705564FEB7C75130AD06Bcf6`
+- Restricted: `0x0Db499F22fEd9c1c557785620C23594101c5f0A0`
 
 ## Dashboard
 

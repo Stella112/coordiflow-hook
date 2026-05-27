@@ -23,6 +23,14 @@ The product stack has three layers:
 
 The current testnet deployment is fully on-chain and verifiable. The dashboard does not use fake data; it reads pool state, wallet stats, personas, and claimable rewards directly from deployed contracts on X Layer testnet.
 
+For the live testnet walkthrough, CoordiFlow includes real on-chain participant agents that executed real swaps against the deployed pool:
+
+- Builder: repeated constructive buys
+- Stabilizer: single healthy market interaction
+- Restricted: rapid buy/sell round trip behavior
+
+These are not simulated dashboard states. They are addresses with hook-recorded wallet stats that can be inspected through the dashboard or direct RPC calls.
+
 Final one-liner:
 
 > CoordiFlow is a Uniswap v4 Hook on X Layer that turns Flap-style token launches into behavior-aware coordination markets, where liquidity, fees, rewards, and market stages respond to the quality of participation, not just volume.
