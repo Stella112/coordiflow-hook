@@ -16,7 +16,12 @@
     "rewardsVault": "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
     "poolId": "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
     "launchTokenIsCurrency0": true,
-    "seedParticipant": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19"
+    "participants": {
+      "seeder": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+      "builder": "0x0F80054095F3A4cb2A2d14b7326303102B56D137",
+      "stabilizer": "0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3",
+      "restricted": "0x64dD322ac2eADb4864c014E5206683a73B8055cd"
+    }
   },
   "transactions": {
     "hookDeploy": "0x13c511c91a6e4a900407d70ecd968452df4caba10b8192f9ab36b2b842bf9ff4",
@@ -27,19 +32,36 @@
     "hookSetRewardsVault": "0x7e2809ce389a3e233a58b1eb9cd1134130121c7beeed1dba8a9359a84cb8b0a4",
     "poolConfigure": "0xfbbecdd34c189d53e2a396cdfde90f15811ab466bb9ee9cc4ddba872486f8db2",
     "positionManagerMulticall": "0x95604d427f5ef2dec26fe79adfd92f1e61b7de8f85ae8b7b3662f6a555624e1d",
-    "rewardFunding": "0x53efd2424f36576b47a6a029ab28afa0814398cbbbc429fe33c94ac2eb53783a"
+    "rewardFunding": "0x53efd2424f36576b47a6a029ab28afa0814398cbbbc429fe33c94ac2eb53783a",
+    "mainnetScenario": {
+      "builderAgentDeploy": "0xc162de92b62aafaec4e954c27b733e3669ad3de7ac6980590dea1c903b47f21c",
+      "stabilizerAgentDeploy": "0x61ca1aeeddc43f6ebab4bc48828dbc1a5449758029935b3ef37a81f7aed79464",
+      "restrictedAgentDeploy": "0xca59a252d4f79ce56e18da4b3423cb3a63856a48609d3ed7d4d31855e8d079cf",
+      "builderSwap1": "0xaf8bdc4ac26fd4babbe80b24d282ee1e3e7aff1cd2645ecee241f4e28b7d23e7",
+      "builderSwap2": "0x514ab25c71bdcfb2a24a86347109bf818f17efce679b7e9076d8df392f4dc789",
+      "builderSwap3": "0xb84f16274199eb5a28f9dc0f760428f93bda68e522e6fe3d38ac31a598c0b604",
+      "stabilizerSwap": "0xa5de71ace9640ddfb88bec019878fae63aed790e43e11a44ff599abb60d6bef2",
+      "restrictedBuy": "0x5179036ecf54c1b2fb424c2ff56407823da88b84a532b71af67024f0d0e94a4f",
+      "restrictedSell1": "0x864b869a1b21d4349ccb16525b16a15a94ddc681e1553e10f7a2b0b835796413",
+      "restrictedSell2": "0x61cf0be73f73b352909f086b42e10e81187e4be7591fb6049dd93c79659286e4"
+    }
   },
   "verification": {
     "hookBytecodePresent": true,
     "poolState": {
-      "uniqueParticipants": 1,
-      "positiveParticipants": 1,
-      "restrictedParticipants": 0,
+      "uniqueParticipants": 4,
+      "positiveParticipants": 4,
+      "restrictedParticipants": 1,
       "phase": 0,
-      "coordinationScore": 100,
+      "coordinationScore": 400,
       "liquidityReleaseBps": 0,
       "lastMarketSignalBps": 0
     },
-    "rewardsVaultPoolBalanceWei": "1000000000000000"
+    "personas": {
+      "builder": 2,
+      "stabilizer": 3,
+      "restricted": 4
+    },
+    "rewardsVaultPoolBalanceWei": "525076889504992"
   }
 }

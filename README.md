@@ -161,6 +161,9 @@ Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.j
 - Launch token: `0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081`
 - Quote token: `0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5`
 - Rewards vault: `0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D`
+- Builder agent: `0x0F80054095F3A4cb2A2d14b7326303102B56D137`
+- Stabilizer agent: `0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3`
+- Restricted agent: `0x64dD322ac2eADb4864c014E5206683a73B8055cd`
 - PoolManager: `0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32`
 - PositionManager: `0xcF1eAFC6928dC385A342E7c6491D371d2871458B`
 - Permit2: `0x000000000022D473030F116dDEE9F6B43aC78BA3`
@@ -168,8 +171,9 @@ Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.j
 Mainnet verification reads:
 
 - Hook bytecode is present at the deployed hook address.
-- `poolState`: 1 unique participant, 1 positive participant, coordination score 100.
-- Rewards vault pool balance: `1000000000000000` wei.
+- `poolState`: 4 unique participants, 4 positive participants, 1 restricted participant, coordination score 400.
+- Mainnet personas: Builder `2`, Stabilizer `3`, Restricted `4`.
+- Rewards vault pool balance after real reward accrual: `525076889504992` wei.
 
 ## X Layer Testnet Deployment
 

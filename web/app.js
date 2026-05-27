@@ -14,6 +14,12 @@ const deployments = {
     vault: "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
     rpc: "https://rpc.xlayer.tech",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+    participants: {
+      seeder: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+      builder: "0x0F80054095F3A4cb2A2d14b7326303102B56D137",
+      stabilizer: "0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3",
+      restricted: "0x64dD322ac2eADb4864c014E5206683a73B8055cd",
+    },
   },
   testnet: {
     label: "X Layer testnet",
@@ -22,6 +28,12 @@ const deployments = {
     vault: "0x90407637D45588F0663b722438C6452c637c51d2",
     rpc: "https://testrpc.xlayer.tech/terigon",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+    participants: {
+      seeder: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+      builder: "0xCD5aB02bF3B5fBEB12d118B25e53692dc4321fd2",
+      stabilizer: "0x7d481820489ae41C705564FEB7C75130AD06Bcf6",
+      restricted: "0x0Db499F22fEd9c1c557785620C23594101c5f0A0",
+    },
   },
 };
 const personaSummaries = {
@@ -110,6 +122,9 @@ function applyDeployment(name) {
   els.networkBadge.textContent = `Verified on ${deployment.label}`;
   document.querySelectorAll("[data-preset]").forEach((button) => {
     button.classList.toggle("selected", button.dataset.preset === name);
+  });
+  document.querySelectorAll("[data-persona]").forEach((button) => {
+    button.dataset.wallet = deployment.participants[button.dataset.persona];
   });
   highlightSelectedWallet(deployment.wallet);
 }
