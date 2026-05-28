@@ -25,7 +25,7 @@
         <a href="#mechanism">Mechanism</a>
         <a href="#personas">Personas</a>
         <a href="#rewards">Rewards</a>
-        <a href="#docs">Docs</a>
+        <a href="./docs.html">Docs</a>
       </div>
       <div class="land-nav-actions">
         <span class="btn-v4hook">V4 Hook</span>
@@ -60,7 +60,7 @@
             Open Dashboard
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
           </button>
-          <a href="#docs" class="btn-docs">Technical Docs</a>
+          <a href="./docs.html" class="btn-docs">Technical Docs</a>
         </div>
 
         <div class="land-stats-mini">
@@ -406,223 +406,11 @@
     </div>
   </section>
 
-  <!-- Section 09: Technical Docs -->
-  <section id="docs" class="section border-top">
-    <div class="container py-28">
-      <div class="section-title-block">
-        <span class="section-num">09 / Technical Docs</span>
-        <h2 class="section-h2">Build, test, verify, and explain CoordiFlow.</h2>
-      </div>
-      <p class="section-desc mt-8">
-        These docs describe the live X Layer mainnet product, the testing flow, the partner integrations,
-        security model, and what ships after the hackathon. The dashboard must show real contract reads,
-        transaction hashes, balances, and hook state. No mock data is part of the product flow.
-      </p>
-
-      <div class="docs-shell mt-12">
-        <aside class="docs-aside">
-          <a href="#docs-overview">Overview</a>
-          <a href="#docs-antisnipe">Anti-snipe</a>
-          <a href="#docs-live">Live contracts</a>
-          <a href="#docs-tutorial">Tutorial</a>
-          <a href="#docs-pages">App pages</a>
-          <a href="#docs-integrations">Integrations</a>
-          <a href="#docs-security">Security</a>
-          <a href="#docs-demo">Demo flow</a>
-          <a href="#docs-roadmap">Future releases</a>
-        </aside>
-
-        <div class="docs-main">
-          <article id="docs-overview" class="docs-card">
-            <span class="docs-kicker">Product</span>
-            <h3>CoordiFlow in one paragraph</h3>
-            <p>
-              CoordiFlow is a Uniswap v4 Hook on X Layer that turns token launches into behavior-aware
-              coordination markets. Wallets are classified as Seeder, Builder, Stabilizer, or Restricted
-              based on real pool interactions. Those personas affect fees, per-block access, reward
-              eligibility, launch stages, and the coordination score, so the market matures through
-              healthy participation instead of pure volume or first-block speed.
-            </p>
-            <div class="docs-principle">Good coordination should earn. Toxic flow should pay.</div>
-          </article>
-
-          <article id="docs-antisnipe" class="docs-card">
-            <span class="docs-kicker">Launch defense</span>
-            <h3>Anti-snipe, but bigger than anti-snipe</h3>
-            <p>
-              A normal anti-snipe hook protects the first launch moments. CoordiFlow protects the whole
-              launch lifecycle. Early aggressive wallets can face tighter caps, higher effective fees,
-              delayed reward eligibility, and Restricted classification. But the system keeps watching
-              after entry: wallets that seed liquidity, hold through volatility, and participate repeatedly
-              can graduate into positive personas.
-            </p>
-            <div class="docs-grid">
-              <div class="docs-mini">
-                <h4>Anti-snipe</h4>
-                <p>Early oversized or rapid buy pressure is slowed through persona-aware access and fee logic.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Anti-dump</h4>
-                <p>Fast buy-sell round trips are counted, scored, and can push a wallet toward Restricted status.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Anti-whale</h4>
-                <p>Large max trade size and outsized pool impact reduce score quality and can tighten access.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Pro-builder</h4>
-                <p>Seeders, Builders, and Stabilizers earn better treatment because they improve market formation.</p>
-              </div>
-            </div>
-          </article>
-
-          <article id="docs-live" class="docs-card">
-            <span class="docs-kicker">On-chain proof</span>
-            <h3>Live X Layer mainnet contracts</h3>
-            <div class="docs-table">
-              <div><span>Hook</span><code>0x42D04F47EB54d48D39EA177E418E322e1FaF4AC0</code></div>
-              <div><span>PoolManager</span><code>0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32</code></div>
-              <div><span>USDT0 / CFLOW pool</span><code>0x4dee7db9acada05cd1be6a1bb4d3d63e54dc83dad2cf625ace41c8b3efbaba6a</code></div>
-              <div><span>USDT0 user actions</span><code>0x7e4B149Fd681cc2649a3CC7e8Bb3f786b3eAE33b</code></div>
-              <div><span>Rewards vault</span><code>0xD26732420947b470B2d92F07B083254E7Bcd6Dfa</code></div>
-              <div><span>Rehypothecation vault</span><code>0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb</code></div>
-              <div><span>Signal provider</span><code>0x904d734b523BFD94542f93A9a3a2d46e3aC6767A</code></div>
-              <div><span>Persona badge SBT</span><code>0x82b4Cb5AC9C68eB6cbbb4eFcAB637054AA43c815</code></div>
-            </div>
-            <p>
-              The app reads these contracts directly through X Layer RPC. Swaps, approvals, rewards,
-              badges, signals, and rehypothecation state should be verifiable from the transaction
-              history panel and the X Layer explorer.
-            </p>
-          </article>
-
-          <article id="docs-tutorial" class="docs-card">
-            <span class="docs-kicker">Tutorial</span>
-            <h3>How to test the app</h3>
-            <ol class="docs-steps">
-              <li>Open the dashboard and connect a wallet funded with OKB for gas and USDT0 for testing.</li>
-              <li>Confirm the wallet is on X Layer mainnet. The connect button and block counter should update from RPC.</li>
-              <li>Go to Swap, choose USDT0 -> CFLOW, enter a small amount, approve USDT0, then swap.</li>
-              <li>Flip the pair to CFLOW -> USDT0 and perform a small sell. The hook records behavior again.</li>
-              <li>Open Personas and Activity. The wallet persona, score contribution, tx hashes, and hook-recorded actions should update from chain.</li>
-              <li>Open Rewards Vault. Restricted or toxic behavior creates automatic penalty credits that can be inspected on-chain.</li>
-              <li>Open Rehypothecation. Eligible wallets deposit idle CQUOTE, then the owner or agent deploys part of it to the strategy reserve and accrues yield.</li>
-              <li>Open Persona Badges. Minted SBTs are on-chain proofs of wallet behavior, not images invented by the UI.</li>
-            </ol>
-          </article>
-
-          <article id="docs-pages" class="docs-card">
-            <span class="docs-kicker">Interface map</span>
-            <h3>What every dashboard page proves</h3>
-            <div class="docs-grid">
-              <div class="docs-mini">
-                <h4>Swap</h4>
-                <p>Real USDT0 <-> CFLOW swaps through the X Layer v4 route. Pair flip, approval, tx hash, wallet balances, and hook reads are live.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Liquidity</h4>
-                <p>Seeder behavior is triggered by real liquidity actions. The hook tracks LP participation as part of wallet quality.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Rewards Vault</h4>
-                <p>Restricted flow creates automatic penalty credits. Positive personas can inspect and claim eligible rewards when vault funding exists.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Rehypothecation</h4>
-                <p>Eligible users deposit idle assets, then the strategy agent deploys, accrues, and routes yield through on-chain vault functions.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Personas and badges</h4>
-                <p>The UI reads persona state and SBT badge ownership from contracts, so reputation is portable on-chain history.</p>
-              </div>
-              <div class="docs-mini">
-                <h4>Signals and activity</h4>
-                <p>X Layer signal data, recent transactions, blocks, and action history show how the hook is being driven by real chain events.</p>
-              </div>
-            </div>
-          </article>
-
-          <article id="docs-integrations" class="docs-card">
-            <span class="docs-kicker">Integrations</span>
-            <h3>Partner-native product stack</h3>
-            <div class="docs-grid">
-              <div class="docs-mini">
-                <h4>Flap-compatible launches</h4>
-                <p>
-                  A Flap-style launch can create the token and initial market. CoordiFlow attaches as
-                  the v4 Hook layer, adding behavior scoring, dynamic fees, rewards, and market-stage logic.
-                  No private Flap API is required for the MVP.
-                </p>
-              </div>
-              <div class="docs-mini">
-                <h4>X Layer Exchange OS signals</h4>
-                <p>
-                  The live signal provider is an on-chain adapter for X Layer-native market intelligence.
-                  It can boost or flag wallet and market quality without replacing the hook's own behavior data.
-                </p>
-              </div>
-              <div class="docs-mini">
-                <h4>Automatic penalty credits</h4>
-                <p>
-                  Restricted flow is scored by the hook and credits the rewards system automatically.
-                  Production fee settlement routing is a future hardening item, but the penalty accounting is on-chain.
-                </p>
-              </div>
-              <div class="docs-mini">
-                <h4>Agentic rehypothecation</h4>
-                <p>
-                  Users deposit into a real vault. The strategy agent can deploy idle capital to the reserve,
-                  accrue yield, and route claimable OKB yield to eligible wallets. A fully automated keeper is planned.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <article id="docs-security" class="docs-card">
-            <span class="docs-kicker">Security model</span>
-            <h3>What is protected in the MVP</h3>
-            <ul class="docs-list">
-              <li>Access control: external signals, strategy movement, and sensitive admin functions are owner or trusted-agent gated.</li>
-              <li>Reentrancy protection: vault-style user actions use explicit locks around deposit, deploy, claim, and reward movement.</li>
-              <li>Anti-griefing: wallet score impact is capped, per-wallet behavior is tracked, and Restricted personas face tighter access.</li>
-              <li>Fee safety: dynamic fee behavior stays bounded so the hook cannot return impossible or negative fee values.</li>
-              <li>Truth in integration: Aave-compatible reserve logic is live, but no unverified X Layer Aave pool is hardcoded.</li>
-            </ul>
-          </article>
-
-          <article id="docs-demo" class="docs-card">
-            <span class="docs-kicker">3 minute demo</span>
-            <h3>Recommended video flow</h3>
-            <div class="docs-timeline">
-              <div><span>0:00</span><p>Explain: CoordiFlow makes launches mature through participation quality, not only volume.</p></div>
-              <div><span>0:25</span><p>Show live X Layer contracts, connected wallet, and direct contract reads on the dashboard.</p></div>
-              <div><span>0:50</span><p>Swap USDT0 -> CFLOW, then flip and swap CFLOW -> USDT0. Show persona and score changes.</p></div>
-              <div><span>1:30</span><p>Show Restricted flow paying into rewards, then open the rewards vault and activity history.</p></div>
-              <div><span>2:00</span><p>Show rehypothecation: user deposit, agent strategy deployment, accrued yield, and claimable amount.</p></div>
-              <div><span>2:35</span><p>Close with Flap compatibility, X Layer signals, badges, and the future release path.</p></div>
-            </div>
-          </article>
-
-          <article id="docs-roadmap" class="docs-card">
-            <span class="docs-kicker">Future releases</span>
-            <h3>What ships after the hackathon</h3>
-            <div class="roadmap-grid">
-              <div><span>R1</span><p>Keeper automation for fully autonomous rehypothecation and strategy harvests.</p></div>
-              <div><span>R2</span><p>Production fee settlement routing so dynamic hook fees move directly into the reward vault.</p></div>
-              <div><span>R3</span><p>Direct partner adapters for Flap launch pages and official X Layer Exchange OS signal sources.</p></div>
-              <div><span>R4</span><p>Timelock, multisig controls, config freeze, analytics indexing, and richer mobile dashboard polish.</p></div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 10: CTA -->
+  <!-- Section 09: CTA -->
   <section class="section border-top">
     <div class="container py-32 cta-grid">
       <div class="cta-left">
-        <span class="section-num">10 / Ship a coordination market</span>
+        <span class="section-num">09 / Ship a coordination market</span>
         <h2 class="cta-h2 mt-5">Launch a token that responds to how it is actually being formed.</h2>
         <p class="section-desc mt-6">
           CoordiFlow is live on X Layer. Attach the hook to a v4 pool and let the market mature through real coordination â€” not raw volume.
@@ -633,7 +421,7 @@
           Open Dashboard
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
         </button>
-        <a href="#docs" class="btn-docs w-full border-box">Read the Docs</a>
+        <a href="./docs.html" class="btn-docs w-full border-box">Read the Docs</a>
       </div>
     </div>
   </section>
@@ -659,15 +447,15 @@
           <li><a href="#mechanism">Mechanism</a></li>
           <li><a href="#personas">Personas</a></li>
           <li><a href="#rewards">Rewards</a></li>
-          <li><a href="#docs-live">X Layer</a></li>
+          <li><a href="./docs.html#docs-live">X Layer</a></li>
         </ul>
       </div>
       <div class="foot-links">
         <h4>Build</h4>
         <ul>
           <li><a href="#" onclick="openApp('overview')">Interface</a></li>
-          <li><a href="#docs">Documentation</a></li>
-          <li><a href="#docs-live">Hook reference</a></li>
+          <li><a href="./docs.html">Documentation</a></li>
+          <li><a href="./docs.html#docs-live">Hook reference</a></li>
           <li><a href="https://github.com/Stella112/coordiflow-hook" target="_blank" rel="noreferrer">GitHub</a></li>
         </ul>
       </div>
@@ -1686,6 +1474,11 @@
 
   // Wallet input sync
   document.addEventListener('DOMContentLoaded', function() {
+    var appView = new URLSearchParams(window.location.search).get('app');
+    if (appView) {
+      openApp(appView);
+    }
+
     var wa = document.getElementById('walletAddress');
     if (wa) {
       wa.addEventListener('input', function() {
