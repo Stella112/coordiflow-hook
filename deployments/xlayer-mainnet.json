@@ -12,10 +12,12 @@
   "coordiFlow": {
     "hook": "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
     "userActions": "0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1",
+    "usdt0UserActions": "0x85dd2ddF9614Df62699d1bC37e0d1bd5c8e7c735",
     "launchToken": "0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081",
     "quoteToken": "0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5",
     "rewardsVault": "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
     "poolId": "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
+    "usdt0PoolId": "0x630a11b29c4147d2eb3ddfd3754501050341e46e2271888422d090b75b87b7ae",
     "launchTokenIsCurrency0": true,
     "participants": {
       "seeder": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
@@ -106,6 +108,12 @@
       "builderMint": "0x842b2788a8c5c7fbcc2c742245587d4a9e943502b589da6f8fcfc80c6e14d871",
       "stabilizerMint": "0x296ba119b8c276e5d83b1426e3fc72a13b9ad988a58934db472bedf06675d20f",
       "restrictedMint": "0x183242aeeb354cfebea542ce6094919cea0790b05bd6182d3f15a68b5e60aa66"
+    },
+    "usdt0Route": {
+      "poolCreateAndFund": "see broadcast/03_CreateCoordiFlowPool.s.sol/196/run-latest.json",
+      "userActionsDeploy": "see broadcast/10_DeployUserActions.s.sol/196/run-latest.json",
+      "approveProof": "0xa46c92c4f72f6738c03166bfc29867110ec05df8caa1575a98dcb59352fd7740",
+      "swapProof": "0x1048a77f581d8c253433c27de7287e059197efd4aeb9bdc731103ca250214543"
     }
   },
   "verification": {

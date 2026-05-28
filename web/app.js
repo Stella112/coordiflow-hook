@@ -27,7 +27,9 @@ const deployments = {
     label: "X Layer mainnet",
     hook: "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
     userActions: "0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1",
+    usdt0UserActions: "0x85dd2ddF9614Df62699d1bC37e0d1bd5c8e7c735",
     poolId: "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
+    usdt0PoolId: "0x630a11b29c4147d2eb3ddfd3754501050341e46e2271888422d090b75b87b7ae",
     vault: "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
     rehypothecationVault: "0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb",
     signalProvider: "0x8d89C6f5d2d961EC39027e5371f6044C96995D98",
@@ -323,13 +325,13 @@ async function renderRehypothecation(wallet) {
 
 async function approveSwap() {
   const route = selectedSwapRoute();
-  await approveToken(route.tokenIn, els.userActions.value.trim(), parseAmount(els.swapAmount.value));
+  await approveToken(route.tokenIn, route.actions, parseAmount(els.swapAmount.value, route.decimals));
 }
 
 async function executeSwap() {
-  const actions = assertAddress(els.userActions.value.trim(), "User actions");
   const route = selectedSwapRoute();
-  const amountIn = parseAmount(els.swapAmount.value);
+  const actions = assertAddress(route.actions, "User actions");
+  const amountIn = parseAmount(els.swapAmount.value, route.decimals);
   const data = selectors.swapExactInput + encodeUint(amountIn) + encodeBool(route.zeroForOne) + encodeUint(0n);
   await sendAndTrack(actions, data, "Swap sent. Waiting for X Layer confirmation...");
 }
@@ -446,10 +448,28 @@ async function updateWalletNetworkLabel() {
 function selectedSwapRoute() {
   const route = els.swapRoute.value;
   if (route === "quoteToLaunch") {
-    return { tokenIn: activeDeployment.quoteToken, zeroForOne: !activeDeployment.launchTokenIsCurrency0 };
+    return {
+      tokenIn: activeDeployment.quoteToken,
+      actions: els.userActions.value.trim(),
+      zeroForOne: !activeDeployment.launchTokenIsCurrency0,
+      decimals: 18,
+    };
   }
   if (route === "launchToQuote") {
-    return { tokenIn: activeDeployment.launchToken, zeroForOne: activeDeployment.launchTokenIsCurrency0 };
+    return {
+      tokenIn: activeDeployment.launchToken,
+      actions: els.userActions.value.trim(),
+      zeroForOne: activeDeployment.launchTokenIsCurrency0,
+      decimals: 18,
+    };
+  }
+  if (route === "usdt0ToLaunch") {
+    return {
+      tokenIn: activeDeployment.assets.usdt0,
+      actions: activeDeployment.usdt0UserActions,
+      zeroForOne: true,
+      decimals: 6,
+    };
   }
   throw new Error("This route needs a funded CoordiFlow pool or external route before it can be enabled.");
 }
@@ -663,11 +683,12 @@ function formatTokenUnits(value) {
   return `${whole}.${fraction}`;
 }
 
-function parseAmount(value) {
+function parseAmount(value, decimals = 18) {
   const normalized = value.trim();
   if (!/^\d+(\.\d{0,18})?$/.test(normalized)) throw new Error("Amount must be a positive decimal.");
   const [whole, fraction = ""] = normalized.split(".");
-  return BigInt(whole) * 10n ** 18n + BigInt(fraction.padEnd(18, "0"));
+  if (fraction.length > decimals) throw new Error(`Amount supports up to ${decimals} decimals for this asset.`);
+  return BigInt(whole) * 10n ** BigInt(decimals) + BigInt(fraction.padEnd(decimals, "0"));
 }
 
 function shortAddress(value) {

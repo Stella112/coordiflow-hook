@@ -7,7 +7,82 @@
     <link rel="stylesheet" href="./styles.css?v=20260528-actions" />
   </head>
   <body>
-    <main class="shell">
+    <header class="site-nav">
+      <a class="brand" href="#home"><span></span>CoordiFlow</a>
+      <nav>
+        <a href="#mechanism">Mechanism</a>
+        <a href="#personas">Personas</a>
+        <a href="#rewards">Rewards</a>
+        <a href="#app">App</a>
+      </nav>
+      <a class="nav-cta" href="#app">Enter App</a>
+    </header>
+
+    <main id="home">
+      <section class="landing-hero">
+        <div>
+          <p class="eyebrow">Live on X Layer · Uniswap v4 Hook</p>
+          <h1>Dynamic liquidity tuning for <span>market quality.</span></h1>
+          <p>
+            CoordiFlow turns launches into behavior-aware coordination markets. Wallet personas, fees, rewards,
+            liquidity stages, and yield access respond to real on-chain participation.
+          </p>
+          <div class="hero-actions">
+            <a href="#app">Enter App</a>
+            <a href="#mechanism">See Mechanism</a>
+          </div>
+        </div>
+        <aside class="hero-terminal">
+          <div>
+            <span>Coordination Score</span>
+            <strong>Mainnet</strong>
+          </div>
+          <div class="terminal-line"><span>hook</span><code>0x20Ac...4Ac0</code></div>
+          <div class="terminal-line"><span>route</span><code>CFLOW / USDT0 funded</code></div>
+          <div class="terminal-line"><span>status</span><code>verified on-chain</code></div>
+        </aside>
+      </section>
+
+      <section id="mechanism" class="landing-section">
+        <p class="eyebrow">01 / Mechanism</p>
+        <h2>A hook that watches the market form, then shapes it.</h2>
+        <div class="feature-row">
+          <article><span>Attach</span><p>Connect CoordiFlow to any compatible Uniswap v4 launch pool.</p></article>
+          <article><span>Observe</span><p>Swaps and LP actions update wallet behavior on-chain.</p></article>
+          <article><span>Classify</span><p>Wallets become Seeder, Builder, Stabilizer, or Restricted.</p></article>
+          <article><span>Respond</span><p>Fees, caps, rewards, and market stages shift with quality.</p></article>
+        </div>
+      </section>
+
+      <section id="personas" class="landing-section split-section">
+        <div>
+          <p class="eyebrow">02 / Personas</p>
+          <h2>Not all participation is equal.</h2>
+          <p>
+            A launch with real Seeders and Stabilizers is healthier than noisy whale volume. CoordiFlow turns that
+            difference into programmable market behavior.
+          </p>
+        </div>
+        <div class="persona-mini-grid">
+          <span>Seeder</span>
+          <span>Builder</span>
+          <span>Stabilizer</span>
+          <span>Restricted</span>
+        </div>
+      </section>
+
+      <section id="rewards" class="landing-section split-section">
+        <div>
+          <p class="eyebrow">03 / Rewards</p>
+          <h2>Good coordination earns. Toxic flow pays.</h2>
+        </div>
+        <p>
+          Rewards, penalty vaults, and light rehypothecation are product modules, not mock widgets. The app reads
+          vault balances and claimable yield from deployed X Layer contracts.
+        </p>
+      </section>
+
+      <section id="app" class="shell app-shell">
       <section class="topbar">
         <div>
           <p class="eyebrow">CoordiFlow</p>
@@ -175,7 +250,7 @@
                   <select id="swapRoute">
                     <option value="quoteToLaunch">CQUOTE -> CFLOW</option>
                     <option value="launchToQuote">CFLOW -> CQUOTE</option>
-                    <option value="usdt0ToLaunch" disabled>USDT0 -> CFLOW needs funded route</option>
+                    <option value="usdt0ToLaunch">USDT0 -> CFLOW</option>
                     <option value="usdtToLaunch" disabled>USDT -> CFLOW needs funded route</option>
                     <option value="wokbToLaunch" disabled>WOKB -> CFLOW needs funded route</option>
                   </select>
@@ -406,6 +481,7 @@
             </div>
           </section>
         </section>
+      </section>
       </section>
     </main>
 

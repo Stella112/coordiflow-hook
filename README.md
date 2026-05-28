@@ -160,6 +160,8 @@ Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.j
 
 - Hook: `0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0`
 - User actions helper: `0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1`
+- USDT0 route pool ID: `0x630a11b29c4147d2eb3ddfd3754501050341e46e2271888422d090b75b87b7ae`
+- USDT0 route user actions helper: `0x85dd2ddF9614Df62699d1bC37e0d1bd5c8e7c735`
 - Pool ID: `0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577`
 - Launch token: `0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081`
 - Quote token: `0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5`
@@ -238,7 +240,12 @@ The dashboard can also send real wallet transactions:
 - approve and deposit CQUOTE into the rehypothecation vault
 - claim accrued OKB yield
 
-USDT, USDT0, and WOKB are displayed as official X Layer funding assets. Their swap options remain disabled until a funded CoordiFlow route/pool is deployed for those assets; this keeps the dashboard verifiable instead of pretending unsupported routes exist.
+USDT0 is enabled as a funded route. The current route was seeded with real USDT0 and CFLOW, then verified with a real `0.1 USDT0 -> CFLOW` swap:
+
+- USDT0 approve proof: `0xa46c92c4f72f6738c03166bfc29867110ec05df8caa1575a98dcb59352fd7740`
+- USDT0 swap proof: `0x1048a77f581d8c253433c27de7287e059197efd4aeb9bdc731103ca250214543`
+
+USDT and WOKB are displayed as official X Layer funding assets but remain disabled until funded CoordiFlow routes/pools are deployed for those assets; this keeps the dashboard verifiable instead of pretending unsupported routes exist.
 
 ## Security Notes
 

@@ -37,6 +37,8 @@ contract CreateCoordiFlowPoolScript is Script {
         address permit2 = vm.envOr("PERMIT2", address(0x3191Fc1E303EF4e12a7DE5f5d2e8d53A0660c5b9));
         address rewardsVault = vm.envOr("REWARDS_VAULT", address(0));
 
+        uint160 startingPrice =
+            uint160(vm.envOr("STARTING_SQRT_PRICE_X96", uint256(STARTING_PRICE)));
         uint256 launchAmount = vm.envOr("POOL_LAUNCH_AMOUNT", uint256(100_000 ether));
         uint256 quoteAmount = vm.envOr("POOL_QUOTE_AMOUNT", uint256(100_000 ether));
         uint256 rewardFunding = vm.envOr("REWARD_FUNDING", uint256(0.01 ether));
@@ -46,11 +48,11 @@ contract CreateCoordiFlowPoolScript is Script {
         uint256 amount0Max = launchTokenIsCurrency0 ? launchAmount : quoteAmount;
         uint256 amount1Max = launchTokenIsCurrency0 ? quoteAmount : launchAmount;
 
-        int24 currentTick = TickMath.getTickAtSqrtPrice(STARTING_PRICE);
+        int24 currentTick = TickMath.getTickAtSqrtPrice(startingPrice);
         int24 tickLower = _truncateTick(currentTick - 750 * TICK_SPACING);
         int24 tickUpper = _truncateTick(currentTick + 750 * TICK_SPACING);
         uint128 liquidity = LiquidityAmounts.getLiquidityForAmounts(
-            STARTING_PRICE,
+            startingPrice,
             TickMath.getSqrtPriceAtTick(tickLower),
             TickMath.getSqrtPriceAtTick(tickUpper),
             amount0Max,
@@ -62,7 +64,7 @@ contract CreateCoordiFlowPoolScript is Script {
             _mintLiquidityParams(key, tickLower, tickUpper, liquidity, amount0Max, amount1Max, deployer, hookData);
 
         bytes[] memory calls = new bytes[](2);
-        calls[0] = abi.encodeWithSelector(IPoolInitializer_v4.initializePool.selector, key, STARTING_PRICE);
+        calls[0] = abi.encodeWithSelector(IPoolInitializer_v4.initializePool.selector, key, startingPrice);
         calls[1] = abi.encodeWithSelector(
             IPositionManager.modifyLiquidities.selector, abi.encode(actions, mintParams), block.timestamp + 30 minutes
         );
@@ -99,6 +101,7 @@ contract CreateCoordiFlowPoolScript is Script {
         console2.log("Currency0", Currency.unwrap(key.currency0));
         console2.log("Currency1", Currency.unwrap(key.currency1));
         console2.log("LaunchTokenIsCurrency0", launchTokenIsCurrency0);
+        console2.log("StartingSqrtPriceX96", startingPrice);
         console2.log("PositionManager", positionManager);
         console2.log("Permit2", permit2);
     }
