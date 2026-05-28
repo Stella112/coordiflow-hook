@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoordiFlow â€” Behavior-aware coordination markets on X Layer</title>
   <meta name="description" content="A Uniswap v4 Hook that turns token launches into behavior-aware coordination markets. Liquidity, fees, rewards, and market stages respond to the quality of participation â€” not just volume." />
-  <link rel="stylesheet" href="./styles.css?v=20260528-v7" />
+  <link rel="stylesheet" href="./styles.css?v=20260528-v8" />
 </head>
 <body>
 
@@ -683,12 +683,15 @@
             <div class="card-head"><h3>Hook + Flap launch path</h3><span class="card-meta">V4-compatible launch layer</span></div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
               <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:14px;color:var(--muted);line-height:1.55;">
-                CoordiFlow attaches as the Uniswap v4 Hook on a launch pool. A Flap-style launcher can create the token and initial market; this hook then classifies swaps and liquidity actions to adjust persona state, rewards, and stage progression.
+                CoordiFlow attaches as the Uniswap v4 Hook on a launch pool. For this hackathon build, the integration is real at the v4 pool/hook layer: any Flap-style launch that creates a standard v4 pool can use the CoordiFlow hook address during pool creation. We are not pretending to call a private Flap API.
               </div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
                 <div class="liq-detail-row"><span class="ldr-key">beforeSwap</span><span class="ldr-val">persona fee/cap</span></div>
                 <div class="liq-detail-row"><span class="ldr-key">afterSwap</span><span class="ldr-val">score update</span></div>
                 <div class="liq-detail-row"><span class="ldr-key">afterAddLiquidity</span><span class="ldr-val">Seeder path</span></div>
+                <div class="liq-detail-row"><span class="ldr-key">Hook</span><span class="ldr-val">0x20Ac...4Ac0</span></div>
+                <div class="liq-detail-row"><span class="ldr-key">PoolManager</span><span class="ldr-val">0x360E...FB32</span></div>
+                <div class="liq-detail-row"><span class="ldr-key">Launch format</span><span class="ldr-val">v4 dynamic-fee pool</span></div>
               </div>
             </div>
           </div>
@@ -905,6 +908,22 @@
                   <span class="swap-detail-key">Slippage</span>
                   <span class="swap-detail-val">0.5%</span>
                 </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Balance source</span>
+                  <span class="swap-detail-val" id="balanceSource">token.balanceOf(wallet)</span>
+                </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Pay token</span>
+                  <span class="swap-detail-val" id="payTokenAddress">-</span>
+                </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Receive token</span>
+                  <span class="swap-detail-val" id="receiveTokenAddress">-</span>
+                </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">USDT0 route proof</span>
+                  <span class="swap-detail-val"><a data-proof="usdt0Swap" target="_blank" rel="noreferrer">-</a></span>
+                </div>
               </div>
 
               <!-- Action buttons (bound to app.js) -->
@@ -1111,6 +1130,17 @@
           <h1>Rewards Vault</h1>
           <p>Coordination rewards accumulate from toxic flow penalties and are distributed to healthy wallets each epoch.</p>
         </div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-head"><h3>Anti-snipe proof</h3><span class="card-meta">Hook-enforced behavior control</span></div>
+          <div class="card-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+            <div class="liq-detail-row"><span class="ldr-key">Restricted wallet</span><span class="ldr-val">0x64dD...55cd</span></div>
+            <div class="liq-detail-row"><span class="ldr-key">Buy proof</span><span class="ldr-val"><a data-proof="restrictedBuy" target="_blank" rel="noreferrer">-</a></span></div>
+            <div class="liq-detail-row"><span class="ldr-key">Sell/round-trip proof</span><span class="ldr-val"><a data-proof="restrictedSell" target="_blank" rel="noreferrer">-</a></span></div>
+            <div style="grid-column:span 3;padding:12px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:13px;color:var(--muted);line-height:1.55;">
+              CoordiFlow is anti-snipe because the hook records rapid round trips and oversized/sell-heavy flow, changes the wallet persona to Restricted, and returns stricter fee/cap behavior from the hook path instead of treating every buyer the same.
+            </div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-head"><h3>Claim rewards</h3><span class="card-meta" style="color:var(--positive)">On-chain claim</span></div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:20px;">
@@ -1147,6 +1177,12 @@
             <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
               <div style="padding:12px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:13px;color:var(--muted);line-height:1.5;">
                 Deposits are real user transactions. Strategy deployment is owner/agent-gated on-chain, so users do not manually route funds to Aave; the agent moves idle CQUOTE after deposit.
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+                <div class="liq-detail-row"><span class="ldr-key">Deposit proof</span><span class="ldr-val"><a data-proof="rehypDeposit" target="_blank" rel="noreferrer">-</a></span></div>
+                <div class="liq-detail-row"><span class="ldr-key">Strategy proof</span><span class="ldr-val"><a data-proof="rehypDeploy" target="_blank" rel="noreferrer">-</a></span></div>
+                <div class="liq-detail-row"><span class="ldr-key">Fund yield</span><span class="ldr-val"><a data-proof="rehypFundYield" target="_blank" rel="noreferrer">-</a></span></div>
+                <div class="liq-detail-row"><span class="ldr-key">Accrue yield</span><span class="ldr-val"><a data-proof="rehypAccrue" target="_blank" rel="noreferrer">-</a></span></div>
               </div>
               <div class="field"><span class="field-label">Deposit amount</span><input id="rehypDepositAmount" class="field-input" type="number" value="1" /></div>
               <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;">
@@ -1431,7 +1467,7 @@
   });
 </script>
 
-<script src="./app.js?v=20260528-v7"></script>
+<script src="./app.js?v=20260528-v8"></script>
 </body>
 </html>
 

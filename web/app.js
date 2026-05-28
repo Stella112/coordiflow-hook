@@ -135,6 +135,18 @@ const verifiedActivity = [
   },
 ];
 
+const txProofs = {
+  restrictedBuy: "0x5179036ecf54c1b2fb424c2ff56407823da88b84a532b71af67024f0d0e94a4f",
+  restrictedSell: "0x61cf0be73f73b352909f086b42e10e81187e4be7591fb6049dd93c79659286e4",
+  rehypApprove: "0xd00eb424c4cfb6129cac624946726068a3836a98ef5a0a7aa7051d44d56014f3",
+  rehypDeposit: "0x5556329b0655518e427c0438e86d683f3eee7a0a8534e690d55e5ddd155ced75",
+  rehypDeploy: "0x174f551b7fc2faff13fddb1fbf149fa91d0c57d7dc967036fd9b39a1f12a9b97",
+  rehypFundYield: "0xbb7f7446eef47b0fccf5a6f6a75ba86063a03eea199835163f0fd61b0a946b25",
+  rehypAccrue: "0xdd3c0e1f651328c364ce6bdc99aafcf93bc42dd728fd9e954cc0a5b4e266c738",
+  badgeSeederMint: "0xc41b4fb0784728b8abac4644b659ed19d3bcb08e56460a59513feddd935d4484",
+  usdt0Swap: "0x1048a77f581d8c253433c27de7287e059197efd4aeb9bdc731103ca250214543",
+};
+
 function one(selector) {
   return document.querySelector(selector);
 }
@@ -421,6 +433,10 @@ async function refreshWalletBalances() {
   setAll("#swapBalRec", receiveBalance);
   setAll("#liqBalLaunch", launchBalance);
   setAll("#liqBalQuote", quoteBalance);
+  setAll("#balanceSource", `${route.inputSymbol}.balanceOf(${shortAddress(wallet)})`);
+  setAll("#payTokenAddress", shortAddress(route.tokenIn));
+  setAll("#receiveTokenAddress", shortAddress(route.outputToken));
+  setAll("#activeWalletSource", shortAddress(wallet));
 }
 
 function renderPoolState(words) {
@@ -762,6 +778,9 @@ function updateSwapRouteUi() {
   setAll("#swapReceiveEstimate", "On-chain tx");
   setAll("#swapRate", "Quoted by v4 execution");
   setAll("#swapCap", "Enforced by hook state");
+  setAll("#balanceSource", `${route.inputSymbol}.balanceOf(wallet)`);
+  setAll("#payTokenAddress", shortAddress(route.tokenIn));
+  setAll("#receiveTokenAddress", shortAddress(route.outputToken));
 }
 
 async function mintPersonaBadge() {
@@ -972,6 +991,20 @@ function renderVerifiedActivity() {
   document.querySelectorAll(".activity-list").forEach((list) => {
     list.innerHTML = rows;
   });
+  renderProofLinks();
+}
+
+function renderProofLinks() {
+  document.querySelectorAll("[data-proof]").forEach((node) => {
+    const hash = txProofs[node.dataset.proof];
+    if (!hash) return;
+    node.setAttribute("href", oklinkTx(hash));
+    node.textContent = shortHash(hash);
+  });
+}
+
+function oklinkTx(hash) {
+  return `https://www.oklink.com/x-layer/tx/${hash}`;
 }
 
 function highlightSelectedWallet(wallet) {
