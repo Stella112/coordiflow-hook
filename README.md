@@ -35,7 +35,8 @@ One-liner:
 
 - Seeders, Builders, and Stabilizers can earn from a funded rewards vault
 - unhealthy/restricted flow does not earn
-- future modules can route hook fees, penalties, or idle-liquidity rewards into the vault
+- v2 contracts automatically record restricted-flow penalty credits from the hook into the rewards vault ledger
+- future settlement modules can route actual hook-collected fee proceeds into the vault
 
 ## Flap Positioning
 
@@ -50,6 +51,7 @@ This repo does not claim a private Flap API integration. The MVP is intentionall
 - `src/CoordiFlowHook.sol` tracks real wallet behavior per pool.
 - `src/interfaces/IExchangeOSSignalProvider.sol` defines the optional X Layer intelligence adapter.
 - `src/CoordiFlowRewardsVault.sol` holds and pays real claimable rewards for positive coordination.
+- `src/CoordiFlowRewardsVault.sol` also exposes the v2 penalty ledger: `penaltyCredits(poolId)` and `walletPenaltyCredits(poolId, wallet)`.
 - `src/CoordiFlowRehypothecationVault.sol` lets positive personas deposit idle CQUOTE and claim real OKB yield.
 - `src/CoordiFlowUserActions.sol` is the public user-facing helper for real swaps and LP actions against the CoordiFlow v4 pool.
 - `src/CoordiFlowToken.sol` is a launch token contract for an on-chain CoordiFlow launch asset.
@@ -194,6 +196,7 @@ Mainnet verification reads:
 - X Layer intelligence proof: hook is connected to the signal provider; restricted wallet signal is `-3000 bps`, market momentum signal is `+500 bps`.
 - Persona badge proof: Seeder badge `#1`, Builder badge `#2`, Stabilizer badge `#3`, Restricted badge `#4`.
 - Aave integration: an Aave-compatible strategy reserve is deployed and ready for the official X Layer Aave pool address. The current official BGD Aave address book package did not expose an `AaveV3XLayer` constants file, so no unverified Aave pool address is hardcoded.
+- Current v1 mainnet rewards are real and OKB-funded. Automatic restricted-flow penalty accounting is implemented and tested in the v2 contracts in this repo; because hooks are immutable, making that ledger live for users requires deploying the v2 hook/vault and initializing a v2 pool.
 
 ## X Layer Testnet Deployment
 
@@ -240,6 +243,8 @@ The dashboard can also send real wallet transactions:
 - approve and deposit CQUOTE into the rehypothecation vault
 - claim accrued OKB yield
 
+The rewards page reads automatic penalty getters when the connected vault exposes them. If the selected deployment is the current v1 mainnet vault, the dashboard shows that a v2 redeploy is required instead of inventing penalty-funded numbers.
+
 USDT0 is enabled as a funded route. The current route was seeded with real USDT0 and CFLOW, then verified with a real `0.1 USDT0 -> CFLOW` swap:
 
 - USDT0 approve proof: `0xa46c92c4f72f6738c03166bfc29867110ec05df8caa1575a98dcb59352fd7740`
@@ -255,6 +260,7 @@ CoordiFlow is a hackathon product, not an audited production deployment. The cur
 - The public user-actions helper has a reentrancy lock and only accepts `unlockCallback` from the official X Layer v4 PoolManager.
 - Dynamic fees are passed through Uniswap v4 `LPFeeLibrary.validate()` during pool configuration.
 - Oversized swaps can be capped by pool configuration.
+- Restricted-flow penalty credits are only recordable by the configured hook.
 - Signal data is transparent through an on-chain signal provider and source hash.
 - The Aave strategy adapter is deployed but intentionally has no hardcoded Aave pool until an official X Layer Aave pool address is available.
 

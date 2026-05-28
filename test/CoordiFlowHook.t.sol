@@ -20,6 +20,8 @@ import {Constants} from "@uniswap/v4-core/test/utils/Constants.sol";
 import {EasyPosm} from "./utils/libraries/EasyPosm.sol";
 
 import {CoordiFlowHook} from "../src/CoordiFlowHook.sol";
+import {CoordiFlowRewardsVault} from "../src/CoordiFlowRewardsVault.sol";
+import {ICoordiFlowRewardsVault} from "../src/interfaces/ICoordiFlowRewardsVault.sol";
 import {BaseTest} from "./utils/BaseTest.sol";
 
 contract CoordiFlowHookTest is BaseTest {
@@ -34,6 +36,7 @@ contract CoordiFlowHookTest is BaseTest {
     PoolKey poolKey;
 
     CoordiFlowHook hook;
+    CoordiFlowRewardsVault rewardsVault;
     PoolId poolId;
 
     address alice = address(0xA11CE);
@@ -53,6 +56,9 @@ contract CoordiFlowHookTest is BaseTest {
         bytes memory constructorArgs = abi.encode(poolManager, address(this));
         deployCodeTo("CoordiFlowHook.sol:CoordiFlowHook", constructorArgs, flags);
         hook = CoordiFlowHook(flags);
+        rewardsVault = new CoordiFlowRewardsVault(address(this));
+        rewardsVault.setHook(address(hook));
+        hook.setRewardsVault(ICoordiFlowRewardsVault(address(rewardsVault)));
 
         poolKey = PoolKey(currency0, currency1, LPFeeLibrary.DYNAMIC_FEE_FLAG, 60, IHooks(hook));
         poolId = poolKey.toId();
@@ -120,6 +126,16 @@ contract CoordiFlowHookTest is BaseTest {
         _swapAs(bob, false, 1e18);
 
         assertEq(uint8(hook.personaOf(poolKey, bob)), uint8(CoordiFlowHook.Persona.Restricted));
+    }
+
+    function testRestrictedFlowAutomaticallyRecordsPenaltyCredit() public {
+        _swapAs(bob, true, 1e18);
+        _swapAs(bob, false, 1e18);
+        _swapAs(bob, true, 1e18);
+        _swapAs(bob, false, 1e18);
+
+        assertEq(rewardsVault.walletPenaltyCredits(poolId, bob), 0.014 ether);
+        assertEq(rewardsVault.penaltyCredits(poolId), 0.014 ether);
     }
 
     function testSwapCapRevertsOversizedFlow() public {

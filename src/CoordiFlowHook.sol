@@ -253,6 +253,7 @@ contract CoordiFlowHook is BaseHook {
         if (tradeSize > stats.maxTradeSize) stats.maxTradeSize = tradeSize;
 
         _refreshPersona(poolId, wallet, stats);
+        _recordRestrictedPenalty(poolId, wallet, stats.persona, tradeSize, config);
         _accrueCoordinationReward(poolId, wallet, stats.persona, tradeSize, config.rewardBps);
         return (BaseHook.afterSwap.selector, 0);
     }
@@ -484,6 +485,20 @@ contract CoordiFlowHook is BaseHook {
 
         uint256 rewardAmount = (activityAmount * rewardBps) / 10_000;
         rewardsVault.accrueReward(poolId, wallet, rewardAmount);
+    }
+
+    function _recordRestrictedPenalty(
+        PoolId poolId,
+        address wallet,
+        Persona persona,
+        uint256 activityAmount,
+        PoolConfig memory config
+    ) internal {
+        if (address(rewardsVault) == address(0) || persona != Persona.Restricted) return;
+        if (config.restrictedFee <= config.baseFee) return;
+
+        uint256 penaltyAmount = (activityAmount * (config.restrictedFee - config.baseFee)) / 1_000_000;
+        rewardsVault.recordPenalty(poolId, wallet, penaltyAmount);
     }
 
     function _walletFromHookData(address sender, bytes calldata hookData) internal pure returns (address) {

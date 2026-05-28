@@ -5,4 +5,5 @@ import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
 
 interface ICoordiFlowRewardsVault {
     function accrueReward(PoolId poolId, address wallet, uint256 amount) external;
+    function recordPenalty(PoolId poolId, address wallet, uint256 amount) external;
 }

@@ -2,6 +2,8 @@ const selectors = {
   poolState: "0xe0b01bac",
   walletStats: "0x378a7a4c",
   claimable: "0x4499f5b3",
+  penaltyCredits: "0xb4fbfce6",
+  walletPenaltyCredits: "0xed2e6a48",
   owner: "0x8da5cb5b",
   deposits: "0xfc7e286d",
   claimableYield: "0x3180afec",
@@ -211,6 +213,9 @@ const els = {
   liquidityRelease: one("#liquidityRelease"),
   marketSignal: one("#marketSignal"),
   claimableRewards: last("#claimableRewards"),
+  penaltyCredits: last("#penaltyCredits"),
+  walletPenaltyCredits: last("#walletPenaltyCredits"),
+  penaltyStatus: last("#penaltyStatus"),
   idleDeposits: last("#idleDeposits"),
   availableAssets: last("#availableAssets"),
   deployedAssets: last("#deployedAssets"),
@@ -498,7 +503,8 @@ function updatePersonaBars() {
 async function renderRewards(poolId, wallet) {
   const vault = els.vaultAddress.value.trim();
   if (!vault) {
-    setAll("#claimableRewards, #claimableRewardsDisplay", "Not set");
+    setAll("#claimableRewards, #claimableRewardsDisplay, #penaltyCredits, #walletPenaltyCredits", "Not set");
+    setAll("#penaltyStatus", "Rewards vault is not configured.");
     return;
   }
 
@@ -506,6 +512,30 @@ async function renderRewards(poolId, wallet) {
   const result = await ethCall(vault, selectors.claimable + strip0x(poolId) + padAddress(wallet));
   const claimable = `${formatTokenUnits(decodeWords(result)[0])} OKB`;
   setAll("#claimableRewards, #claimableRewardsDisplay", claimable);
+  await renderPenaltyCredits(vault, poolId, wallet);
+}
+
+async function renderPenaltyCredits(vault, poolId, wallet) {
+  try {
+    const [poolPenalty, walletPenalty] = await Promise.all([
+      ethCall(vault, selectors.penaltyCredits + strip0x(poolId)),
+      ethCall(vault, selectors.walletPenaltyCredits + strip0x(poolId) + padAddress(wallet)),
+    ]);
+
+    setAll("#penaltyCredits", `${formatTokenUnits(decodeWords(poolPenalty)[0])} units`);
+    setAll("#walletPenaltyCredits", `${formatTokenUnits(decodeWords(walletPenalty)[0])} units`);
+    setAll(
+      "#penaltyStatus",
+      "Live v2 penalty ledger: Restricted swaps automatically record penalty credits from the hook.",
+    );
+  } catch {
+    setAll("#penaltyCredits", "V2 redeploy required");
+    setAll("#walletPenaltyCredits", "V2 redeploy required");
+    setAll(
+      "#penaltyStatus",
+      "Current mainnet v1 vault is real but predates automatic penalty getters. The v2 contracts now implement and test automatic penalty accounting; a v2 hook/pool redeploy makes this live on-chain.",
+    );
+  }
 }
 
 async function renderRehypothecation(wallet) {

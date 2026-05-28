@@ -8,10 +8,13 @@ contract CoordiFlowRewardsVault {
     address public hook;
 
     mapping(PoolId poolId => uint256 amount) public poolBalance;
+    mapping(PoolId poolId => uint256 amount) public penaltyCredits;
+    mapping(PoolId poolId => mapping(address wallet => uint256 amount)) public walletPenaltyCredits;
     mapping(PoolId poolId => mapping(address wallet => uint256 amount)) public claimable;
 
     event HookUpdated(address indexed hook);
     event RewardFunded(bytes32 indexed poolId, address indexed funder, uint256 amount);
+    event PenaltyRecorded(bytes32 indexed poolId, address indexed wallet, uint256 amount);
     event RewardAccrued(bytes32 indexed poolId, address indexed wallet, uint256 amount);
     event RewardClaimed(bytes32 indexed poolId, address indexed wallet, uint256 amount);
 
@@ -49,6 +52,14 @@ contract CoordiFlowRewardsVault {
         poolBalance[poolId] -= amount;
         claimable[poolId][wallet] += amount;
         emit RewardAccrued(PoolId.unwrap(poolId), wallet, amount);
+    }
+
+    function recordPenalty(PoolId poolId, address wallet, uint256 amount) external onlyHook {
+        if (amount == 0) return;
+
+        penaltyCredits[poolId] += amount;
+        walletPenaltyCredits[poolId][wallet] += amount;
+        emit PenaltyRecorded(PoolId.unwrap(poolId), wallet, amount);
     }
 
     function claim(PoolId poolId) external {

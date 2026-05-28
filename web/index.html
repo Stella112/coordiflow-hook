@@ -1141,6 +1141,24 @@
             </div>
           </div>
         </div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-head"><h3>Automatic penalty funding</h3><span class="card-meta">Restricted flow -> rewards ledger</span></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);">
+                <div class="label-xs" style="margin-bottom:6px;">Pool penalty credits</div>
+                <div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--p)" id="penaltyCredits">-</div>
+              </div>
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);">
+                <div class="label-xs" style="margin-bottom:6px;">Selected wallet penalty credits</div>
+                <div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--c-restr)" id="walletPenaltyCredits">-</div>
+              </div>
+            </div>
+            <div id="penaltyStatus" style="padding:12px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:13px;color:var(--muted);line-height:1.55;">
+              Loading penalty ledger from the deployed rewards vault.
+            </div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-head"><h3>Claim rewards</h3><span class="card-meta" style="color:var(--positive)">On-chain claim</span></div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:20px;">
