@@ -1,0 +1,9 @@
+{
+  "name": "coordiflow-hook",
+  "version": "0.2.4-alpha",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/vercel-build.mjs",
+    "start": "node web/serve.mjs"
+  }
+}
