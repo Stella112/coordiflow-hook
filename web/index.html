@@ -1,490 +1,1417 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoordiFlow</title>
-    <link rel="stylesheet" href="./styles.css?v=20260528-actions" />
-  </head>
-  <body>
-    <header class="site-nav">
-      <a class="brand" href="#home"><span></span>CoordiFlow</a>
-      <nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoordiFlow — Behavior-aware coordination markets on X Layer</title>
+  <meta name="description" content="A Uniswap v4 Hook that turns token launches into behavior-aware coordination markets. Liquidity, fees, rewards, and market stages respond to the quality of participation — not just volume." />
+  <link rel="stylesheet" href="./styles.css?v=20260528-v4" />
+</head>
+<body>
+
+<!-- ================================================================
+  LANDING PAGE
+  ================================================================ -->
+<div id="page-landing">
+
+  <!-- Nav -->
+  <nav class="land-nav">
+    <div class="land-nav-inner">
+      <div class="land-nav-logo">
+        <span class="logo-diamond"><span class="logo-diamond-inner"></span></span>
+        <span class="logo-name">CoordiFlow</span>
+      </div>
+      <div class="land-nav-links">
         <a href="#mechanism">Mechanism</a>
         <a href="#personas">Personas</a>
         <a href="#rewards">Rewards</a>
-        <a href="#app">App</a>
-      </nav>
-      <a class="nav-cta" href="#app">Enter App</a>
-    </header>
+        <a href="#">Docs</a>
+      </div>
+      <div class="land-nav-actions">
+        <span class="btn-v4hook">V4 Hook</span>
+        <button class="btn-launch" onclick="openApp('overview')">Launch</button>
+      </div>
+    </div>
+  </nav>
 
-    <main id="home">
-      <section class="landing-hero">
-        <div>
-          <p class="eyebrow">Live on X Layer · Uniswap v4 Hook</p>
-          <h1>Dynamic liquidity tuning for <span>market quality.</span></h1>
-          <p>
-            CoordiFlow turns launches into behavior-aware coordination markets. Wallet personas, fees, rewards,
-            liquidity stages, and yield access respond to real on-chain participation.
-          </p>
-          <div class="hero-actions">
-            <a href="#app">Enter App</a>
-            <a href="#mechanism">See Mechanism</a>
-          </div>
+  <!-- Hero Section -->
+  <section class="section-hero">
+    <div class="container hero-grid">
+      <!-- Left: copy -->
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Live on X Layer
+          <span class="hero-badge-sep">·</span>
+          <span class="hero-badge-dim">Uniswap V4 Hook</span>
         </div>
-        <aside class="hero-terminal">
-          <div>
-            <span>Coordination Score</span>
-            <strong>Mainnet</strong>
-          </div>
-          <div class="terminal-line"><span>hook</span><code>0x20Ac...4Ac0</code></div>
-          <div class="terminal-line"><span>route</span><code>CFLOW / USDT0 funded</code></div>
-          <div class="terminal-line"><span>status</span><code>verified on-chain</code></div>
-        </aside>
-      </section>
-
-      <section id="mechanism" class="landing-section">
-        <p class="eyebrow">01 / Mechanism</p>
-        <h2>A hook that watches the market form, then shapes it.</h2>
-        <div class="feature-row">
-          <article><span>Attach</span><p>Connect CoordiFlow to any compatible Uniswap v4 launch pool.</p></article>
-          <article><span>Observe</span><p>Swaps and LP actions update wallet behavior on-chain.</p></article>
-          <article><span>Classify</span><p>Wallets become Seeder, Builder, Stabilizer, or Restricted.</p></article>
-          <article><span>Respond</span><p>Fees, caps, rewards, and market stages shift with quality.</p></article>
-        </div>
-      </section>
-
-      <section id="personas" class="landing-section split-section">
-        <div>
-          <p class="eyebrow">02 / Personas</p>
-          <h2>Not all participation is equal.</h2>
-          <p>
-            A launch with real Seeders and Stabilizers is healthier than noisy whale volume. CoordiFlow turns that
-            difference into programmable market behavior.
-          </p>
-        </div>
-        <div class="persona-mini-grid">
-          <span>Seeder</span>
-          <span>Builder</span>
-          <span>Stabilizer</span>
-          <span>Restricted</span>
-        </div>
-      </section>
-
-      <section id="rewards" class="landing-section split-section">
-        <div>
-          <p class="eyebrow">03 / Rewards</p>
-          <h2>Good coordination earns. Toxic flow pays.</h2>
-        </div>
-        <p>
-          Rewards, penalty vaults, and light rehypothecation are product modules, not mock widgets. The app reads
-          vault balances and claimable yield from deployed X Layer contracts.
+        <h1 class="hero-h1">
+          Dynamic liquidity<br>
+          tuning for<br>
+          <span class="hero-h1-accent">market quality.</span>
+        </h1>
+        <p class="hero-desc">
+          CoordiFlow is a Uniswap v4 Hook that classifies wallet behavior into
+          on-chain personas to programmatically adjust fees, rewards, and
+          market access — in real time, fully on-chain.
         </p>
-      </section>
-
-      <section id="app" class="shell app-shell">
-      <section class="topbar">
-        <div>
-          <p class="eyebrow">CoordiFlow</p>
-          <h1>Not all coordination is equal.</h1>
-          <p class="subhead">
-            Live X Layer launch market. Personas, score, rewards, and phase are read directly from deployed contracts.
-          </p>
+        <div class="hero-ctas">
+          <button class="btn-dashboard" onclick="openApp('overview')">
+            Open Dashboard
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
+          </button>
+          <a href="#" class="btn-docs">Technical Docs</a>
         </div>
-        <button id="connectWallet" type="button">Connect Wallet</button>
-      </section>
 
-      <section class="workspace">
-        <aside class="panel controls">
-          <label>
-            Hook contract
-            <input
-              id="hookAddress"
-              autocomplete="off"
-              spellcheck="false"
-              value="0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0"
-            />
-          </label>
-          <label>
-            Pool ID
-            <input
-              id="poolId"
-              autocomplete="off"
-              spellcheck="false"
-              value="0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577"
-            />
-          </label>
-          <label>
-            Rewards vault
-            <input
-              id="vaultAddress"
-              autocomplete="off"
-              spellcheck="false"
-              value="0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D"
-            />
-          </label>
-          <label>
-            Rehypothecation vault
-            <input
-              id="rehypothecationVault"
-              autocomplete="off"
-              spellcheck="false"
-              value="0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb"
-            />
-          </label>
-          <label>
-            User actions
-            <input
-              id="userActions"
-              autocomplete="off"
-              spellcheck="false"
-              value="0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1"
-            />
-          </label>
-          <label>
-            Signal provider
-            <input
-              id="signalProvider"
-              autocomplete="off"
-              spellcheck="false"
-              value="0x8d89C6f5d2d961EC39027e5371f6044C96995D98"
-            />
-          </label>
-          <label>
-            Persona badge
-            <input
-              id="badgeContract"
-              autocomplete="off"
-              spellcheck="false"
-              value="0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd"
-            />
-          </label>
-          <label>
-            Wallet
-            <input
-              id="walletAddress"
-              autocomplete="off"
-              spellcheck="false"
-              value="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19"
-            />
-          </label>
-          <div class="persona-buttons" aria-label="Known on-chain participant wallets">
-            <button type="button" data-persona="seeder" data-wallet="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19">Seeder</button>
-            <button type="button" data-persona="builder" data-wallet="0x0F80054095F3A4cb2A2d14b7326303102B56D137">Builder</button>
-            <button type="button" data-persona="stabilizer" data-wallet="0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3">Stabilizer</button>
-            <button class="danger" type="button" data-persona="restricted" data-wallet="0x64dD322ac2eADb4864c014E5206683a73B8055cd">Restricted</button>
+        <div class="land-stats-mini">
+          <div class="lsm-item">
+            <div class="lsm-label">Pools</div>
+            <div class="lsm-val">12</div>
           </div>
-          <div class="network-presets" aria-label="Live deployment presets">
-            <button class="selected" type="button" data-preset="mainnet">X Layer Mainnet</button>
-            <button type="button" data-preset="testnet">X Layer Testnet</button>
+          <div class="lsm-item">
+            <div class="lsm-label">Active wallets</div>
+            <div class="lsm-val">1,284</div>
           </div>
-          <label>
-            RPC endpoint
-            <input id="rpcUrl" autocomplete="off" spellcheck="false" value="https://rpc.xlayer.tech" />
-          </label>
-          <button id="refreshState" type="button">Refresh On-Chain State</button>
-          <p id="status" class="status">Waiting for deployed contract addresses.</p>
-        </aside>
+          <div class="lsm-item">
+            <div class="lsm-label">Healthy share</div>
+            <div class="lsm-val">76%</div>
+          </div>
+        </div>
+      </div>
 
-        <section class="main-grid">
-          <section class="panel signal">
-            <canvas id="signalCanvas" width="900" height="460" aria-label="Coordination signal visualization"></canvas>
-            <div class="signal-overlay">
-              <p>Coordination Score</p>
-              <strong id="coordinationScore">-</strong>
-              <span id="phaseLabel">Phase -</span>
+      <!-- Right: live stats widget -->
+      <div class="hero-right">
+        <div class="hero-widget">
+          <div class="widget-top">
+            <span class="widget-top-label">Persona Logic Unit</span>
+            <span class="widget-active-badge">
+              Active
+            </span>
+          </div>
+          <div class="widget-pad">
+            <div class="widget-score-row">
+              <span class="widget-score-label">Coordination Score</span>
+              <span class="widget-score-delta">+4.2 / 24h</span>
             </div>
-            <div id="networkBadge" class="verification-badge">Verified on X Layer mainnet</div>
-          </section>
+            <div class="widget-score-big">
+              82<span class="widget-score-denom">/ 100</span>
+            </div>
+            <div class="widget-score-bar">
+              <div class="wsb-fill"></div>
+            </div>
 
-          <section class="panel stage-panel">
-            <div class="stage-copy">
-              <p class="eyebrow">Market Maturity</p>
-              <h2 id="stageTitle">Awaiting State</h2>
-              <p class="compact-copy">Fees, personas, rewards, and launch stage are controlled by live hook state.</p>
+            <!-- Mini chart -->
+            <div class="widget-chart">
+              <svg viewBox="0 0 400 90" preserveAspectRatio="none">
+                <path d="M0 70 C 30 60 50 65 80 50 S 140 22 180 30 220 60 260 42 320 14 400 18" stroke="oklch(0.88 0.14 210)" stroke-width="1.25" fill="none"></path>
+              </svg>
             </div>
-            <div class="stage-track" aria-label="Market phase progression">
-              <div id="stageFill" class="stage-fill"></div>
-              <span data-stage="0">Phase 0</span>
-              <span data-stage="1">Phase 1</span>
-              <span data-stage="2">Phase 2</span>
-              <span data-stage="3">Phase 3</span>
-            </div>
-          </section>
 
-          <section class="demo-flow">
-            <article class="panel flow-card">
-              <p class="eyebrow">Verified Flow</p>
-              <h2>Wallets enter, personas form, rewards unlock.</h2>
-              <div class="flow-steps">
-                <span>Seeder added liquidity</span>
-                <span>Builder made repeated buys</span>
-                <span>Stabilizer traded cleanly</span>
-                <span>Restricted triggered round-trip rules</span>
+            <div class="widget-personas">
+              <div class="widget-persona-row">
+                <span class="wp-left">
+                  <span class="wp-name">SEEDER</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:18%; background:var(--c-seeder);"></span></span>
+                </span>
+                <span class="wp-pct">+15.0%</span>
               </div>
-            </article>
-            <article class="panel flap-card">
-              <p class="eyebrow">Flap-Compatible Layer</p>
-              <h2>Launch infrastructure + behavior-aware hook logic.</h2>
-              <p>
-                CoordiFlow is built as the smart coordination layer for Flap-style launches on X Layer: token creation
-                can stay simple, while liquidity, fees, badges, rewards, and yield access respond to participation quality.
-              </p>
-            </article>
-          </section>
+              <div class="widget-persona-row">
+                <span class="wp-left">
+                  <span class="wp-name">BUILDER</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:36%; background:var(--c-seeder);"></span></span>
+                </span>
+                <span class="wp-pct">+8.2%</span>
+              </div>
+              <div class="widget-persona-row">
+                <span class="wp-left">
+                  <span class="wp-name">STABILIZER</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:32%; background:var(--c-seeder);"></span></span>
+                </span>
+                <span class="wp-pct">+5.2%</span>
+              </div>
+              <div class="widget-persona-row">
+                <span class="wp-left">
+                  <span class="wp-name">RESTRICTED</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:14%; background:var(--c-seeder);"></span></span>
+                </span>
+                <span class="wp-pct">−12.0%</span>
+              </div>
+            </div>
+          </div>
+          <div class="widget-pool">pool · cflow / usdc · stage 02 · forming</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <section class="panel action-panel">
-            <div class="section-head">
+  <!-- Section 01: Thesis -->
+  <section class="section border-top">
+    <div class="container py-28">
+      <div class="section-title-block">
+        <span class="section-num">01 / Thesis</span>
+        <h2 class="section-h2">Not all participation is equal.</h2>
+      </div>
+      <div class="thesis-grid">
+        <p class="thesis-text">
+          A launch with 100 wallets that dump quickly is not healthier than a launch with 30 real participants who add liquidity, hold, return, and stabilize the market. CoordiFlow makes that difference visible and programmable — transforming a token launch from <span class="muted">"who bought the most"</span> into <span>"is this market forming through healthy coordination."</span>
+        </p>
+        <div class="thesis-points">
+          <ul>
+            <li><span>Volume</span> measures noise.</li>
+            <li><span>Wallets</span> measure breadth.</li>
+            <li><span>Coordination</span> measures market formation.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 02: Mechanism -->
+  <section id="mechanism" class="section border-top bg-surface-40">
+    <div class="container py-28">
+      <div class="section-title-block">
+        <span class="section-num">02 / Mechanism</span>
+        <h2 class="section-h2">A hook that watches the market form, then shapes it.</h2>
+      </div>
+      <div class="mech-grid mt-14">
+        <div class="mech-card">
+          <div class="mech-step"><span>Step 01</span><span class="dot"></span></div>
+          <h3>Attach</h3>
+          <p>Install at the Uniswap v4 Hook layer of any compatible pool, including Flap-style launches on X Layer.</p>
+        </div>
+        <div class="mech-card">
+          <div class="mech-step"><span>Step 02</span><span class="dot"></span></div>
+          <h3>Observe</h3>
+          <p>Every swap, mint, and burn updates wallet state on-chain. No oracles, no off-chain trust assumptions.</p>
+        </div>
+        <div class="mech-card">
+          <div class="mech-step"><span>Step 03</span><span class="dot"></span></div>
+          <h3>Classify</h3>
+          <p>Wallets earn a persona — Seeder, Builder, Stabilizer, or Restricted — based on their actual flow profile.</p>
+        </div>
+        <div class="mech-card">
+          <div class="mech-step"><span>Step 04</span><span class="dot"></span></div>
+          <h3>Respond</h3>
+          <p>Fees, caps, stages, liquidity unlocks, and reward eligibility shift with coordination quality.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 03: Personas -->
+  <section id="personas" class="section border-top">
+    <div class="container py-28">
+      <div class="section-title-block">
+        <span class="section-num">03 / Personas</span>
+        <h2 class="section-h2">Real-time behavior classification.</h2>
+      </div>
+      <p class="section-desc mt-8">
+        Persona assignment is deterministic from observed actions and updates with every interaction. Wallets move between personas as their behavior evolves — no committee, no off-chain scoring service.
+      </p>
+      <div class="personas-grid mt-12">
+        <div class="persona-card">
+          <div class="pc-head"><span class="pc-id" style="color:var(--p)">ID: SEEDER</span><span class="dot" style="background:var(--p)"></span></div>
+          <p class="pc-desc">Provides initial concentrated liquidity into the launch curve. Anchors price discovery.</p>
+          <div class="pc-foot"><span>Early liquidity</span><span style="color:var(--p)">Fee +15.0%</span></div>
+        </div>
+        <div class="persona-card dim">
+          <div class="pc-head"><span class="pc-id">ID: BUILDER</span><span class="dot dim-dot"></span></div>
+          <p class="pc-desc">Returns to the pool with consistent, additive flow. Buys into structure, not noise.</p>
+          <div class="pc-foot"><span>Repeat constructive</span><span>Fee +8.2%</span></div>
+        </div>
+        <div class="persona-card dim">
+          <div class="pc-head"><span class="pc-id">ID: STABILIZER</span><span class="dot dim-dot"></span></div>
+          <p class="pc-desc">Trades two-sided, holds across stages, dampens volatility through real positions.</p>
+          <div class="pc-foot"><span>Balanced flow</span><span>Fee +5.2%</span></div>
+        </div>
+        <div class="persona-card dim">
+          <div class="pc-head"><span class="pc-id">ID: RESTRICTED</span><span class="dot dim-dot"></span></div>
+          <p class="pc-desc">Rapid round-trippers, oversized punts, MEV-shaped patterns. Faces higher fees and caps.</p>
+          <div class="pc-foot"><span>Toxic flow</span><span>Fee −12.0%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 04: Hook Surface -->
+  <section class="section border-top bg-surface-40">
+    <div class="container py-28">
+      <div class="section-title-block">
+        <span class="section-num">04 / Hook Surface</span>
+        <h2 class="section-h2">One hook. Six programmable levers.</h2>
+      </div>
+      <p class="section-desc mt-8">
+        The pool does not behave the same for every wallet. It responds to the quality of coordination, in real time, at the protocol layer — not an off-chain dashboard.
+      </p>
+      <div class="levers-grid mt-12">
+        <div class="lever-card">
+          <div class="lever-name">DYNAMIC_FEE</div>
+          <div class="lever-val">0.30%</div>
+          <div class="lever-bar"><div style="width:30%"></div></div>
+        </div>
+        <div class="lever-card">
+          <div class="lever-name">EMISSIONS_MULT</div>
+          <div class="lever-val">2.5x</div>
+          <div class="lever-bar"><div style="width:75%"></div></div>
+        </div>
+        <div class="lever-card">
+          <div class="lever-name">SWAP_CAP</div>
+          <div class="lever-val">12k</div>
+          <div class="lever-bar"><div style="width:60%"></div></div>
+        </div>
+        <div class="lever-card">
+          <div class="lever-name">STAGE_GATE</div>
+          <div class="lever-val">02/05</div>
+          <div class="lever-bar"><div style="width:40%"></div></div>
+        </div>
+        <div class="lever-card">
+          <div class="lever-name">LIQ_RELEASE</div>
+          <div class="lever-val">38%</div>
+          <div class="lever-bar"><div style="width:38%"></div></div>
+        </div>
+        <div class="lever-card">
+          <div class="lever-name">RESTRICTED_CEIL</div>
+          <div class="lever-val">1.4%</div>
+          <div class="lever-bar"><div style="width:14%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 05: Coordination Score -->
+  <section class="section border-top">
+    <div class="container py-28 score-grid">
+      <div class="score-left">
+        <div class="section-title-block">
+          <span class="section-num">05 / Coordination Score</span>
+          <h2 class="section-h2">A single number for market health.</h2>
+        </div>
+        <p class="section-desc mt-8">
+          The score aggregates persona weights, liquidity persistence, swap symmetry, and stage progression into a 0–100 signal — readable by any wallet, consumable by any contract.
+        </p>
+        <ul class="score-list mt-10">
+          <li>Read directly from the hook contract.</li>
+          <li>Drives stage progression and liquidity release.</li>
+          <li>Surfaces in the dashboard, live every block.</li>
+        </ul>
+      </div>
+      <div class="score-right">
+        <div class="score-display">
+          <span class="sd-tl">HOOK_V4_LOGIC</span>
+          <span class="sd-tr">v0.2.4</span>
+          <svg viewBox="0 0 280 280">
+            <circle cx="140" cy="140" r="110" stroke="rgba(255,255,255,0.06)" stroke-width="10" fill="none"></circle>
+            <circle cx="140" cy="140" r="110" stroke="oklch(0.88 0.14 210)" stroke-width="10" fill="none" stroke-linecap="square" stroke-dasharray="691.15" stroke-dashoffset="124.4"></circle>
+          </svg>
+          <div class="sd-center">
+            <span class="sd-label">Coordination</span>
+            <span class="sd-val">82</span>
+            <span class="sd-stage">Forming · stage 02</span>
+          </div>
+          <span class="sd-bl">BLOCK 1,284,991</span>
+          <span class="sd-br">OPERATIONAL</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 06: Rewards Vault -->
+  <section id="rewards" class="section border-top bg-surface-40">
+    <div class="container py-28">
+      <div class="section-title-block">
+        <span class="section-num">06 / Rewards Vault</span>
+        <h2 class="section-h2">Good coordination earns. Toxic flow pays.</h2>
+      </div>
+      <p class="section-desc mt-8">
+        CoordiFlow ships with a real rewards vault. Seeders, Builders, and Stabilizers become eligible for funded coordination pools. Restricted behavior does not earn — and contributes higher fees back to the vault.
+      </p>
+      <div class="rewards-grid mt-12">
+        <div class="reward-card">
+          <div class="rc-label">Vault inflows</div>
+          <div class="rc-val">412k USDC</div>
+          <div class="rc-sub">From elevated toxic-flow fees · epoch 14</div>
+        </div>
+        <div class="reward-card">
+          <div class="rc-label">Eligible wallets</div>
+          <div class="rc-val">1,047</div>
+          <div class="rc-sub">Seeders · Builders · Stabilizers</div>
+        </div>
+        <div class="reward-card">
+          <div class="rc-label">Distributed</div>
+          <div class="rc-val">298k USDC</div>
+          <div class="rc-sub">Across 12 coordination epochs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 07: Flap Integration -->
+  <section class="section border-top">
+    <div class="container py-28 flap-grid">
+      <div class="flap-left">
+        <div class="section-title-block">
+          <span class="section-num">07 / Flap Integration</span>
+          <h2 class="section-h2">Flap launches the market. CoordiFlow helps it mature.</h2>
+        </div>
+        <p class="section-desc mt-8">
+          CoordiFlow is a natural extension of Flap-style modular token launches. Flap handles token creation and the early curve. CoordiFlow adds the missing behavior-aware market layer at the Uniswap v4 Hook level — no privileged API required, just a compatible v4 pool.
+        </p>
+      </div>
+      <div class="flap-right">
+        <div class="flap-spec-card">
+          <div class="fs-head">integration.spec</div>
+          <div class="fs-rows">
+            <div class="fs-row"><span>launch.layer</span><span class="fs-val">Flap (token + early curve)</span></div>
+            <div class="fs-row"><span>market.layer</span><span class="fs-val highlight">CoordiFlow v4 Hook</span></div>
+            <div class="fs-row"><span>chain</span><span class="fs-val">X Layer</span></div>
+            <div class="fs-row"><span>integration</span><span class="fs-val">pool-level, permissionless</span></div>
+            <div class="fs-row"><span>api.required</span><span class="fs-val">none</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 08: X Layer Fit -->
+  <section class="section border-top bg-surface-40">
+    <div class="container py-28 xl-grid">
+      <div class="xl-left">
+        <div class="section-title-block">
+          <span class="section-num">08 / X Layer Fit</span>
+          <h2 class="section-h2">Coordination needs cheap, real interactions.</h2>
+        </div>
+        <p class="section-desc mt-12" style="max-width:100%; color:var(--text); font-size:18px;">
+          X Layer is a strong fit because coordination markets need many small, real interactions. Cheap and fast transactions make it practical for wallets to participate, add liquidity, trade, stabilize, and build on-chain reputation through behavior.
+        </p>
+        <p class="section-desc mt-5" style="max-width:100%;">
+          An optional X Layer intelligence layer lets future adapters bring in wallet or market-quality signals from X Layer-native infrastructure.
+        </p>
+      </div>
+      <div class="xl-right">
+        <div class="xl-stats">
+          <div class="xl-stat">
+            <div class="xls-val">~$0.001</div>
+            <div class="xls-lbl">per swap</div>
+          </div>
+          <div class="xl-stat">
+            <div class="xls-val">&lt; 2s</div>
+            <div class="xls-lbl">finality</div>
+          </div>
+          <div class="xl-stat">
+            <div class="xls-val">EVM</div>
+            <div class="xls-lbl">equivalent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 09: CTA -->
+  <section class="section border-top">
+    <div class="container py-32 cta-grid">
+      <div class="cta-left">
+        <span class="section-num">09 / Ship a coordination market</span>
+        <h2 class="cta-h2 mt-5">Launch a token that responds to how it is actually being formed.</h2>
+        <p class="section-desc mt-6">
+          CoordiFlow is live on X Layer. Attach the hook to a v4 pool and let the market mature through real coordination — not raw volume.
+        </p>
+      </div>
+      <div class="cta-right">
+        <button class="btn-dashboard w-full" onclick="openApp('overview')">
+          Open Dashboard
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
+        </button>
+        <a href="#" class="btn-docs w-full border-box">Read the Docs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer border-top bg-surface">
+    <div class="container py-14 foot-grid">
+      <div class="foot-main">
+        <div class="land-nav-logo" style="margin-bottom:16px;">
+          <span class="logo-diamond"><span class="logo-diamond-inner"></span></span>
+          <span class="logo-name" style="font-size:14px;">CoordiFlow</span>
+        </div>
+        <p class="foot-desc">
+          The liquidity coordination layer. A Uniswap v4 Hook on X Layer that classifies on-chain behavior and tunes markets in real time.
+        </p>
+        <div class="foot-copy mt-8">
+          <span>v0.2.4-alpha</span><span class="dot-sm"></span><span>© 2026 Coordinate Labs</span>
+        </div>
+      </div>
+      <div class="foot-links">
+        <h4>Protocol</h4>
+        <ul>
+          <li><a href="#mechanism">Mechanism</a></li>
+          <li><a href="#personas">Personas</a></li>
+          <li><a href="#rewards">Rewards</a></li>
+          <li><a href="#">X Layer</a></li>
+        </ul>
+      </div>
+      <div class="foot-links">
+        <h4>Build</h4>
+        <ul>
+          <li><a href="#" onclick="openApp('overview')">Interface</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Hook reference</a></li>
+          <li><a href="#">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /landing -->
+
+
+<!-- ================================================================
+  DASHBOARD APP
+  ================================================================ -->
+<div id="page-app" class="hidden" style="display:flex;min-height:100vh;">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <a class="sb-logo" href="#" onclick="closeDash(event)">
+      <span class="logo-diamond"><span class="logo-diamond-inner"></span></span>
+      <span class="sb-logo-name">CoordiFlow</span>
+    </a>
+
+    <nav class="sb-nav">
+      <!-- Market -->
+      <div class="sb-section">
+        <span class="sb-section-label">Market</span>
+        <button class="sb-item active" data-view="overview" onclick="showView('overview',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Overview
+          </span>
+        </button>
+        <button class="sb-item" data-view="swap" onclick="showView('swap',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h14l-3-3M20 17H6l3 3"/></svg>
+            Swap
+          </span>
+          <span class="sb-live"><span class="live-dot"></span>live</span>
+        </button>
+        <button class="sb-item" data-view="liquidity" onclick="showView('liquidity',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 7c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>
+            Liquidity
+          </span>
+        </button>
+      </div>
+
+      <!-- Yield -->
+      <div class="sb-section">
+        <span class="sb-section-label">Yield</span>
+        <button class="sb-item" data-view="rewards" onclick="showView('rewards',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12"/><path d="M8 6a2 2 0 1 1 4 0v3H8z M16 6a2 2 0 1 0-4 0v3h4z"/></svg>
+            Rewards Vault
+          </span>
+        </button>
+        <button class="sb-item" data-view="rehyp" onclick="showView('rehyp',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="12" cy="12" r="3.2"/><path d="M12 8.8v-1M12 16.2v-1M8.8 12h-1M16.2 12h-1"/></svg>
+            Rehypothecation
+          </span>
+        </button>
+      </div>
+
+      <!-- Signals -->
+      <div class="sb-section">
+        <span class="sb-section-label">Signals</span>
+        <button class="sb-item" data-view="personas" onclick="showView('personas',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15 20c0-2.5 1.6-4.6 4-5.4"/></svg>
+            Personas
+          </span>
+        </button>
+        <button class="sb-item" data-view="signals" onclick="showView('signals',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="1.5"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/><path d="M5.5 5.5a9 9 0 0 0 0 13M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+            X Layer Signals
+          </span>
+        </button>
+        <button class="sb-item" data-view="badges" onclick="showView('badges',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/></svg>
+            Persona Badges
+          </span>
+        </button>
+      </div>
+
+      <!-- Protocol -->
+      <div class="sb-section">
+        <span class="sb-section-label">Protocol</span>
+        <button class="sb-item" data-view="activity" onclick="showView('activity',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+            Activity
+          </span>
+        </button>
+        <button class="sb-item" data-view="security" onclick="showView('security',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+            Security
+          </span>
+        </button>
+        <button class="sb-item" data-view="settings" onclick="showView('settings',this)">
+          <span class="sb-item-inner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.2-1.7l2-1.5-2-3.4-2.3.9a7 7 0 0 0-3-1.7L13 2h-2l-.5 2.6a7 7 0 0 0-3 1.7l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .6.1 1.1.2 1.7l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 3 1.7L11 22h2l.5-2.6a7 7 0 0 0 3-1.7l2.3.9 2-3.4-2-1.5c.1-.6.2-1.1.2-1.7z"/></svg>
+            Settings
+          </span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Wallet status at bottom -->
+    <div class="sb-wallet">
+      <div class="sb-net">
+        <span class="live-dot"></span>
+        <span id="walletNetwork">X Layer · Mainnet</span>
+      </div>
+      <span id="walletAddrDisplay" class="sb-addr">Not connected</span>
+      <button id="connectWallet" class="btn-sb-disconnect" type="button">Connect Wallet</button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ──────────────────────────────────────────────── -->
+  <div class="main-wrap">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="tb-path">/app</span>
+        <span class="tb-sep">/</span>
+        <span id="breadcrumb-page" class="tb-page">Overview</span>
+      </div>
+      <div class="topbar-right">
+        <span class="block-pill">
+          <span class="block-dot"></span>
+          Block 8,412,019
+        </span>
+        <button class="btn-connect-wallet" type="button" onclick="document.getElementById('connectWallet').click()">
+          Connect wallet
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: OVERVIEW ══════════════════════════════════ -->
+    <div id="view-overview" class="dash-view">
+      <div class="view-inner">
+        <div class="view-header">
+          <h1>Coordination overview</h1>
+          <p>Live state of the CFLOW market on X Layer mainnet — fees, stages, personas, and rewards all respond to wallet behavior.</p>
+        </div>
+
+        <!-- Score + Personas row -->
+        <div class="grid-2">
+          <!-- Score ring card -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Live coordination score</h3>
+              <span class="card-meta">Epoch 14 · CFLOW/CQUOTE</span>
+            </div>
+            <div class="card-body">
+              <div class="score-ring-wrap">
+                <svg viewBox="0 0 160 160" style="transform:rotate(-90deg)">
+                  <circle cx="80" cy="80" r="64" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+                  <circle id="scoreRingFill" cx="80" cy="80" r="64" fill="none"
+                    stroke="oklch(0.88 0.14 210)" stroke-width="6" stroke-linecap="round"
+                    stroke-dasharray="402.12" stroke-dashoffset="72.38"
+                    style="filter:drop-shadow(0 0 6px oklch(0.88 0.14 210 / 0.6))"/>
+                </svg>
+                <div class="score-ring-center">
+                  <span class="score-big" id="coordinationScore">82</span>
+                  <span class="score-sub" id="phaseLabel">score · stage 02</span>
+                </div>
+              </div>
+              <div class="score-stats">
+                <div class="score-stat">
+                  <span class="score-stat-label">Δ 24h</span>
+                  <span class="score-stat-val positive" id="marketSignal">+4.2</span>
+                </div>
+                <div class="score-stat">
+                  <span class="score-stat-label">Wallets</span>
+                  <span class="score-stat-val" id="uniqueParticipants">1,284</span>
+                </div>
+                <div class="score-stat">
+                  <span class="score-stat-label">Healthy</span>
+                  <span class="score-stat-val positive" id="positiveParticipants">76%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Persona distribution -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Persona distribution</h3>
+              <span class="card-meta">Last epoch · 1,137 wallets</span>
+            </div>
+            <div class="card-body">
+              <div class="persona-bar">
+                <div class="p-seg p-seeder" style="width:18%"></div>
+                <div class="p-seg p-builder" style="width:36%"></div>
+                <div class="p-seg p-stab" style="width:32%"></div>
+                <div class="p-seg p-restr" style="width:14%"></div>
+              </div>
+              <div class="persona-grid">
+                <div class="persona-row">
+                  <span class="persona-left"><span class="p-dot" style="background:var(--c-seeder)"></span>Seeders</span>
+                  <span class="persona-right"><span class="pw">w +1.0</span> <span>18%</span></span>
+                </div>
+                <div class="persona-row">
+                  <span class="persona-left"><span class="p-dot" style="background:var(--c-builder)"></span>Builders</span>
+                  <span class="persona-right"><span class="pw">w +0.8</span> <span>36%</span></span>
+                </div>
+                <div class="persona-row">
+                  <span class="persona-left"><span class="p-dot" style="background:var(--c-stab)"></span>Stabilizers</span>
+                  <span class="persona-right"><span class="pw">w +0.9</span> <span>32%</span></span>
+                </div>
+                <div class="persona-row">
+                  <span class="persona-left"><span class="p-dot" style="background:var(--c-restr)"></span>Restricted</span>
+                  <span class="persona-right"><span class="pw">w −1.0</span> <span id="restrictedParticipants">14%</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage controls -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Stage controls</h3>
+            <span class="card-meta">Hook · owner-gated</span>
+          </div>
+          <div class="card-body">
+            <div class="stage-stepper stage-track">
+              <div class="stage-line-bg"></div>
+              <div id="stageFill" class="stage-line-active" style="width:33%"></div>
+              <div class="stage-node done" data-stage="0">
+                <span class="stage-circle done">1</span>
+                <span class="stage-name">Seeding</span>
+              </div>
+              <div class="stage-node done" data-stage="1">
+                <span class="stage-circle done">2</span>
+                <span class="stage-name">Forming</span>
+              </div>
+              <div class="stage-node" data-stage="2">
+                <span class="stage-circle">3</span>
+                <span class="stage-name">Maturing</span>
+              </div>
+              <div class="stage-node" data-stage="3">
+                <span class="stage-circle">4</span>
+                <span class="stage-name">Stable</span>
+              </div>
+            </div>
+            <div class="stage-cards">
+              <div class="stage-card">
+                <div class="sc-num">Stage 01</div>
+                <div class="sc-name">Seeding</div>
+                <div class="sc-desc">Concentrated LP only · max fee 0.80%</div>
+              </div>
+              <div class="stage-card current">
+                <div class="sc-num">Stage 02<span class="sc-cur-badge">current</span></div>
+                <div class="sc-name" id="stageTitle">Forming</div>
+                <div class="sc-desc">Swap caps relaxed · builder weight live</div>
+              </div>
+              <div class="stage-card">
+                <div class="sc-num">Stage 03</div>
+                <div class="sc-name">Maturing</div>
+                <div class="sc-desc">Rewards distribution opens · base fee 0.30%</div>
+              </div>
+              <div class="stage-card">
+                <div class="sc-num">Stage 04</div>
+                <div class="sc-name">Stable</div>
+                <div class="sc-desc">Full caps · rehypothecation enabled</div>
+              </div>
+            </div>
+            <div class="stage-thresh">
               <div>
-                <p class="eyebrow">Launch Actions</p>
-                <h2>Swap, seed liquidity, earn rewards.</h2>
+                <div class="st-label">Advance threshold</div>
+                <div class="st-text">Score ≥ <span style="color:var(--p);font-family:var(--fm)">70</span> for <span style="font-family:var(--fm)">3 epochs</span> · currently <span style="color:var(--positive);font-family:var(--fm)" id="liquidityRelease">82 · 2/3</span></div>
               </div>
-              <span id="walletNetwork">Wallet not connected</span>
-            </div>
-            <div class="action-grid">
-              <article class="action-card">
-                <span>Direct pool swap</span>
-                <strong>CFLOW / CQUOTE</strong>
-                <label>
-                  Route
-                  <select id="swapRoute">
-                    <option value="quoteToLaunch">CQUOTE -> CFLOW</option>
-                    <option value="launchToQuote">CFLOW -> CQUOTE</option>
-                    <option value="usdt0ToLaunch">USDT0 -> CFLOW</option>
-                    <option value="usdtToLaunch" disabled>USDT -> CFLOW needs funded route</option>
-                    <option value="wokbToLaunch" disabled>WOKB -> CFLOW needs funded route</option>
-                  </select>
-                </label>
-                <label>
-                  Amount in
-                  <input id="swapAmount" inputmode="decimal" value="1" />
-                </label>
-                <div class="button-row">
-                  <button id="approveSwap" type="button">Approve</button>
-                  <button id="executeSwap" type="button">Swap</button>
-                </div>
-              </article>
-              <article class="action-card">
-                <span>Add liquidity</span>
-                <strong>Become a Seeder</strong>
-                <label>
-                  Liquidity units
-                  <input id="liquidityAmount" inputmode="numeric" value="1000000000000" />
-                </label>
-                <label>
-                  Max token spend
-                  <input id="liquidityMax" inputmode="decimal" value="10" />
-                </label>
-                <div class="button-row">
-                  <button id="approveLiquidity" type="button">Approve both</button>
-                  <button id="addLiquidity" type="button">Add LP</button>
-                </div>
-              </article>
-              <article class="action-card">
-                <span>Restricted Vault</span>
-                <strong>Toxic flow pays. Good coordination earns.</strong>
-                <div class="button-row single">
-                  <button id="claimRewards" type="button">Claim rewards</button>
-                </div>
-                <p>Claims real OKB from the reward vault when the selected wallet has accrued coordination rewards.</p>
-              </article>
-              <article class="action-card">
-                <span>Light Rehypothecation</span>
-                <strong>Deposit idle CQUOTE</strong>
-                <label>
-                  Deposit amount
-                  <input id="rehypDepositAmount" inputmode="decimal" value="1" />
-                </label>
-                <div class="button-row">
-                  <button id="approveRehyp" type="button">Approve</button>
-                  <button id="depositRehyp" type="button">Deposit</button>
-                </div>
-                <button id="claimYield" type="button">Claim yield</button>
-              </article>
-            </div>
-            <div class="asset-routes">
-              <span>Official X Layer assets</span>
-              <code>USDT0 0x779D...3736</code>
-              <code>USDT 0x1E4a...D41d</code>
-              <code>WOKB 0xe538...9b2b</code>
-            </div>
-            <p id="txStatus" class="tx-status">Connect wallet to send real X Layer mainnet transactions.</p>
-          </section>
-
-          <section class="integration-strip" aria-label="Live CoordiFlow integrations">
-            <article class="integration-card">
-              <span>Signal Intelligence</span>
-              <strong id="signalSummary">Loading</strong>
-              <code id="signalAddress">0x8d89...5D98</code>
-            </article>
-            <article class="integration-card">
-              <span>Persona Badge SBT</span>
-              <strong id="badgeSummary">Loading</strong>
-              <code id="badgeAddress">0xD85e...58Cd</code>
-            </article>
-            <article class="integration-card">
-              <span>Rehypothecation</span>
-              <strong id="rehypothecationSummary">Loading</strong>
-              <code id="rehypothecationAddress">0xf887...3bdb</code>
-            </article>
-            <article class="integration-card">
-              <span>Aave Adapter</span>
-              <strong>Aave-ready reserve</strong>
-              <code>0x87B8...63b7</code>
-            </article>
-          </section>
-
-          <section class="metrics">
-            <article class="metric">
-              <span>Unique participants</span>
-              <strong id="uniqueParticipants">-</strong>
-            </article>
-            <article class="metric">
-              <span>Positive personas</span>
-              <strong id="positiveParticipants">-</strong>
-            </article>
-            <article class="metric">
-              <span>Restricted wallets</span>
-              <strong id="restrictedParticipants">-</strong>
-            </article>
-            <article class="metric">
-              <span>Liquidity release</span>
-              <strong id="liquidityRelease">-</strong>
-            </article>
-            <article class="metric">
-              <span>X Layer signal</span>
-              <strong id="marketSignal">-</strong>
-            </article>
-            <article class="metric">
-              <span>Claimable rewards</span>
-              <strong id="claimableRewards">-</strong>
-            </article>
-            <article class="metric">
-              <span>Idle deposits</span>
-              <strong id="idleDeposits">-</strong>
-            </article>
-            <article class="metric">
-              <span>Available for lending</span>
-              <strong id="availableAssets">-</strong>
-            </article>
-            <article class="metric">
-              <span>Rehypothecated</span>
-              <strong id="deployedAssets">-</strong>
-            </article>
-            <article class="metric">
-              <span>Yield pool</span>
-              <strong id="yieldPool">-</strong>
-            </article>
-            <article class="metric">
-              <span>Claimable yield</span>
-              <strong id="claimableYield">-</strong>
-            </article>
-            <article class="metric">
-              <span>Wallet signal</span>
-              <strong id="walletSignal">-</strong>
-            </article>
-            <article class="metric">
-              <span>Persona badge</span>
-              <strong id="personaBadge">-</strong>
-            </article>
-          </section>
-
-          <section class="security-grid">
-            <article class="panel security-card">
-              <p class="eyebrow">Security</p>
-              <h2>Guardrails judges can verify.</h2>
-              <ul>
-                <li>Owner-gated pool, reward vault, and signal configuration.</li>
-                <li>User action helper uses a reentrancy lock and PoolManager-only callback.</li>
-                <li>Dynamic hook fees are bounded by Uniswap v4 fee validation.</li>
-                <li>Signal provider and source hash are visible on-chain.</li>
-              </ul>
-            </article>
-            <article class="panel security-card">
-              <p class="eyebrow">Flap-Compatible Launch</p>
-              <h2>Launch layer plus coordination intelligence.</h2>
-              <ul>
-                <li>Works with standard Uniswap v4 pool initialization.</li>
-                <li>Launches can keep Flap-style creation simple while CoordiFlow scores flow quality.</li>
-                <li>Swap and LP actions trigger personas, fees, rewards, badges, and market stage updates.</li>
-              </ul>
-            </article>
-          </section>
-
-          <section class="panel persona-panel">
-            <div>
-              <p class="eyebrow">Live Wallet Persona</p>
-              <h2 id="personaName">Unloaded</h2>
-              <p id="personaSummary" class="persona-summary">Select a participant to read its hook-recorded behavior.</p>
-            </div>
-            <div class="persona-stats">
-              <span>Buys <strong id="buyVolume">-</strong></span>
-              <span>Sells <strong id="sellVolume">-</strong></span>
-              <span>Swaps <strong id="swapCount">-</strong></span>
-              <span>LP actions <strong id="liquidityActions">-</strong></span>
-              <span>Rapid round trips <strong id="rapidRoundTrips">-</strong></span>
-            </div>
-          </section>
-
-          <section class="persona-roster">
-            <article class="persona-card" data-wallet="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19">
-              <span>Seeder</span>
-              <strong>Early liquidity</strong>
-              <code>0xE665...8e19</code>
-            </article>
-            <article class="persona-card" data-persona="builder" data-wallet="0x0F80054095F3A4cb2A2d14b7326303102B56D137">
-              <span>Builder</span>
-              <strong>Repeated constructive buys</strong>
-              <code>0x0F80...D137</code>
-            </article>
-            <article class="persona-card" data-persona="stabilizer" data-wallet="0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3">
-              <span>Stabilizer</span>
-              <strong>Healthy market interaction</strong>
-              <code>0xa163...b3E3</code>
-            </article>
-            <article class="persona-card restricted" data-persona="restricted" data-wallet="0x64dD322ac2eADb4864c014E5206683a73B8055cd">
-              <span>Restricted</span>
-              <strong>Rapid round-trip flow</strong>
-              <code>0x64dD...55cd</code>
-            </article>
-          </section>
-
-          <section class="panel activity-panel">
-            <div class="activity-header">
-              <div>
-                <p class="eyebrow">Verified Mainnet Activity</p>
-                <h2>Real transactions that changed the dashboard state</h2>
+              <div style="display:flex;gap:8px;">
+                <button class="btn-outline">Hold stage</button>
+                <button class="btn-primary-sm">Advance →</button>
               </div>
-              <span>Chain 196</span>
             </div>
-            <div class="activity-list">
-              <article>
-                <strong>Builder persona formed</strong>
-                <span>Three constructive swaps updated wallet stats and minted badge #2.</span>
-                <code>0xb84f...b604</code>
-              </article>
-              <article>
-                <strong>Restricted persona flagged</strong>
-                <span>Rapid round-trip flow triggered restricted classification and negative signal.</span>
-                <code>0x61cf...86e4</code>
-              </article>
-              <article>
-                <strong>Rehypothecation proof</strong>
-                <span>10 CQUOTE deposited, 3 CQUOTE left deployed, 0.0001 OKB yield accrued.</span>
-                <code>0xdd3c...c738</code>
-              </article>
-              <article>
-                <strong>Signal provider connected</strong>
-                <span>Hook now reads wallet and market signal bps from the X Layer intelligence adapter.</span>
-                <code>0xbd03...f066</code>
-              </article>
-            </div>
-          </section>
-        </section>
-      </section>
-      </section>
-    </main>
+          </div>
+        </div>
 
-    <script src="./app.js?v=20260528-actions"></script>
-  </body>
+        <!-- Chart + Activity row -->
+        <div class="grid-2">
+          <!-- Score history / Signal canvas -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Score history</h3>
+              <span class="card-meta">30 days · score 0–100</span>
+            </div>
+            <div class="chart-area">
+              <canvas id="signalCanvas" width="900" height="240"></canvas>
+            </div>
+          </div>
+
+          <!-- Recent activity -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Recent activity</h3>
+              <span class="card-meta">Block stream</span>
+            </div>
+            <ul class="activity-list">
+              <li class="act-item"><span class="act-time">12s</span><span class="act-bar" style="background:var(--c-stab)"></span><span class="act-type">+ stabilizer</span><span class="act-text">0x7a…b21f added LP · 1.2k CQUOTE · CFLOW/CQUOTE</span></li>
+              <li class="act-item"><span class="act-time">48s</span><span class="act-bar" style="background:var(--c-builder)"></span><span class="act-type">+ builder</span><span class="act-text">0x3e…9f02 repeat buy · USDT0 → CFLOW</span></li>
+              <li class="act-item"><span class="act-time">1m</span><span class="act-bar" style="background:var(--c-restr)"></span><span class="act-type">⚠ restricted</span><span class="act-text">0xc1…44a8 round-trip flagged · fee +0.4%</span></li>
+              <li class="act-item"><span class="act-time">2m</span><span class="act-bar" style="background:var(--c-seeder)"></span><span class="act-type">+ seeder</span><span class="act-text">0x9b…0d31 minted concentrated range · CFLOW/CQUOTE</span></li>
+              <li class="act-item"><span class="act-time">3m</span><span class="act-bar" style="background:var(--p)"></span><span class="act-type">✓ reward</span><span class="act-text">epoch 14 · stabilizer claim window open</span></li>
+              <li class="act-item"><span class="act-time">5m</span><span class="act-bar" style="background:var(--p)"></span><span class="act-type">↑ stage</span><span class="act-text">CFLOW/CQUOTE advanced to stage 02 · forming</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Hidden app.js bindings -->
+        <div style="display:none">
+          <div id="networkBadge">Verified on X Layer mainnet</div>
+          <strong id="walletSignal"></strong>
+          <strong id="personaBadge"></strong>
+          <strong id="claimableRewards"></strong>
+          <strong id="idleDeposits"></strong>
+          <strong id="availableAssets"></strong>
+          <strong id="deployedAssets"></strong>
+          <strong id="yieldPool"></strong>
+          <strong id="claimableYield"></strong>
+          <strong id="signalSummary"></strong>
+          <code id="signalAddress"></code>
+          <strong id="badgeSummary"></strong>
+          <code id="badgeAddress"></code>
+          <strong id="rehypothecationSummary"></strong>
+          <code id="rehypothecationAddress"></code>
+          <p id="status"></p>
+          <p id="txStatus"></p>
+          <h2 id="personaName"></h2>
+          <p id="personaSummary"></p>
+          <strong id="buyVolume"></strong>
+          <strong id="sellVolume"></strong>
+          <strong id="swapCount"></strong>
+          <strong id="liquidityActions"></strong>
+          <strong id="rapidRoundTrips"></strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: SWAP ══════════════════════════════════════ -->
+    <div id="view-swap" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header">
+          <h1>Swap</h1>
+          <p>Swap tokens on X Layer through the CoordiFlow v4 pool. Your persona adjusts effective fees in real time.</p>
+        </div>
+
+        <div class="card">
+          <!-- Fee tier tabs -->
+          <div class="swap-fee-tabs">
+            <div class="swap-fee-tab active">
+              <span class="live-pill"><span class="live-dot" style="width:5px;height:5px;"></span> fee 0.30% · live</span>
+            </div>
+            <div class="swap-fee-tab">
+              fee 0.38% · live
+            </div>
+            <div class="swap-fee-tab">
+              fee 0.35% · live
+            </div>
+          </div>
+
+          <div class="swap-layout">
+            <!-- Left: swap form -->
+            <div class="swap-form">
+              <div class="swap-pair-header">
+                <span class="swap-pair-name">CQUOTE → CFLOW</span>
+                <span class="swap-pool-badge">V4 Pool</span>
+              </div>
+
+              <!-- You pay -->
+              <div class="swap-token-box">
+                <div class="stb-label">
+                  <span>You pay</span>
+                  <span class="stb-bal">bal <span id="swapBalPay">12,480.55</span></span>
+                </div>
+                <div class="stb-main">
+                  <input id="swapAmount" class="stb-amount" type="number" value="1000" placeholder="0.00" />
+                  <span class="stb-token">CQUOTE</span>
+                </div>
+              </div>
+
+              <!-- Flip arrow -->
+              <div class="swap-arrow-row">
+                <button class="swap-arrow-btn" title="Flip pair">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/></svg>
+                </button>
+              </div>
+
+              <!-- You receive -->
+              <div class="swap-token-box">
+                <div class="stb-label">
+                  <span>You receive</span>
+                  <span class="stb-bal">bal <span id="swapBalRec">0.00</span></span>
+                </div>
+                <div class="stb-main">
+                  <span style="font-family:var(--fd);font-size:36px;font-weight:600;letter-spacing:-0.03em">996.72</span>
+                  <span class="stb-token">CFLOW</span>
+                </div>
+              </div>
+
+              <!-- Route selector (hidden, bound to app.js) -->
+              <select id="swapRoute" style="display:none">
+                <option value="quoteToLaunch">CQUOTE → CFLOW</option>
+                <option value="launchToQuote">CFLOW → CQUOTE</option>
+              </select>
+
+              <!-- Trade details -->
+              <div class="swap-details">
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Rate</span>
+                  <span class="swap-detail-val">1 CQUOTE = 0.9967 CFLOW</span>
+                </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Effective fee</span>
+                  <span class="swap-detail-val">0.38% (base) · persona-adjusted</span>
+                </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Per-block cap</span>
+                  <span class="swap-detail-val">1.0% of TVL</span>
+                </div>
+                <div class="swap-detail-row">
+                  <span class="swap-detail-key">Slippage</span>
+                  <span class="swap-detail-val">0.5%</span>
+                </div>
+              </div>
+
+              <!-- Action buttons (bound to app.js) -->
+              <div style="display:grid;grid-template-columns:1fr 3fr;gap:10px;margin-bottom:4px;">
+                <button id="approveSwap" class="btn-outline" type="button" style="height:52px;">Approve</button>
+                <button id="executeSwap" class="btn-primary-full" type="button">Swap on X Layer</button>
+              </div>
+            </div>
+
+            <!-- Right: wallet behavior panel -->
+            <div class="swap-wallet-panel">
+              <div class="card-head" style="border:none;padding:0 0 14px;border-bottom:1px solid var(--hairline);margin-bottom:16px;">
+                <h3 style="font-size:15px;">Your wallet</h3>
+                <span class="card-meta" style="color:var(--positive)">Behavior observed live</span>
+              </div>
+
+              <div class="swp-section">
+                <span class="swp-section-label">Current persona</span>
+                <div class="swp-persona-card">
+                  <span style="font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Persona</span>
+                  <div class="swp-persona-name">
+                    <span class="live-dot" style="background:var(--p)"></span>
+                    Stabilizer
+                  </div>
+                  <div class="swp-persona-sub">weight +0.9 · fee discount 12%</div>
+                </div>
+              </div>
+
+              <div class="swp-section">
+                <span class="swp-section-label">Score contribution</span>
+                <div class="swp-score-contrib">
+                  <span style="font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">This epoch</span>
+                  <div class="swp-contrib-val">+8.4</div>
+                </div>
+              </div>
+
+              <div class="swp-section">
+                <span class="swp-section-label">Last 5 swaps</span>
+                <div class="swp-last-swaps">
+                  <div class="swp-swap-item"><span class="swp-swap-num">1.</span><span></span><span class="swp-swap-val positive">+1.2k CFLOW</span></div>
+                  <div class="swp-swap-item"><span class="swp-swap-num">2.</span><span></span><span class="swp-swap-val negative">−420 CQUOTE</span></div>
+                  <div class="swp-swap-item"><span class="swp-swap-num">3.</span><span></span><span class="swp-swap-val positive">+880 CFLOW</span></div>
+                  <div class="swp-swap-item"><span class="swp-swap-num">4.</span><span></span><span class="swp-swap-val negative">−110 CQUOTE</span></div>
+                  <div class="swp-swap-item"><span class="swp-swap-num">5.</span><span></span><span class="swp-swap-val">+250 USDT0→CFLOW</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tx-status-line" id="txStatus">Connect wallet to send real X Layer mainnet transactions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: LIQUIDITY ════════════════════════════════ -->
+    <div id="view-liquidity" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header">
+          <h1>Liquidity</h1>
+          <p>Provide concentrated liquidity to the CFLOW/CQUOTE v4 pool. Seeders earn higher rewards and improved score weighting.</p>
+        </div>
+
+        <!-- Top stats -->
+        <div class="liq-stats">
+          <div class="liq-stat-card">
+            <div class="lsc-label">TVL · CFLOW/CQUOTE</div>
+            <div class="lsc-main">
+              <span class="lsc-val">1.84M</span>
+              <span class="lsc-delta">+128k</span>
+            </div>
+          </div>
+          <div class="liq-stat-card">
+            <div class="lsc-label">Active LPs</div>
+            <div class="lsc-main">
+              <span class="lsc-val">84</span>
+              <span class="lsc-delta">+6</span>
+            </div>
+          </div>
+          <div class="liq-stat-card">
+            <div class="lsc-label">Stage</div>
+            <div class="lsc-main" style="justify-content:space-between;align-items:center;">
+              <span class="lsc-val" style="font-size:28px;">02 · forming</span>
+              <span style="font-family:var(--fm);font-size:11px;color:var(--muted)">advance @ 70</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main layout -->
+        <div class="liq-layout">
+          <!-- Left: add liquidity form -->
+          <div class="card liq-form-card">
+            <div class="liq-form-header">
+              <span class="liq-form-title">Add liquidity</span>
+              <span class="liq-pair-label">CFLOW / CQUOTE</span>
+            </div>
+            <div class="liq-form-body">
+              <!-- CFLOW token box -->
+              <div class="liq-token-box">
+                <div class="ltb-label">
+                  <span>CFLOW</span>
+                  <span style="color:var(--muted)">bal 0.00</span>
+                </div>
+                <div class="ltb-main">
+                  <input id="liquidityAmount" class="ltb-amount" type="number" value="500" placeholder="0.00" />
+                  <span class="ltb-token">CFLOW</span>
+                </div>
+              </div>
+
+              <!-- CQUOTE token box -->
+              <div class="liq-token-box">
+                <div class="ltb-label">
+                  <span>CQUOTE</span>
+                  <span style="color:var(--muted)">bal 12,480.55</span>
+                </div>
+                <div class="ltb-main">
+                  <input id="liquidityMax" class="ltb-amount" type="number" value="498.30" placeholder="0.00" />
+                  <span class="ltb-token">CQUOTE</span>
+                </div>
+              </div>
+
+              <!-- Price range -->
+              <div class="liq-range">
+                <div class="liq-range-label">
+                  Range
+                  <span class="liq-range-tag">Concentrated</span>
+                </div>
+                <div class="liq-range-inputs">
+                  <div class="liq-range-box">
+                    <div style="font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Min price</div>
+                    <div class="liq-range-val">0.9800</div>
+                  </div>
+                  <div class="liq-range-box">
+                    <div style="font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Max price</div>
+                    <div class="liq-range-val">1.0200</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Details -->
+              <div class="liq-details">
+                <div class="liq-detail-row">
+                  <span class="ldr-key">Projected persona</span>
+                  <span class="ldr-val" style="color:var(--p)">Seeder · weight +1.0</span>
+                </div>
+                <div class="liq-detail-row">
+                  <span class="ldr-key">LP token</span>
+                  <span class="ldr-val">ERC-6909 · v4 position</span>
+                </div>
+                <div class="liq-detail-row">
+                  <span class="ldr-key">Estimated reward share</span>
+                  <span class="ldr-val" style="color:var(--positive)">1.8% / epoch</span>
+                </div>
+              </div>
+
+              <!-- Buttons (app.js bound) -->
+              <div style="display:grid;grid-template-columns:1fr 3fr;gap:10px;">
+                <button id="approveLiquidity" class="btn-outline" type="button" style="height:52px;">Approve both</button>
+                <button id="addLiquidity" class="btn-primary-full" type="button">Add liquidity</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Your positions -->
+          <div class="card liq-positions-panel">
+            <div class="liq-pos-header">
+              <span class="liq-pos-title">Your positions</span>
+              <span class="liq-pos-count">2 active</span>
+            </div>
+            <div class="liq-pos-list">
+              <div class="liq-pos-card">
+                <div class="lpc-name">
+                  CFLOW/CQUOTE
+                  <span class="lpc-persona" style="color:var(--c-seeder)">● Seeder</span>
+                </div>
+                <div class="lpc-row">
+                  <span class="lpc-label">Value</span>
+                  <span class="lpc-val">8,420 CQUOTE</span>
+                </div>
+                <div class="lpc-row">
+                  <span class="lpc-label">Fees earned</span>
+                  <span class="lpc-val lpc-fees">+62.4</span>
+                </div>
+              </div>
+              <div class="liq-pos-card">
+                <div class="lpc-name">
+                  USDTO/CFLOW
+                  <span class="lpc-persona" style="color:var(--c-builder)">● Builder</span>
+                </div>
+                <div class="lpc-row">
+                  <span class="lpc-label">Value</span>
+                  <span class="lpc-val">1,218 USDT0</span>
+                </div>
+                <div class="lpc-row">
+                  <span class="lpc-label">Fees earned</span>
+                  <span class="lpc-val lpc-fees">+11.8</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: REWARDS VAULT ════════════════════════════ -->
+    <div id="view-rewards" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header">
+          <h1>Rewards Vault</h1>
+          <p>Coordination rewards accumulate from toxic flow penalties and are distributed to healthy wallets each epoch.</p>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Claim rewards</h3><span class="card-meta" style="color:var(--positive)">Epoch 14 open</span></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:20px;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);">
+                <div class="label-xs" style="margin-bottom:6px;">Vault Balance</div>
+                <div style="font-family:var(--fd);font-size:28px;font-weight:600;" id="claimableRewardsDisplay">-</div>
+              </div>
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);">
+                <div class="label-xs" style="margin-bottom:6px;">Your Claimable</div>
+                <div style="font-family:var(--fd);font-size:28px;font-weight:600;color:var(--positive)" id="claimableRewards">-</div>
+              </div>
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);">
+                <div class="label-xs" style="margin-bottom:6px;">Epoch</div>
+                <div style="font-family:var(--fd);font-size:28px;font-weight:600;">14</div>
+              </div>
+            </div>
+            <button id="claimRewards" class="btn-primary-full" type="button">Claim Rewards (OKB)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: REHYPOTHECATION ══════════════════════════ -->
+    <div id="view-rehyp" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header">
+          <h1>Rehypothecation</h1>
+          <p>Deposit idle CQUOTE to earn additional yield via Aave-compatible lending protocols.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Deposit</h3><span class="card-meta">Idle CQUOTE → Yield</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+              <div class="field"><span class="field-label">Deposit amount</span><input id="rehypDepositAmount" class="field-input" type="number" value="1" /></div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;">
+                <button id="approveRehyp" class="btn-outline" type="button" style="height:42px;">Approve</button>
+                <button id="depositRehyp" class="btn-primary-full" type="button" style="height:42px;">Deposit CQUOTE</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Your position</h3><span class="card-meta">Yield accrual</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:14px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:5px;">Idle deposits</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="idleDeposits">-</div></div>
+                <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:5px;">Claimable yield</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;color:var(--positive)" id="claimableYield">-</div></div>
+              </div>
+              <button id="claimYield" class="btn-primary-full" type="button" style="height:42px;">Claim Yield</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: PERSONAS ═════════════════════════════════ -->
+    <div id="view-personas" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header">
+          <h1>Personas</h1>
+          <p>Browse on-chain participants and inspect their hook-recorded behavior scores.</p>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Participants</h3><span class="card-meta">Click to inspect</span></div>
+          <div class="persona-roster persona-buttons">
+            <div class="pr-card" data-persona="seeder" data-wallet="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19">
+              <div class="pr-tag"><span class="p-dot" style="background:var(--c-seeder)"></span>Seeder</div>
+              <div class="pr-title">Early liquidity provider — concentrated range seeder</div>
+              <code class="pr-addr">0xE665…8e19</code>
+            </div>
+            <div class="pr-card" data-persona="builder" data-wallet="0x0F80054095F3A4cb2A2d14b7326303102B56D137">
+              <div class="pr-tag" style="color:var(--c-builder)"><span class="p-dot" style="background:var(--c-builder)"></span>Builder</div>
+              <div class="pr-title">Repeated constructive buy pressure</div>
+              <code class="pr-addr">0x0F80…D137</code>
+            </div>
+            <div class="pr-card" data-persona="stabilizer" data-wallet="0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3">
+              <div class="pr-tag" style="color:var(--c-stab)"><span class="p-dot" style="background:var(--c-stab)"></span>Stabilizer</div>
+              <div class="pr-title">Healthy balanced market interaction</div>
+              <code class="pr-addr">0xa163…b3E3</code>
+            </div>
+            <div class="pr-card restricted" data-persona="restricted" data-wallet="0x64dD322ac2eADb4864c014E5206683a73B8055cd">
+              <div class="pr-tag restricted"><span class="p-dot" style="background:var(--c-restr)"></span>Restricted</div>
+              <div class="pr-title">Rapid round-trip · sandwich flagged</div>
+              <code class="pr-addr">0x64dD…55cd</code>
+            </div>
+          </div>
+          <!-- Persona stats panel (populated by app.js) -->
+          <div class="persona-stats-panel" style="border-top:1px solid var(--hairline);">
+            <div class="psp-info">
+              <div class="label-xs" style="margin-bottom:6px;">Live wallet persona</div>
+              <div class="psp-name" id="personaName">Select a wallet</div>
+              <p class="psp-desc" id="personaSummary">Click a participant above to read its hook-recorded behavior.</p>
+            </div>
+            <div class="psp-stats">
+              <div class="psp-stat"><span class="psp-stat-label">Buys</span><span class="psp-stat-val" id="buyVolume">-</span></div>
+              <div class="psp-stat"><span class="psp-stat-label">Sells</span><span class="psp-stat-val" id="sellVolume">-</span></div>
+              <div class="psp-stat"><span class="psp-stat-label">Swaps</span><span class="psp-stat-val" id="swapCount">-</span></div>
+              <div class="psp-stat"><span class="psp-stat-label">LP Actions</span><span class="psp-stat-val" id="liquidityActions">-</span></div>
+              <div class="psp-stat"><span class="psp-stat-label">Round Trips</span><span class="psp-stat-val" style="color:var(--neg)" id="rapidRoundTrips">-</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: X LAYER SIGNALS ══════════════════════════ -->
+    <div id="view-signals" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header"><h1>X Layer Signals</h1><p>Live signal intelligence from the deployed signal provider contract.</p></div>
+        <div class="card">
+          <div class="card-head"><h3>Signal provider</h3><span class="card-meta" id="signalAddress">0x8d89…5D98</span></div>
+          <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;">Wallet signal</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="walletSignal">-</div></div>
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;">Market signal</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="marketSignalB">-</div></div>
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);grid-column:span 2;"><div class="label-xs" style="margin-bottom:6px;">Signal summary</div><div style="font-size:14px;color:var(--muted);line-height:1.55" id="signalSummary">Loading signal data...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: PERSONA BADGES ═══════════════════════════ -->
+    <div id="view-badges" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header"><h1>Persona Badges</h1><p>Soulbound tokens (SBTs) issued on-chain representing wallet persona history.</p></div>
+        <div class="card">
+          <div class="card-head"><h3>Persona Badge SBT</h3><span class="card-meta" id="badgeAddress">0xD85e…58Cd</span></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;">Your badge</div><div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--p)" id="personaBadge">-</div></div>
+              <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);grid-column:span 2;"><div class="label-xs" style="margin-bottom:6px;">Badge summary</div><div style="font-size:14px;color:var(--muted);line-height:1.55" id="badgeSummary">Loading badge data...</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: ACTIVITY ═════════════════════════════════ -->
+    <div id="view-activity" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header"><h1>Activity</h1><p>Live block-by-block transaction activity from the CoordiFlow hook.</p></div>
+        <div class="card">
+          <div class="card-head"><h3>Recent activity</h3><span class="card-meta">Block stream</span></div>
+          <ul class="activity-list">
+            <li class="act-item"><span class="act-time">12s</span><span class="act-bar" style="background:var(--c-stab)"></span><span class="act-type">+ stabilizer</span><span class="act-text">0x7a…b21f added LP · 1.2k CQUOTE · CFLOW/CQUOTE</span></li>
+            <li class="act-item"><span class="act-time">48s</span><span class="act-bar" style="background:var(--c-builder)"></span><span class="act-type">+ builder</span><span class="act-text">0x3e…9f02 repeat buy · USDT0 → CFLOW</span></li>
+            <li class="act-item"><span class="act-time">1m</span><span class="act-bar" style="background:var(--c-restr)"></span><span class="act-type">⚠ restricted</span><span class="act-text">0xc1…44a8 round-trip flagged · fee +0.4%</span></li>
+            <li class="act-item"><span class="act-time">2m</span><span class="act-bar" style="background:var(--c-seeder)"></span><span class="act-type">+ seeder</span><span class="act-text">0x9b…0d31 minted concentrated range · CFLOW/CQUOTE</span></li>
+            <li class="act-item"><span class="act-time">3m</span><span class="act-bar" style="background:var(--p)"></span><span class="act-type">✓ reward</span><span class="act-text">epoch 14 · stabilizer claim window open</span></li>
+            <li class="act-item"><span class="act-time">5m</span><span class="act-bar" style="background:var(--p)"></span><span class="act-type">↑ stage</span><span class="act-text">CFLOW/CQUOTE advanced to stage 02 · forming</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: SECURITY ═════════════════════════════════ -->
+    <div id="view-security" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header"><h1>Security</h1><p>Hook security status and on-chain access control overview.</p></div>
+        <div class="placeholder-view">
+          <div class="placeholder-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <div class="placeholder-title">No security events</div>
+          <div class="placeholder-desc">All hook permissions are operating within expected bounds. No anomalous activity detected in the last 24 hours.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: SETTINGS ═════════════════════════════════ -->
+    <div id="view-settings" class="dash-view hidden">
+      <div class="view-inner">
+        <div class="view-header"><h1>Settings</h1><p>Configure contract addresses and wallet for on-chain state reads and transactions.</p></div>
+
+        <div class="config-grid">
+          <!-- Contract addresses -->
+          <div class="card">
+            <div class="card-head"><h3>Contract addresses</h3></div>
+            <div class="card-body config-fields">
+              <div class="field"><span class="field-label">Hook contract</span><input class="field-input" id="hookAddress" value="0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0" /></div>
+              <div class="field"><span class="field-label">Pool ID</span><input class="field-input" id="poolId" value="0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577" /></div>
+              <div class="field"><span class="field-label">Rewards vault</span><input class="field-input" id="vaultAddress" value="0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D" /></div>
+              <div class="field"><span class="field-label">Rehypothecation vault</span><input class="field-input" id="rehypothecationVault" value="0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb" /></div>
+              <div class="field"><span class="field-label">User actions</span><input class="field-input" id="userActions" value="0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1" /></div>
+              <div class="field"><span class="field-label">Signal provider</span><input class="field-input" id="signalProvider" value="0x8d89C6f5d2d961EC39027e5371f6044C96995D98" /></div>
+              <div class="field"><span class="field-label">Persona badge</span><input class="field-input" id="badgeContract" value="0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd" /></div>
+            </div>
+          </div>
+
+          <!-- Wallet & Network -->
+          <div class="card">
+            <div class="card-head"><h3>Wallet & Network</h3></div>
+            <div class="card-body config-fields">
+              <div class="field"><span class="field-label">Wallet address</span><input class="field-input" id="walletAddress" value="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19" /></div>
+              <div class="field"><span class="field-label">RPC endpoint</span><input class="field-input" id="rpcUrl" value="https://rpc.xlayer.tech" /></div>
+
+              <div class="field">
+                <span class="field-label">Demo wallets</span>
+                <div class="persona-btn-grid persona-buttons">
+                  <button class="pbg-btn selected" type="button" data-persona="seeder" data-wallet="0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19">Seeder</button>
+                  <button class="pbg-btn" type="button" data-persona="builder" data-wallet="0x0F80054095F3A4cb2A2d14b7326303102B56D137">Builder</button>
+                  <button class="pbg-btn" type="button" data-persona="stabilizer" data-wallet="0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3">Stabilizer</button>
+                  <button class="pbg-btn danger" type="button" data-persona="restricted" data-wallet="0x64dD322ac2eADb4864c014E5206683a73B8055cd">Restricted</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <span class="field-label">Network</span>
+                <div class="net-btn-grid network-presets">
+                  <button class="net-btn selected" type="button" data-preset="mainnet">X Layer Mainnet</button>
+                  <button class="net-btn" type="button" data-preset="testnet">Testnet</button>
+                </div>
+              </div>
+
+              <button id="refreshState" class="btn-refresh-chain" type="button">Refresh On-Chain State</button>
+              <p id="status" class="status-line">Waiting for contract addresses.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Integration info -->
+        <div class="card">
+          <div class="card-head"><h3>Live integrations</h3><span class="card-meta">CoordiFlow contracts</span></div>
+          <div class="card-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;color:var(--p)">Signal intelligence</div><div style="font-size:14px;color:var(--muted);margin-bottom:6px;" id="signalSummaryB">Loading...</div><code style="font-family:var(--fm);font-size:11px;color:var(--muted)">0x8d89…5D98</code></div>
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;color:var(--p)">Persona badge SBT</div><div style="font-size:14px;color:var(--muted);margin-bottom:6px;" id="badgeSummaryB">Loading...</div><code style="font-family:var(--fm);font-size:11px;color:var(--muted)" id="badgeAddressB">0xD85e…58Cd</code></div>
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;color:var(--p)">Rehypothecation</div><div style="font-size:14px;color:var(--muted);margin-bottom:6px;" id="rehypothecationSummary">Loading...</div><code style="font-family:var(--fm);font-size:11px;color:var(--muted)" id="rehypothecationAddress">0xf887…3bdb</code></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /main-wrap -->
+</div><!-- /page-app -->
+
+
+<!-- ================================================================
+  ROUTING & APP SCRIPT
+  ================================================================ -->
+<script>
+  var currentView = 'overview';
+
+  function openApp(view) {
+    document.getElementById('page-landing').style.display = 'none';
+    document.getElementById('page-app').classList.remove('hidden');
+    document.getElementById('page-app').style.display = 'flex';
+    showView(view || 'overview', document.querySelector('[data-view="' + (view||'overview') + '"]'));
+  }
+
+  function closeDash(e) {
+    if(e) e.preventDefault();
+    document.getElementById('page-app').classList.add('hidden');
+    document.getElementById('page-app').style.display = 'none';
+    document.getElementById('page-landing').style.display = 'block';
+  }
+
+  function showView(viewId, btn) {
+    // Hide all views
+    document.querySelectorAll('.dash-view').forEach(function(v) { v.classList.add('hidden'); });
+    var el = document.getElementById('view-' + viewId);
+    if (el) { el.classList.remove('hidden'); }
+
+    // Update sidebar active state
+    document.querySelectorAll('.sb-item').forEach(function(b) { b.classList.remove('active'); });
+    var activeBtn = btn || document.querySelector('[data-view="' + viewId + '"]');
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Update breadcrumb
+    var crumb = document.getElementById('breadcrumb-page');
+    if (crumb) crumb.textContent = viewId.charAt(0).toUpperCase() + viewId.slice(1).replace('-', ' ');
+
+    currentView = viewId;
+  }
+
+  // Score ring update (lightweight polling)
+  setInterval(function() {
+    var score = document.getElementById('coordinationScore');
+    var ring  = document.getElementById('scoreRingFill');
+    if (score && ring) {
+      var val = parseFloat(score.textContent) || 0;
+      if (val > 0) {
+        var offset = 402.12 - (Math.min(100, Math.max(0, val)) / 100) * 402.12;
+        ring.setAttribute('stroke-dashoffset', offset.toFixed(2));
+      }
+    }
+    // Sync wallet display
+    var wa   = document.getElementById('walletAddress');
+    var disp = document.getElementById('walletAddrDisplay');
+    if (wa && disp && wa.value) {
+      var v = wa.value;
+      disp.textContent = v.length > 10 ? v.slice(0,6) + '\u2026' + v.slice(-4) : (v || 'Not connected');
+    }
+    // Relay stage .active class
+    document.querySelectorAll('[data-stage]').forEach(function(node) {
+      if (node.classList.contains('active')) {
+        node.classList.add('done');
+        var circle = node.querySelector('.stage-circle');
+        if (circle) circle.classList.add('done');
+        var lbl = node.querySelector('.stage-name');
+        if (lbl) lbl.style.color = 'var(--text)';
+      }
+    });
+  }, 700);
+
+  // Wallet input sync
+  document.addEventListener('DOMContentLoaded', function() {
+    var wa = document.getElementById('walletAddress');
+    if (wa) {
+      wa.addEventListener('input', function() {
+        var v = this.value;
+        var disp = document.getElementById('walletAddrDisplay');
+        if (disp) disp.textContent = v.length > 10 ? v.slice(0,6) + '\u2026' + v.slice(-4) : (v || 'Not connected');
+      });
+    }
+  });
+</script>
+
+<script src="./app.js?v=20260528-v4"></script>
+</body>
 </html>

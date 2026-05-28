@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/styles-DYHUnixs.css" data-precedence="default"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" data-precedence="default"/><title>CoordiFlow — The liquidity coordination layer on X Layer</title><meta name="author" content="CoordiFlow Labs"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="CoordiFlow — Behavior-aware coordination markets on X Layer"/><meta name="twitter:description" content="A Uniswap v4 Hook that turns token launches into behavior-aware coordination markets. Liquidity, fees, rewards, and market stages respond to the quality of participation — not just volume."/><meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c88951e4-0a6f-4659-a0d8-ba4b5c6fa30d/id-preview-1557d60a--5e001b79-86ea-4464-a1e3-eeaad587e26a.lovable.app-1779913303878.png"/><meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c88951e4-0a6f-4659-a0d8-ba4b5c6fa30d/id-preview-1557d60a--5e001b79-86ea-4464-a1e3-eeaad587e26a.lovable.app-1779913303878.png"/><meta name="description" content="A Uniswap v4 Hook that classifies wallet behavior into on-chain personas and programmatically adjusts liquidity, fees, and rewards in real time."/><meta property="og:title" content="CoordiFlow — The liquidity coordination layer"/><meta property="og:description" content="Behavior-aware Uniswap v4 Hook on X Layer. Liquidity, fees, and rewards driven by the quality of on-chain participation."/><link rel="modulepreload" href="/assets/index-CsWYxaej.js"/><link rel="modulepreload" href="/assets/index-DA3_9Wxa.js"/><link rel="modulepreload" href="/assets/site-chrome-C9xNg_LQ.js"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+<style>
+	@font-face {
+		font-family: 'CameraPlainVariable';
+		src: url('https://cdn.gpteng.co/mcp-widgets/v1/fonts/CameraPlainVariable.woff2') format('woff2');
+		font-weight: 100 900;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	#lovable-badge {
+		--badge-bg: #1b1b1b;
+		--badge-text: #c5c1b9;
+		--badge-text-hover: #dcdad5;
+		--badge-radius: 6px;
+		--badge-padding: 8px;
+		--badge-gap: 6px;
+		--badge-shadow: 
+			0 0 0 1px rgba(0, 0, 0, 0.88),
+			0 1px 0 0 rgba(0, 0, 0, 0.04),
+			0 2px 2px -1px rgba(0, 0, 0, 0.08),
+			0 4px 4px -2px rgba(0, 0, 0, 0.08),
+			0 8px 8px -4px rgba(0, 0, 0, 0.08),
+			0 16px 16px -8px rgba(0, 0, 0, 0.08);
+		--badge-transition-duration: 0.2s;
+		--badge-transition-easing: cubic-bezier(0.16, 1, 0.32, 1);
+		--focus-color: #575ECF;
+		--focus-offset: 2px;
+		--focus-width: 2px;
+		
+		position: fixed;
+		bottom: 12px;
+		right: 12px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		z-index: 1000000;
+		background-color: var(--badge-bg);
+		color: var(--badge-text);
+		border-radius: var(--badge-radius);
+		box-shadow: var(--badge-shadow);
+		font-size: 12px;
+		font-family: CameraPlainVariable, "CameraPlainVariable Fallback", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		font-weight: 400 !important;
+		text-transform: none !important;
+		font-feature-settings: normal !important;
+		transform: translateZ(0);
+		will-change: transform, opacity;
+	}
+
+	#lovable-badge-cta {
+		display: flex;
+		align-items: center;
+		gap: var(--badge-gap);
+		padding: 0 var(--badge-padding);
+		height: 100%;
+		color: inherit;
+		text-decoration: none;
+		white-space: nowrap;
+		border-radius: var(--badge-radius) 0 0 var(--badge-radius);
+		transition: 
+			background-color var(--badge-transition-duration) ease,
+			color var(--badge-transition-duration) ease,
+			transform 0.1s ease;
+	}
+
+	#lovable-badge-cta:hover {
+		background: rgba(255, 255, 255, 0.04);
+		color: var(--badge-text-hover);
+	}
+
+	#lovable-badge-cta:active {
+		transform: scale(0.98);
+	}
+
+	#lovable-badge-cta:focus {
+		outline: none;
+	}
+
+	#lovable-badge-cta:focus-visible {
+		outline: var(--focus-width) solid var(--focus-color);
+		outline-offset: var(--focus-offset);
+		z-index: 1;
+	}
+
+	#lovable-badge-text {
+		line-height: 1;
+	}
+
+	#lovable-badge-divider {
+		width: 1px;
+		height: 24px;
+		background-color: rgba(255, 255, 255, 0.04);
+		flex-shrink: 0;
+	}
+
+	#lovable-badge-close {
+		width: 24px;
+		height: 24px;
+		min-width: 24px;
+		min-height: 24px;
+		cursor: pointer;
+		background: none;
+		border: none;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0 var(--badge-radius) var(--badge-radius) 0;
+		flex-shrink: 0;
+		transition: 
+			background-color var(--badge-transition-duration) ease,
+			transform 0.1s ease;
+	}
+
+	#lovable-badge-close:hover {
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	#lovable-badge-close:active {
+		transform: scale(0.92);
+	}
+
+	#lovable-badge-close:focus {
+		outline: none;
+	}
+
+	#lovable-badge-close:focus-visible {
+		outline: var(--focus-width) solid var(--focus-color);
+		outline-offset: calc(var(--focus-offset) * -1);
+		z-index: 1;
+	}
+
+	#lovable-badge-close svg path {
+		fill: var(--badge-text);
+		transition: fill var(--badge-transition-duration) ease;
+	}
+
+	#lovable-badge-close:hover svg path {
+		fill: var(--badge-text-hover);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#lovable-badge-cta,
+		#lovable-badge-close,
+		#lovable-badge-close svg path {
+			transition: none;
+		}
+		
+		#lovable-badge-cta:active,
+		#lovable-badge-close:active {
+			transform: none;
+		}
+	}
+
+	@media (prefers-contrast: high) {
+		#lovable-badge {
+			--badge-bg: #000;
+			--badge-text: #fff;
+			--badge-text-hover: #fff;
+			border: 2px solid currentColor;
+		}
+		
+		#lovable-badge-cta:focus-visible,
+		#lovable-badge-close:focus-visible {
+			outline-width: 3px;
+		}
+	}
+</style>
+<script defer src="/~flock.js" data-proxy-url="/~api/analytics"></script></head><body><!--$--><div class="min-h-screen bg-background text-foreground"><header class="sticky top-0 z-50 border-b border-hairline bg-background/85 backdrop-blur-md"><div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-8"><a class="flex items-center gap-2.5 active" href="/" data-status="active" aria-current="page"><span class="grid size-5 rotate-45 place-items-center bg-foreground " aria-hidden="true"><span class="size-1.5 -rotate-45 rounded-full bg-background"></span></span><span class="font-display text-[15px] font-bold uppercase tracking-tight">CoordiFlow</span></a><nav class="hidden items-center gap-9 md:flex"><a href="/#mechanism" class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground">Mechanism</a><a href="/#personas" class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground">Personas</a><a href="/#rewards" class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground">Rewards</a><a href="/docs" class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground">Docs</a></nav><div class="flex items-center gap-2"><span class="hidden rounded-sm border border-hairline px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:inline">v4 hook</span><a href="/app" class="hidden rounded-sm bg-foreground px-3.5 py-2 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-background transition-opacity hover:opacity-90 sm:inline-flex">Launch</a><button aria-label="Menu" class="rounded-sm border border-hairline p-2 md:hidden"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></header><section class="relative border-b border-hairline"><div class="mx-auto max-w-6xl px-5 sm:px-8"><div class="grid gap-16 py-20 md:grid-cols-12 md:py-28"><div class="md:col-span-7"><div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em]"><span class="flex items-center gap-2 text-primary"><span class="size-1.5 rounded-full bg-primary animate-pulse-soft"></span>Live on X Layer</span><span class="h-3 w-px bg-hairline"></span><span class="text-muted-foreground">Uniswap v4 Hook</span></div><h1 class="mt-7 font-display text-4xl font-medium leading-[1.05] tracking-tight text-foreground md:text-6xl">Dynamic liquidity tuning for<br/><span class="text-primary">market quality.</span></h1><p class="mt-7 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">CoordiFlow is a Uniswap v4 Hook that classifies wallet behavior into on-chain personas to programmatically adjust fees, rewards, and market access — in real time, fully on-chain.</p><div class="mt-10 flex flex-col gap-3 sm:flex-row"><a href="/app" class="inline-flex items-center justify-center gap-2 rounded-sm bg-foreground px-6 py-3.5 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-background transition-opacity hover:opacity-90">Open Dashboard <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></a><a href="/docs" class="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-transparent px-6 py-3.5 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-surface">Technical Docs</a></div><dl class="mt-16 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-sm border border-hairline bg-hairline"><div class="bg-surface px-4 py-5"><dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Pools</dt><dd class="mt-2 font-display text-xl font-medium tracking-tight">12</dd></div><div class="bg-surface px-4 py-5"><dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Active wallets</dt><dd class="mt-2 font-display text-xl font-medium tracking-tight">1,284</dd></div><div class="bg-surface px-4 py-5"><dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Healthy share</dt><dd class="mt-2 font-display text-xl font-medium tracking-tight">76%</dd></div></dl></div><div class="md:col-span-5"><div class="relative border border-hairline bg-surface/40"><div class="flex items-center justify-between border-b border-hairline px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground"><span>Persona Logic Unit</span><span class="text-primary">Active</span></div><div class="px-5 py-6"><div class="flex items-baseline justify-between"><span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Coordination Score</span><span class="font-mono text-[10px] text-positive">+4.2 / 24h</span></div><div class="mt-3 flex items-end gap-3"><span class="font-display text-6xl font-medium tracking-tight tabular-nums">82</span><span class="pb-2 font-mono text-xs text-muted-foreground">/ 100</span></div><div class="mt-5 h-1 w-full bg-secondary"><div class="h-full bg-primary" style="width:82%"></div></div><svg viewBox="0 0 400 90" class="mt-6 h-20 w-full"><path d="M0 70 C 30 60 50 65 80 50 S 140 22 180 30 220 60 260 42 320 14 400 18" stroke="oklch(0.88 0.14 210)" stroke-width="1.25" fill="none"></path></svg><div class="mt-6 space-y-3"><div class="flex items-center gap-3"><span class="w-20 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">SEEDER</span><div class="h-px flex-1 bg-secondary"><div class="h-px bg-primary" style="width:18%"></div></div><span class="w-16 text-right font-mono text-[10px] tabular-nums text-foreground/80">+15.0%</span></div><div class="flex items-center gap-3"><span class="w-20 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">BUILDER</span><div class="h-px flex-1 bg-secondary"><div class="h-px bg-primary" style="width:36%"></div></div><span class="w-16 text-right font-mono text-[10px] tabular-nums text-foreground/80">+8.2%</span></div><div class="flex items-center gap-3"><span class="w-20 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">STABILIZER</span><div class="h-px flex-1 bg-secondary"><div class="h-px bg-primary" style="width:32%"></div></div><span class="w-16 text-right font-mono text-[10px] tabular-nums text-foreground/80">+5.2%</span></div><div class="flex items-center gap-3"><span class="w-20 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">RESTRICTED</span><div class="h-px flex-1 bg-secondary"><div class="h-px bg-primary" style="width:14%"></div></div><span class="w-16 text-right font-mono text-[10px] tabular-nums text-foreground/80">−12.0%</span></div></div></div><div class="border-t border-hairline px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">pool · cflow / usdc · stage 02 · forming</div></div></div></div></div></section><section class="border-b border-hairline"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-28"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">01<!-- --> / <!-- -->Thesis</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">Not all participation is equal.</h2></div><div class="mt-12 grid gap-10 md:grid-cols-12"><p class="md:col-span-7 text-pretty text-lg leading-relaxed text-foreground/85">A launch with 100 wallets that dump quickly is not healthier than a launch with 30 real participants who add liquidity, hold, return, and stabilize the market. CoordiFlow makes that difference visible and programmable — transforming a token launch from<!-- --> <span class="text-muted-foreground">&quot;who bought the most&quot;</span> <!-- -->into<!-- --> <span class="text-foreground">&quot;is this market forming through healthy coordination.&quot;</span></p><div class="md:col-span-5"><ul class="space-y-3 border-l border-hairline pl-5 font-mono text-[12px] text-muted-foreground"><li><span class="text-foreground/85">Volume</span> measures noise.</li><li><span class="text-foreground/85">Wallets</span> measure breadth.</li><li><span class="text-foreground/85">Coordination</span> measures market formation.</li></ul></div></div></div></section><section id="mechanism" class="border-b border-hairline bg-surface/40"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-28"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">02<!-- --> / <!-- -->Mechanism</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">A hook that watches the market form, then shapes it.</h2></div><ol class="mt-14 grid gap-px overflow-hidden rounded-sm border border-hairline bg-hairline md:grid-cols-2 lg:grid-cols-4"><li class="bg-surface p-6"><div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground"><span>Step <!-- -->01</span><span class="size-1 rounded-full bg-primary"></span></div><h3 class="mt-6 font-display text-lg font-medium tracking-tight">Attach</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">Install at the Uniswap v4 Hook layer of any compatible pool, including Flap-style launches on X Layer.</p></li><li class="bg-surface p-6"><div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground"><span>Step <!-- -->02</span><span class="size-1 rounded-full bg-primary"></span></div><h3 class="mt-6 font-display text-lg font-medium tracking-tight">Observe</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">Every swap, mint, and burn updates wallet state on-chain. No oracles, no off-chain trust assumptions.</p></li><li class="bg-surface p-6"><div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground"><span>Step <!-- -->03</span><span class="size-1 rounded-full bg-primary"></span></div><h3 class="mt-6 font-display text-lg font-medium tracking-tight">Classify</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">Wallets earn a persona — Seeder, Builder, Stabilizer, or Restricted — based on their actual flow profile.</p></li><li class="bg-surface p-6"><div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground"><span>Step <!-- -->04</span><span class="size-1 rounded-full bg-primary"></span></div><h3 class="mt-6 font-display text-lg font-medium tracking-tight">Respond</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">Fees, caps, stages, liquidity unlocks, and reward eligibility shift with coordination quality.</p></li></ol></div></section><section id="personas" class="border-b border-hairline"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-28"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">03<!-- --> / <!-- -->Personas</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">Real-time behavior classification.</h2></div><p class="mt-8 max-w-2xl text-pretty text-muted-foreground">Persona assignment is deterministic from observed actions and updates with every interaction. Wallets move between personas as their behavior evolves — no committee, no off-chain scoring service.</p><div class="mt-12 grid gap-4 md:grid-cols-2"><article class="border border-hairline bg-surface p-6 transition-colors hover:bg-surface-elevated "><div class="flex items-center justify-between"><span class="font-mono text-xs tracking-[0.14em] text-primary">ID: <!-- -->SEEDER</span><span class="size-2 rounded-full bg-primary"></span></div><p class="mt-4 text-base font-medium text-foreground">Provides initial concentrated liquidity into the launch curve. Anchors price discovery.</p><div class="mt-6 flex items-center justify-between border-t border-hairline pt-3 font-mono text-[10px] uppercase tracking-[0.18em]"><span class="text-muted-foreground">Early liquidity</span><span class="text-primary">Fee <!-- -->+15.0%</span></div></article><article class="border border-hairline bg-surface p-6 transition-colors hover:bg-surface-elevated opacity-80"><div class="flex items-center justify-between"><span class="font-mono text-xs tracking-[0.14em] text-foreground/80">ID: <!-- -->BUILDER</span><span class="size-2 rounded-full bg-foreground/30"></span></div><p class="mt-4 text-base font-medium text-foreground">Returns to the pool with consistent, additive flow. Buys into structure, not noise.</p><div class="mt-6 flex items-center justify-between border-t border-hairline pt-3 font-mono text-[10px] uppercase tracking-[0.18em]"><span class="text-muted-foreground">Repeat constructive</span><span class="text-foreground/80">Fee <!-- -->+8.2%</span></div></article><article class="border border-hairline bg-surface p-6 transition-colors hover:bg-surface-elevated opacity-80"><div class="flex items-center justify-between"><span class="font-mono text-xs tracking-[0.14em] text-foreground/80">ID: <!-- -->STABILIZER</span><span class="size-2 rounded-full bg-foreground/30"></span></div><p class="mt-4 text-base font-medium text-foreground">Trades two-sided, holds across stages, dampens volatility through real positions.</p><div class="mt-6 flex items-center justify-between border-t border-hairline pt-3 font-mono text-[10px] uppercase tracking-[0.18em]"><span class="text-muted-foreground">Balanced flow</span><span class="text-foreground/80">Fee <!-- -->+5.2%</span></div></article><article class="border border-hairline bg-surface p-6 transition-colors hover:bg-surface-elevated opacity-80"><div class="flex items-center justify-between"><span class="font-mono text-xs tracking-[0.14em] text-foreground/80">ID: <!-- -->RESTRICTED</span><span class="size-2 rounded-full bg-foreground/30"></span></div><p class="mt-4 text-base font-medium text-foreground">Rapid round-trippers, oversized punts, MEV-shaped patterns. Faces higher fees and caps.</p><div class="mt-6 flex items-center justify-between border-t border-hairline pt-3 font-mono text-[10px] uppercase tracking-[0.18em]"><span class="text-muted-foreground">Toxic flow</span><span class="text-foreground/80">Fee <!-- -->−12.0%</span></div></article></div></div></section><section class="border-b border-hairline bg-surface/40"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-28"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">04<!-- --> / <!-- -->Hook Surface</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">One hook. Six programmable levers.</h2></div><p class="mt-8 max-w-2xl text-pretty text-muted-foreground">The pool does not behave the same for every wallet. It responds to the quality of coordination, in real time, at the protocol layer — not an off-chain dashboard.</p><div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"><div class="border border-hairline bg-surface p-5"><div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">DYNAMIC_FEE</div><div class="mt-2 font-display text-2xl font-medium tracking-tight tabular-nums">0.30%</div><div class="mt-4 h-px w-full bg-secondary"><div class="h-px bg-primary" style="width:30%"></div></div></div><div class="border border-hairline bg-surface p-5"><div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">EMISSIONS_MULT</div><div class="mt-2 font-display text-2xl font-medium tracking-tight tabular-nums">2.5x</div><div class="mt-4 h-px w-full bg-secondary"><div class="h-px bg-primary" style="width:75%"></div></div></div><div class="border border-hairline bg-surface p-5"><div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">SWAP_CAP</div><div class="mt-2 font-display text-2xl font-medium tracking-tight tabular-nums">12k</div><div class="mt-4 h-px w-full bg-secondary"><div class="h-px bg-primary" style="width:60%"></div></div></div><div class="border border-hairline bg-surface p-5"><div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">STAGE_GATE</div><div class="mt-2 font-display text-2xl font-medium tracking-tight tabular-nums">02/05</div><div class="mt-4 h-px w-full bg-secondary"><div class="h-px bg-primary" style="width:40%"></div></div></div><div class="border border-hairline bg-surface p-5"><div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">LIQ_RELEASE</div><div class="mt-2 font-display text-2xl font-medium tracking-tight tabular-nums">38%</div><div class="mt-4 h-px w-full bg-secondary"><div class="h-px bg-primary" style="width:38%"></div></div></div><div class="border border-hairline bg-surface p-5"><div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">RESTRICTED_CEIL</div><div class="mt-2 font-display text-2xl font-medium tracking-tight tabular-nums">1.4%</div><div class="mt-4 h-px w-full bg-secondary"><div class="h-px bg-primary" style="width:14%"></div></div></div></div></div></section><section class="border-b border-hairline"><div class="mx-auto grid max-w-6xl gap-16 px-5 py-24 sm:px-8 md:grid-cols-12 md:py-28"><div class="md:col-span-6"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">05<!-- --> / <!-- -->Coordination Score</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">A single number for market health.</h2></div><p class="mt-8 max-w-xl text-pretty text-muted-foreground">The score aggregates persona weights, liquidity persistence, swap symmetry, and stage progression into a 0–100 signal — readable by any wallet, consumable by any contract.</p><ul class="mt-10 space-y-3 text-sm"><li class="flex items-start gap-3 border-l border-hairline pl-4"><span class="text-foreground/85">Read directly from the hook contract.</span></li><li class="flex items-start gap-3 border-l border-hairline pl-4"><span class="text-foreground/85">Drives stage progression and liquidity release.</span></li><li class="flex items-start gap-3 border-l border-hairline pl-4"><span class="text-foreground/85">Surfaces in the dashboard, live every block.</span></li></ul></div><div class="md:col-span-6"><div class="relative flex aspect-square w-full items-center justify-center border border-hairline bg-surface p-8"><span class="absolute left-3 top-3 font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">HOOK_V4_LOGIC</span><span class="absolute right-3 top-3 font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">v0.2.4</span><svg viewBox="0 0 280 280" class="size-full -rotate-90"><circle cx="140" cy="140" r="110" stroke="oklch(1 0 0 / 0.06)" stroke-width="10" fill="none"></circle><circle cx="140" cy="140" r="110" stroke="oklch(0.88 0.14 210)" stroke-width="10" fill="none" stroke-linecap="square" stroke-dasharray="691.1503837897545" stroke-dashoffset="124.40706908215589"></circle></svg><div class="absolute inset-0 flex flex-col items-center justify-center"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Coordination</span><span class="mt-2 font-display text-7xl font-medium tracking-tight tabular-nums">82</span><span class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Forming · stage 02</span></div><span class="absolute bottom-3 left-3 font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">BLOCK 1,284,991</span><span class="absolute bottom-3 right-3 font-mono text-[9px] uppercase tracking-[0.22em] text-positive">OPERATIONAL</span></div></div></div></section><section id="rewards" class="border-b border-hairline bg-surface/40"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-28"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">06<!-- --> / <!-- -->Rewards Vault</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">Good coordination earns. Toxic flow pays.</h2></div><p class="mt-8 max-w-2xl text-pretty text-muted-foreground">CoordiFlow ships with a real rewards vault. Seeders, Builders, and Stabilizers become eligible for funded coordination pools. Restricted behavior does not earn — and contributes higher fees back to the vault.</p><div class="mt-12 grid gap-px overflow-hidden rounded-sm border border-hairline bg-hairline md:grid-cols-3"><div class="bg-surface p-7"><p class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Vault inflows</p><p class="mt-4 font-display text-3xl font-medium tracking-tight tabular-nums">412k USDC</p><p class="mt-2 text-sm text-muted-foreground">From elevated toxic-flow fees · epoch 14</p></div><div class="bg-surface p-7"><p class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Eligible wallets</p><p class="mt-4 font-display text-3xl font-medium tracking-tight tabular-nums">1,047</p><p class="mt-2 text-sm text-muted-foreground">Seeders · Builders · Stabilizers</p></div><div class="bg-surface p-7"><p class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Distributed</p><p class="mt-4 font-display text-3xl font-medium tracking-tight tabular-nums">298k USDC</p><p class="mt-2 text-sm text-muted-foreground">Across 12 coordination epochs</p></div></div></div></section><section class="border-b border-hairline"><div class="mx-auto grid max-w-6xl gap-14 px-5 py-24 sm:px-8 md:grid-cols-12 md:py-28"><div class="md:col-span-6"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">07<!-- --> / <!-- -->Flap Integration</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">Flap launches the market. CoordiFlow helps it mature.</h2></div><p class="mt-8 max-w-xl text-pretty text-muted-foreground">CoordiFlow is a natural extension of Flap-style modular token launches. Flap handles token creation and the early curve. CoordiFlow adds the missing behavior-aware market layer at the Uniswap v4 Hook level — no privileged API required, just a compatible v4 pool.</p></div><div class="md:col-span-6"><div class="border border-hairline bg-surface"><div class="border-b border-hairline px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">integration.spec</div><div class="divide-y divide-hairline font-mono text-xs"><div class="flex items-center justify-between px-4 py-3"><span class="text-muted-foreground">launch.layer</span><span class="text-foreground">Flap (token + early curve)</span></div><div class="flex items-center justify-between px-4 py-3"><span class="text-muted-foreground">market.layer</span><span class="text-primary">CoordiFlow v4 Hook</span></div><div class="flex items-center justify-between px-4 py-3"><span class="text-muted-foreground">chain</span><span class="text-foreground">X Layer</span></div><div class="flex items-center justify-between px-4 py-3"><span class="text-muted-foreground">integration</span><span class="text-foreground">pool-level, permissionless</span></div><div class="flex items-center justify-between px-4 py-3"><span class="text-muted-foreground">api.required</span><span class="text-foreground">none</span></div></div></div></div></div></section><section id="xlayer" class="border-b border-hairline bg-surface/40"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-28"><div class="flex flex-col gap-5 border-l border-hairline pl-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">08<!-- --> / <!-- -->X Layer Fit</span><h2 class="max-w-3xl text-balance font-display text-3xl font-medium leading-[1.1] tracking-tight md:text-4xl">Coordination needs cheap, real interactions.</h2></div><div class="mt-12 grid gap-14 md:grid-cols-12"><div class="md:col-span-7"><p class="text-pretty text-lg leading-relaxed text-foreground/85">X Layer is a strong fit because coordination markets need many small, real interactions. Cheap and fast transactions make it practical for wallets to participate, add liquidity, trade, stabilize, and build on-chain reputation through behavior.</p><p class="mt-5 text-pretty text-muted-foreground">An optional X Layer intelligence layer lets future adapters bring in wallet or market-quality signals from X Layer-native infrastructure.</p></div><div class="md:col-span-5"><div class="grid grid-cols-3 gap-px overflow-hidden rounded-sm border border-hairline bg-hairline"><div class="bg-surface px-3 py-5"><div class="font-display text-lg font-medium tracking-tight">~$0.001</div><div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">per swap</div></div><div class="bg-surface px-3 py-5"><div class="font-display text-lg font-medium tracking-tight">&lt; 2s</div><div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">finality</div></div><div class="bg-surface px-3 py-5"><div class="font-display text-lg font-medium tracking-tight">EVM</div><div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">equivalent</div></div></div></div></div></div></section><section id="cta" class="border-b border-hairline"><div class="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-32"><div class="grid gap-10 md:grid-cols-12 md:items-end"><div class="md:col-span-8"><div class="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">09 / Ship a coordination market</div><h2 class="mt-5 text-balance font-display text-4xl font-medium leading-[1.05] tracking-tight md:text-5xl">Launch a token that responds to how it is actually being formed.</h2><p class="mt-6 max-w-xl text-pretty text-muted-foreground">CoordiFlow is live on X Layer. Attach the hook to a v4 pool and let the market mature through real coordination — not raw volume.</p></div><div class="flex flex-col gap-3 md:col-span-4 md:items-end"><a href="/app" class="inline-flex items-center justify-center gap-2 rounded-sm bg-foreground px-6 py-3.5 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-background hover:opacity-90">Open Dashboard <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></a><a href="/docs" class="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline px-6 py-3.5 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-foreground hover:bg-surface">Read the Docs</a></div></div></div></section><footer class="border-t border-hairline bg-background"><div class="mx-auto grid max-w-6xl grid-cols-2 gap-10 px-5 py-14 sm:px-8 md:grid-cols-4"><div class="col-span-2"><div class="flex items-center gap-2.5"><span class="grid size-5 rotate-45 place-items-center bg-foreground " aria-hidden="true"><span class="size-1.5 -rotate-45 rounded-full bg-background"></span></span><span class="font-display text-sm font-bold uppercase tracking-tight">CoordiFlow</span></div><p class="mt-4 max-w-sm text-pretty text-sm leading-relaxed text-muted-foreground">The liquidity coordination layer. A Uniswap v4 Hook on X Layer that classifies on-chain behavior and tunes markets in real time.</p><div class="mt-8 flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground"><span>v0.2.4-alpha</span><span class="size-1 rounded-full bg-muted-foreground/40"></span><span>© <!-- -->2026<!-- --> Coordinate Labs</span></div></div><div><h4 class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Protocol</h4><ul class="mt-4 space-y-2.5"><li><a href="/#mechanism" class="text-sm text-foreground/85 transition-colors hover:text-foreground">Mechanism</a></li><li><a href="/#personas" class="text-sm text-foreground/85 transition-colors hover:text-foreground">Personas</a></li><li><a href="/#rewards" class="text-sm text-foreground/85 transition-colors hover:text-foreground">Rewards</a></li><li><a href="/#xlayer" class="text-sm text-foreground/85 transition-colors hover:text-foreground">X Layer</a></li></ul></div><div><h4 class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Build</h4><ul class="mt-4 space-y-2.5"><li><a href="/app" class="text-sm text-foreground/85 transition-colors hover:text-foreground">Interface</a></li><li><a href="/docs" class="text-sm text-foreground/85 transition-colors hover:text-foreground">Documentation</a></li><li><a href="/docs" class="text-sm text-foreground/85 transition-colors hover:text-foreground">Hook reference</a></li><li><a href="#" class="text-sm text-foreground/85 transition-colors hover:text-foreground">GitHub</a></li></ul></div></div></footer></div><script>(function(t){let s;try{s=JSON.parse(sessionStorage.getItem(t.storageKey)||"{}")}catch(e){console.error(e);return}const c=t.key||window.history.state?.__TSR_key,r=c?s[c]:void 0;if(t.shouldScrollRestoration&&r&&typeof r=="object"&&Object.keys(r).length>0){for(const e in r){const o=r[e];if(!o||typeof o!="object")continue;const l=o.scrollX,i=o.scrollY;if(!(!Number.isFinite(l)||!Number.isFinite(i))){if(e==="window")window.scrollTo({top:i,left:l,behavior:t.behavior});else if(e){let n;try{n=document.querySelector(e)}catch{continue}n&&(n.scrollLeft=l,n.scrollTop=i)}}}return}const a=window.location.hash.split("#",2)[1];if(a){const e=window.history.state?.__hashScrollIntoViewOptions??!0;if(e){const o=document.getElementById(a);o&&o.scrollIntoView(e)}return}window.scrollTo({top:0,left:0,behavior:t.behavior})})({"storageKey":"tsr-scroll-restoration-v1_3","shouldScrollRestoration":true});document.currentScript.remove()</script><!--/$--><script class="$tsr" id="$tsr-stream-barrier">(self.$R=self.$R||{})["tsr"]=[];self.$_TSR={h(){this.hydrated=!0,this.c()},e(){this.streamEnded=!0,this.c()},c(){this.hydrated&&this.streamEnded&&(delete self.$_TSR,delete self.$R.tsr)},p(e){this.initialized?e():this.buffer.push(e)},buffer:[]};$_TSR.router=($R=>$R[0]={manifest:$R[1]={routes:$R[2]={__root__:$R[3]={preloads:$R[4]=["/assets/index-CsWYxaej.js"],assets:$R[5]=[$R[6]={tag:"script",attrs:$R[7]={type:"module",async:!0},children:"import(\"/assets/index-CsWYxaej.js\")"}]},"/":$R[8]={preloads:$R[9]=["/assets/index-DA3_9Wxa.js","/assets/site-chrome-C9xNg_LQ.js"]}}},matches:$R[10]=[$R[11]={i:"__root__ ",u:1779986610387,s:"success",ssr:!0},$R[12]={i:"  ",u:1779986610387,s:"success",ssr:!0}],lastMatchId:"  "})($R["tsr"]);$_TSR.e();document.currentScript.remove()</script><script type="module" async="">import("/assets/index-CsWYxaej.js")</script>
+<aside 
+	id="lovable-badge" 
+	role="complementary"
+	dir="ltr"
+	lang="en"
+	aria-label="Edit with Lovable">
+	<a 
+		id="lovable-badge-cta" 
+		target="_blank" 
+		href="https://lovable.dev/projects/5e001b79-86ea-4464-a1e3-eeaad587e26a?utm_source=lovable-badge"
+		rel="noopener nofollow"
+		aria-label="Edit with Lovable">
+		<span id="lovable-badge-text">Edit with</span>
+		<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" fill="none" viewBox="0 0 52 16">
+  <path fill="#FCFBF8" fill-rule="evenodd" d="M20.318 5.25c.643 0 1.206.14 1.69.418a2.81 2.81 0 0 1 1.118 1.191c.266.513.4 1.115.4 1.807s-.134 1.296-.4 1.812a2.81 2.81 0 0 1-1.118 1.193c-.484.278-1.047.418-1.69.418s-1.208-.14-1.695-.418a2.85 2.85 0 0 1-1.125-1.193c-.262-.516-.393-1.12-.393-1.812s.131-1.294.393-1.807a2.848 2.848 0 0 1 1.125-1.191c.487-.279 1.052-.418 1.695-.418Zm0 1.425c-.27 0-.504.076-.7.228-.193.147-.34.37-.443.67-.102.295-.153.66-.153 1.093 0 .435.05.801.153 1.1.102.3.25.524.443.676.196.147.43.22.7.22.27 0 .502-.073.694-.22.193-.152.341-.375.443-.67.103-.299.153-.667.153-1.106 0-.65-.112-1.145-.337-1.481a1.08 1.08 0 0 0-.953-.51ZM32.7 5.25c.61 0 1.127.1 1.549.3.422.197.74.48.953.849.217.368.325.809.325 1.32v2.704c0 .29.02.562.062.812.044.245.108.4.19.466V12h-1.935a5.895 5.895 0 0 1-.105-.684 7.745 7.745 0 0 1-.02-.228 2.293 2.293 0 0 1-.151.203c-.205.242-.47.437-.793.584-.32.143-.685.215-1.094.215-.406 0-.77-.08-1.094-.24a1.845 1.845 0 0 1-.756-.682 1.984 1.984 0 0 1-.27-1.045c0-.606.178-1.069.535-1.388.356-.324.87-.534 1.542-.633l1.125-.16c.225-.032.403-.074.534-.123a.622.622 0 0 0 .288-.196.549.549 0 0 0 .093-.327.65.65 0 0 0-.11-.367.702.702 0 0 0-.32-.27c-.14-.07-.31-.105-.51-.105-.32 0-.576.083-.768.251-.193.164-.298.39-.314.676h-1.923c.016-.434.147-.82.393-1.155.25-.34.596-.604 1.039-.792.442-.189.954-.283 1.535-.283Zm.99 3.498a.98.98 0 0 1-.215.14 2.49 2.49 0 0 1-.584.178l-.473.092c-.315.061-.553.156-.713.283-.155.127-.233.305-.233.534 0 .23.084.412.252.547.168.135.383.203.645.203s.494-.058.694-.173c.201-.118.355-.282.461-.49.11-.21.166-.448.166-.714v-.6Zm4.526-2.375c.065-.125.138-.243.221-.349.197-.25.437-.44.719-.571.282-.135.6-.203.952-.203.528 0 .988.138 1.377.412.389.275.688.67.896 1.186.21.512.314 1.12.314 1.824 0 .7-.107 1.309-.32 1.825-.213.512-.518.906-.915 1.18-.393.275-.854.412-1.383.412-.352 0-.667-.062-.946-.184a1.832 1.832 0 0 1-.7-.554 2.2 2.2 0 0 1-.234-.383V12h-1.843V3h1.862v3.373Zm1.284.296c-.274 0-.51.085-.707.253-.192.163-.338.397-.436.7a3.376 3.376 0 0 0-.148 1.05c0 .406.05.759.148 1.058.098.299.243.53.436.694.197.164.433.246.707.246.279 0 .512-.082.7-.246.193-.164.336-.395.43-.694.099-.3.148-.652.148-1.058 0-.405-.05-.757-.147-1.056-.095-.299-.238-.53-.43-.694a1.015 1.015 0 0 0-.7-.253Zm9.416-1.419c.602 0 1.136.131 1.604.393.466.262.829.643 1.086 1.143.263.5.394 1.097.394 1.794 0 .25-.002.449-.006.596H47.51c.018.288.071.538.164.75a1.3 1.3 0 0 0 .491.596c.214.13.465.196.757.196.319 0 .583-.082.792-.246.209-.167.34-.403.393-.706h1.862a2.48 2.48 0 0 1-.485 1.235 2.54 2.54 0 0 1-1.051.805c-.439.188-.949.283-1.53.283-.655 0-1.225-.125-1.708-.375a2.672 2.672 0 0 1-1.13-1.143c-.267-.508-.4-1.137-.4-1.887 0-.712.14-1.327.418-1.843a2.86 2.86 0 0 1 1.155-1.186c.491-.27 1.051-.405 1.678-.405Zm-.044 1.345c-.274 0-.516.068-.725.203a1.29 1.29 0 0 0-.479.59 2.045 2.045 0 0 0-.132.498h2.562a1.873 1.873 0 0 0-.138-.602 1.061 1.061 0 0 0-.418-.516 1.243 1.243 0 0 0-.67-.173Z" clip-rule="evenodd"/>
+  <path fill="#FCFBF8" d="m26.605 9.995 1.342-4.566h1.924L27.628 12h-2.07l-2.33-6.57h1.98l1.397 4.565Zm-13.013.143h2.256c1.632 0 1.421 1.837 1.418 1.861h-5.603V3h1.93v7.138Zm31.516 1.861h-1.862V3h1.862v8.999Z"/>
+  <path fill="url(#a)" fill-rule="evenodd" d="M2.7 3c1.492 0 2.7 1.192 2.7 2.663v1.012h.9c1.49 0 2.7 1.192 2.7 2.662S7.791 12 6.3 12H0V5.663C0 4.193 1.209 3 2.7 3Z" clip-rule="evenodd"/>
+  <defs>
+    <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="matrix(-1.54236 7.07838 -10.231 -2.15602 4.627 5.022)" gradientUnits="userSpaceOnUse">
+      <stop offset=".106" stop-color="#FE7B02"/>
+      <stop offset=".394" stop-color="#FE3F21"/>
+      <stop offset=".608" stop-color="#F858BC"/>
+      <stop offset=".929" stop-color="#575ECF"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+
+	</a>
+	
+	<span id="lovable-badge-divider" aria-hidden="true"></span>
+	
+	<button 
+		id="lovable-badge-close"
+		aria-label="Dismiss"
+		title="Dismiss"
+		type="button">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+			<path d="M10.646 4.646a.5.5 0 1 1 .707.708L8.707 8l2.646 2.646a.5.5 0 1 1-.707.707L8 8.707l-2.646 2.646a.5.5 0 1 1-.708-.707L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647Z"/>
+		</svg>
+	</button>
+</aside>
+<script>
+	// Don't show the lovable-badge if the page is in an iframe or if it's being rendered by puppeteer (screenshot service)
+	if (window.self !== window.top || navigator.userAgent.includes('puppeteer')) {
+		// the page is in an iframe
+		var badge = document.getElementById('lovable-badge');
+		if (badge) {
+			badge.style.display = 'none';
+		}
+	}
+
+	// Add click event listener to close button with animation
+	var closeButton = document.getElementById('lovable-badge-close');
+	if (closeButton) {
+		closeButton.addEventListener('click', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			var badge = document.getElementById('lovable-badge');
+			if (badge) {
+				badge.classList.add('closing');
+				setTimeout(function() {
+					if (badge) {
+						badge.style.display = 'none';
+					}
+				}, 240);
+			}
+		});
+	}
+</script>
+</body></html>
