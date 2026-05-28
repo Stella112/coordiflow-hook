@@ -859,7 +859,7 @@
                   <span class="stb-bal">bal <span id="swapBalPay">-</span></span>
                 </div>
                 <div class="stb-main">
-                  <input id="swapAmount" class="stb-amount" type="number" value="1000" placeholder="0.00" />
+                  <input id="swapAmount" class="stb-amount" type="number" value="0.01" placeholder="0.00" />
                   <span class="stb-token" id="swapPaySymbol">CQUOTE</span>
                 </div>
               </div>
@@ -889,6 +889,9 @@
                 <option value="quoteToLaunch">CQUOTE -> CFLOW</option>
                 <option value="launchToQuote">CFLOW -> CQUOTE</option>
               </select>
+              <div id="swapRouteHint" class="tx-status-line" style="border-top:none;padding:0 0 14px;min-height:18px;text-align:left;">
+                Select USDT0 -> CFLOW to buy the demo token. Approval is only step one; swap is step two.
+              </div>
 
               <!-- Trade details -->
               <div class="swap-details">

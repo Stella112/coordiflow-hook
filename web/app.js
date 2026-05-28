@@ -189,6 +189,7 @@ const els = {
   walletNetwork: one("#walletNetwork"),
   txStatus: last("#txStatus"),
   swapRoute: one("#swapRoute"),
+  swapRouteHint: one("#swapRouteHint"),
   swapFlip: one("#swapFlip"),
   swapAmount: one("#swapAmount"),
   approveSwap: one("#approveSwap"),
@@ -422,6 +423,12 @@ async function tokenBalance(token, wallet, decimals = 18) {
   return formatUnits(decodeWords(result)[0], decimals, decimals === 6 ? 2 : 4);
 }
 
+async function tokenBalanceRaw(token, wallet) {
+  if (!token) return 0n;
+  const result = await ethCall(assertAddress(token, "Token"), selectors.balanceOf + padAddress(wallet));
+  return decodeWords(result)[0];
+}
+
 async function refreshWalletBalances() {
   const wallet = els.walletAddress?.value?.trim();
   if (!wallet || !/^0x[a-fA-F0-9]{40}$/.test(wallet)) return;
@@ -578,8 +585,21 @@ async function executeSwap() {
   const route = selectedSwapRoute();
   const actions = assertAddress(route.actions, "User actions");
   const amountIn = parseAmount(els.swapAmount.value, route.decimals);
+  const from = await connectedAccount();
+  const balance = await tokenBalanceRaw(route.tokenIn, from);
+  if (balance < amountIn) {
+    setTxStatus(
+      `Not enough ${route.inputSymbol}. You selected ${route.label}, so the app will spend ${route.inputSymbol}, not ${route.outputSymbol}.`
+    );
+    return;
+  }
   const data = selectors.swapExactInput + encodeUint(amountIn) + encodeBool(route.zeroForOne) + encodeUint(0n);
-  await sendAndTrack(actions, data, "Swap sent. Waiting for X Layer confirmation...");
+  await sendAndTrack(
+    actions,
+    data,
+    `Swap sent: ${route.label}. Waiting for X Layer confirmation...`,
+    `Swap confirmed: ${route.label}. Balances refreshed from X Layer.`
+  );
 }
 
 async function approveLiquidity() {
@@ -631,10 +651,15 @@ async function approveToken(token, spender, amount) {
   assertAddress(token, "Token");
   assertAddress(spender, "Spender");
   const data = selectors.approve + padAddress(spender) + encodeUint(amount);
-  await sendAndTrack(token, data, `Approval sent for ${shortAddress(spender)}...`);
+  await sendAndTrack(
+    token,
+    data,
+    `Approval sent for ${shortAddress(spender)}...`,
+    "Approval confirmed. Now click Swap on X Layer to execute the trade."
+  );
 }
 
-async function sendAndTrack(to, data, pendingMessage) {
+async function sendAndTrack(to, data, pendingMessage, successMessage) {
   const provider = walletProvider();
   if (!provider) throw new Error("No injected wallet found.");
   await ensureXLayer();
@@ -648,6 +673,7 @@ async function sendAndTrack(to, data, pendingMessage) {
   await waitForReceipt(hash);
   setTxStatus(`Confirmed: ${shortHash(hash)}. Refreshing on-chain state...`);
   await refresh();
+  setTxStatus(successMessage || `Confirmed: ${shortHash(hash)}. On-chain state refreshed.`);
 }
 
 async function ensureXLayer() {
@@ -811,6 +837,11 @@ function updateSwapRouteUi() {
   setAll("#balanceSource", `${route.inputSymbol}.balanceOf(wallet)`);
   setAll("#payTokenAddress", shortAddress(route.tokenIn));
   setAll("#receiveTokenAddress", shortAddress(route.outputToken));
+  if (els.swapRouteHint) {
+    const action = route.id === "usdt0ToLaunch" || route.id === "quoteToLaunch" ? "BUYING" : "SELLING";
+    els.swapRouteHint.textContent =
+      `${action} route selected: you spend ${route.inputSymbol} and receive ${route.outputSymbol}. Approval only gives permission; Swap sends the trade.`;
+  }
 }
 
 async function mintPersonaBadge() {
