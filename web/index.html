@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoordiFlow â€” Behavior-aware coordination markets on X Layer</title>
   <meta name="description" content="A Uniswap v4 Hook that turns token launches into behavior-aware coordination markets. Liquidity, fees, rewards, and market stages respond to the quality of participation â€” not just volume." />
-  <link rel="stylesheet" href="./styles.css?v=20260528-v4" />
+  <link rel="stylesheet" href="./styles.css?v=20260528-v6" />
 </head>
 <body>
 
@@ -110,31 +110,31 @@
             <div class="widget-personas">
               <div class="widget-persona-row">
                 <span class="wp-left">
-                  <span class="wp-name">SEEDER</span>
-                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:18%; background:var(--c-seeder);"></span></span>
+                  <span class="wp-name">POSITIVE</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" id="heroPositiveBar" style="width:0%; background:var(--c-seeder);"></span></span>
                 </span>
-                <span class="wp-pct">+15.0%</span>
-              </div>
-              <div class="widget-persona-row">
-                <span class="wp-left">
-                  <span class="wp-name">BUILDER</span>
-                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:36%; background:var(--c-seeder);"></span></span>
-                </span>
-                <span class="wp-pct">+8.2%</span>
-              </div>
-              <div class="widget-persona-row">
-                <span class="wp-left">
-                  <span class="wp-name">STABILIZER</span>
-                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:32%; background:var(--c-seeder);"></span></span>
-                </span>
-                <span class="wp-pct">+5.2%</span>
+                <span class="wp-pct" id="heroPositiveCount">-</span>
               </div>
               <div class="widget-persona-row">
                 <span class="wp-left">
                   <span class="wp-name">RESTRICTED</span>
-                  <span class="wp-bar-wrap"><span class="wp-bar" style="width:14%; background:var(--c-seeder);"></span></span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" id="heroRestrictedBar" style="width:0%; background:var(--c-restr);"></span></span>
                 </span>
-                <span class="wp-pct">âˆ’12.0%</span>
+                <span class="wp-pct" id="heroRestrictedCount">-</span>
+              </div>
+              <div class="widget-persona-row">
+                <span class="wp-left">
+                  <span class="wp-name">PHASE</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" id="heroPhaseBar" style="width:0%; background:var(--p);"></span></span>
+                </span>
+                <span class="wp-pct" id="heroPhaseLabel">-</span>
+              </div>
+              <div class="widget-persona-row">
+                <span class="wp-left">
+                  <span class="wp-name">RELEASE</span>
+                  <span class="wp-bar-wrap"><span class="wp-bar" id="heroReleaseBar" style="width:0%; background:var(--positive);"></span></span>
+                </span>
+                <span class="wp-pct" id="heroReleaseLabel">-</span>
               </div>
             </div>
           </div>
@@ -573,7 +573,7 @@
         <span id="walletNetwork">X Layer Â· Mainnet</span>
       </div>
       <span id="walletAddrDisplay" class="sb-addr">Not connected</span>
-      <button id="connectWallet" class="btn-sb-disconnect" type="button">Connect Wallet</button>
+      <button id="connectWallet" class="btn-sb-disconnect connect-wallet-trigger" type="button">Connect Wallet</button>
     </div>
   </aside>
 
@@ -588,11 +588,11 @@
         <span id="breadcrumb-page" class="tb-page">Overview</span>
       </div>
       <div class="topbar-right">
-        <span class="block-pill">
+        <span class="block-pill" id="latestBlock">
           <span class="block-dot"></span>
-          Block 8,412,019
+          Block -
         </span>
-        <button class="btn-connect-wallet" type="button" onclick="document.getElementById('connectWallet').click()">
+        <button id="connectWalletTop" class="btn-connect-wallet connect-wallet-trigger" type="button">
           Connect wallet
         </button>
       </div>
@@ -612,7 +612,7 @@
           <div class="card">
             <div class="card-head">
               <h3>Live coordination score</h3>
-              <span class="card-meta">Epoch 14 Â· CFLOW/CQUOTE</span>
+              <span class="card-meta">X Layer mainnet · CFLOW/CQUOTE</span>
             </div>
             <div class="card-body">
               <div class="score-ring-wrap">
@@ -625,12 +625,12 @@
                 </svg>
                 <div class="score-ring-center">
                   <span class="score-big" id="coordinationScore">-</span>
-                  <span class="score-sub" id="phaseLabel">score Â· stage 02</span>
+                  <span class="score-sub" id="phaseLabel">Loading on-chain state</span>
                 </div>
               </div>
               <div class="score-stats">
                 <div class="score-stat">
-                  <span class="score-stat-label">Î” 24h</span>
+                  <span class="score-stat-label">Signal</span>
                   <span class="score-stat-val positive" id="marketSignal">-</span>
                 </div>
                 <div class="score-stat">
@@ -649,31 +649,29 @@
           <div class="card">
             <div class="card-head">
               <h3>Persona distribution</h3>
-              <span class="card-meta">Last epoch Â· 1,137 wallets</span>
+              <span class="card-meta">Read from hook state</span>
             </div>
             <div class="card-body">
               <div class="persona-bar">
-                <div class="p-seg p-seeder" style="width:18%"></div>
-                <div class="p-seg p-builder" style="width:36%"></div>
-                <div class="p-seg p-stab" style="width:32%"></div>
-                <div class="p-seg p-restr" style="width:14%"></div>
+                <div class="p-seg p-seeder" id="positivePersonaSeg" style="width:0%"></div>
+                <div class="p-seg p-restr" id="restrictedPersonaSeg" style="width:0%"></div>
               </div>
               <div class="persona-grid">
                 <div class="persona-row">
                   <span class="persona-left"><span class="p-dot" style="background:var(--c-seeder)"></span>Seeders</span>
-                  <span class="persona-right"><span class="pw">w +1.0</span> <span>18%</span></span>
+                  <span class="persona-right"><span class="pw">positive wallets</span> <span id="positivePersonaCount">-</span></span>
                 </div>
                 <div class="persona-row">
                   <span class="persona-left"><span class="p-dot" style="background:var(--c-builder)"></span>Builders</span>
-                  <span class="persona-right"><span class="pw">w +0.8</span> <span>36%</span></span>
+                  <span class="persona-right"><span class="pw">current wallet</span> <span id="builderPersonaCount">-</span></span>
                 </div>
                 <div class="persona-row">
                   <span class="persona-left"><span class="p-dot" style="background:var(--c-stab)"></span>Stabilizers</span>
-                  <span class="persona-right"><span class="pw">w +0.9</span> <span>32%</span></span>
+                  <span class="persona-right"><span class="pw">current wallet</span> <span id="stabilizerPersonaCount">-</span></span>
                 </div>
                 <div class="persona-row">
                   <span class="persona-left"><span class="p-dot" style="background:var(--c-restr)"></span>Restricted</span>
-                  <span class="persona-right"><span class="pw">w âˆ’1.0</span> <span id="restrictedParticipants">-</span></span>
+                  <span class="persona-right"><span class="pw">restricted wallets</span> <span id="restrictedParticipants">-</span></span>
                 </div>
               </div>
             </div>
@@ -808,13 +806,13 @@
           <!-- Fee tier tabs -->
           <div class="swap-fee-tabs">
             <div class="swap-fee-tab active">
-              <span class="live-pill"><span class="live-dot" style="width:5px;height:5px;"></span> fee 0.30% Â· live</span>
+              <span class="live-pill"><span class="live-dot" style="width:5px;height:5px;"></span> Dynamic hook fee</span>
             </div>
             <div class="swap-fee-tab">
-              fee 0.38% Â· live
+              Persona-adjusted on tx
             </div>
             <div class="swap-fee-tab">
-              fee 0.35% Â· live
+              Real wallet signature
             </div>
           </div>
 
@@ -871,7 +869,7 @@
                 </div>
                 <div class="swap-detail-row">
                   <span class="swap-detail-key">Effective fee</span>
-                  <span class="swap-detail-val">0.38% (base) Â· persona-adjusted</span>
+                  <span class="swap-detail-val">Returned by hook during swap</span>
                 </div>
                 <div class="swap-detail-row">
                   <span class="swap-detail-key">Per-block cap</span>
@@ -1088,7 +1086,7 @@
           <p>Coordination rewards accumulate from toxic flow penalties and are distributed to healthy wallets each epoch.</p>
         </div>
         <div class="card">
-          <div class="card-head"><h3>Claim rewards</h3><span class="card-meta" style="color:var(--positive)">Epoch 14 open</span></div>
+          <div class="card-head"><h3>Claim rewards</h3><span class="card-meta" style="color:var(--positive)">On-chain claim</span></div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:20px;">
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
               <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);">
@@ -1397,7 +1395,7 @@
   });
 </script>
 
-<script src="./app.js?v=20260528-v4"></script>
+<script src="./app.js?v=20260528-v6"></script>
 </body>
 </html>
 

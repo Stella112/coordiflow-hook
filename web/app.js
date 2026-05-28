@@ -162,6 +162,7 @@ const els = {
   rpcUrl: one("#rpcUrl"),
   status: last("#status"),
   connectWallet: one("#connectWallet"),
+  connectWalletTop: one("#connectWalletTop"),
   refreshState: one("#refreshState"),
   walletNetwork: one("#walletNetwork"),
   txStatus: last("#txStatus"),
@@ -224,17 +225,45 @@ let latestState = {
 
 let activeDeployment = deployments.mainnet;
 
-on(els.connectWallet, "click", async () => {
-  if (!window.ethereum) {
-    setStatus("No injected wallet found.");
+document.querySelectorAll(".connect-wallet-trigger").forEach((button) => on(button, "click", connectWallet));
+
+async function connectWallet() {
+  const provider = walletProvider();
+  if (!provider) {
+    const message = "No wallet provider found. Open this page in a browser with OKX Wallet or MetaMask enabled.";
+    setStatus(message);
+    setTxStatus(message);
     return;
   }
 
-  const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-  els.walletAddress.value = accounts[0] || "";
-  await updateWalletNetworkLabel();
-  setStatus("Wallet connected. Refresh to load verified state.");
-});
+  try {
+    setStatus("Opening wallet connection...");
+    const accounts = await provider.request({ method: "eth_requestAccounts" });
+    const account = accounts[0];
+    if (!account) throw new Error("Wallet returned no account.");
+    els.walletAddress.value = account;
+    updateWalletDisplay(account);
+    await ensureXLayer();
+    await updateWalletNetworkLabel();
+    setStatus("Wallet connected on X Layer. Loading verified on-chain state...");
+    setTxStatus("Wallet connected. You can now approve, swap, add liquidity, deposit, and claim with real transactions.");
+    await refresh();
+  } catch (error) {
+    setStatus(error.message || "Wallet connection failed.");
+    setTxStatus(error.message || "Wallet connection failed.");
+  }
+}
+
+function walletProvider() {
+  if (window.ethereum?.providers?.length) {
+    return (
+      window.ethereum.providers.find((provider) => provider.isOkxWallet || provider.isOKExWallet) ||
+      window.ethereum.providers.find((provider) => provider.isMetaMask) ||
+      window.ethereum.providers[0]
+    );
+  }
+  return window.okxwallet || window.ethereum || null;
+}
 
 on(els.refreshState, "click", refresh);
 on(els.approveSwap, "click", approveSwap);
@@ -352,9 +381,9 @@ async function renderLatestBlock() {
     const json = await response.json();
     if (!json.result) return;
     const block = Number(BigInt(json.result)).toLocaleString();
-    setAll("#latestBlock", `BLOCK ${block}`);
+    setAll("#latestBlock", `Block ${block}`);
   } catch {
-    setAll("#latestBlock", "BLOCK unavailable");
+    setAll("#latestBlock", "Block unavailable");
   }
 }
 
@@ -403,10 +432,39 @@ function renderPoolState(words) {
   setAll("#uniqueParticipants", latestState.unique.toString());
   setAll("#positiveParticipants", latestState.positive.toString());
   setAll("#restrictedParticipants", latestState.restricted.toString());
+  setAll("#positivePersonaCount, #heroPositiveCount", latestState.positive.toString());
+  setAll("#heroRestrictedCount", latestState.restricted.toString());
   setAll("#liquidityRelease", release);
+  setAll("#heroReleaseLabel", release);
   setAll("#marketSignal, #marketSignalB", signal);
   setAll("#liquidityStage", `Phase ${phase}`);
+  setAll("#heroPhaseLabel", `Phase ${phase}`);
+  updatePersonaBars();
   renderStage();
+}
+
+function updatePersonaBars() {
+  const total = Number(latestState.positive + latestState.restricted);
+  const positivePct = total === 0 ? 0 : Math.round((Number(latestState.positive) / total) * 100);
+  const restrictedPct = total === 0 ? 0 : 100 - positivePct;
+  all("#positivePersonaSeg").forEach((node) => {
+    node.style.width = `${positivePct}%`;
+  });
+  all("#restrictedPersonaSeg").forEach((node) => {
+    node.style.width = `${restrictedPct}%`;
+  });
+  all("#heroPositiveBar").forEach((node) => {
+    node.style.width = `${positivePct}%`;
+  });
+  all("#heroRestrictedBar").forEach((node) => {
+    node.style.width = `${restrictedPct}%`;
+  });
+  all("#heroPhaseBar").forEach((node) => {
+    node.style.width = `${Math.min(100, Number(latestState.phase) * 25)}%`;
+  });
+  all("#heroReleaseBar").forEach((node) => {
+    node.style.width = `${Math.min(100, Number(latestState.releaseBps) / 100)}%`;
+  });
 }
 
 async function renderRewards(poolId, wallet) {
@@ -519,11 +577,12 @@ async function approveToken(token, spender, amount) {
 }
 
 async function sendAndTrack(to, data, pendingMessage) {
-  if (!window.ethereum) throw new Error("No injected wallet found.");
+  const provider = walletProvider();
+  if (!provider) throw new Error("No injected wallet found.");
   await ensureXLayer();
   const from = await connectedAccount();
   setTxStatus(pendingMessage);
-  const hash = await window.ethereum.request({
+  const hash = await provider.request({
     method: "eth_sendTransaction",
     params: [{ from, to, data }],
   });
@@ -534,25 +593,48 @@ async function sendAndTrack(to, data, pendingMessage) {
 }
 
 async function ensureXLayer() {
-  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+  const provider = walletProvider();
+  if (!provider) throw new Error("No injected wallet found.");
+  const chainId = await provider.request({ method: "eth_chainId" });
   if (chainId === "0xc4") return;
-  await window.ethereum.request({
-    method: "wallet_switchEthereumChain",
-    params: [{ chainId: "0xc4" }],
-  });
+  try {
+    await provider.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: "0xc4" }],
+    });
+  } catch (error) {
+    if (error.code !== 4902) throw error;
+    await provider.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: "0xc4",
+          chainName: "X Layer Mainnet",
+          nativeCurrency: { name: "OKB", symbol: "OKB", decimals: 18 },
+          rpcUrls: ["https://rpc.xlayer.tech"],
+          blockExplorerUrls: ["https://www.oklink.com/x-layer"],
+        },
+      ],
+    });
+  }
 }
 
 async function connectedAccount() {
-  const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+  const provider = walletProvider();
+  if (!provider) throw new Error("No injected wallet found.");
+  const accounts = await provider.request({ method: "eth_requestAccounts" });
   const account = accounts[0];
   if (!account) throw new Error("Wallet connection failed.");
   els.walletAddress.value = account;
+  updateWalletDisplay(account);
   return account;
 }
 
 async function waitForReceipt(hash) {
+  const provider = walletProvider();
+  if (!provider) throw new Error("No injected wallet found.");
   for (let i = 0; i < 40; i++) {
-    const receipt = await window.ethereum.request({
+    const receipt = await provider.request({
       method: "eth_getTransactionReceipt",
       params: [hash],
     });
@@ -566,13 +648,24 @@ async function waitForReceipt(hash) {
 }
 
 async function updateWalletNetworkLabel() {
-  if (!window.ethereum || !els.walletNetwork) return;
+  const provider = walletProvider();
+  if (!provider || !els.walletNetwork) {
+    if (els.walletNetwork) els.walletNetwork.textContent = "Wallet not connected";
+    return;
+  }
   try {
-    const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    const chainId = await provider.request({ method: "eth_chainId" });
     els.walletNetwork.textContent = chainId === "0xc4" ? "Wallet on X Layer" : `Wallet chain ${chainId}`;
   } catch {
     els.walletNetwork.textContent = "Wallet not connected";
   }
+}
+
+function updateWalletDisplay(address) {
+  setAll("#walletAddrDisplay", shortAddress(address));
+  document.querySelectorAll(".connect-wallet-trigger").forEach((button) => {
+    button.textContent = shortAddress(address);
+  });
 }
 
 function selectedSwapRoute() {
@@ -682,6 +775,8 @@ function renderWalletStats(words) {
   setAll("#rapidRoundTrips", rapidRoundTrips.toString());
   setAll("#walletScoreContribution", `${persona === 4 ? "-" : "+"}${scoreContribution(persona)}`);
   setAll("#walletLastSwaps", `${swapCount.toString()} hook-recorded swaps`);
+  setAll("#builderPersonaCount", personaName === "Builder" ? "selected" : "-");
+  setAll("#stabilizerPersonaCount", personaName === "Stabilizer" ? "selected" : "-");
 }
 
 function scoreContribution(persona) {
