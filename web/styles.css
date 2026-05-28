@@ -304,8 +304,44 @@ canvas {
 
 .metrics {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
+}
+
+.integration-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.integration-card {
+  min-height: 128px;
+  border: 1px solid rgba(89, 169, 255, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20, 33, 48, 0.94), rgba(11, 18, 26, 0.94));
+  padding: 16px;
+}
+
+.integration-card span {
+  display: block;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.integration-card strong {
+  display: block;
+  min-height: 44px;
+  margin: 12px 0;
+  font-size: 18px;
+  line-height: 1.22;
+}
+
+.integration-card code {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
 }
 
 .metric {
@@ -417,6 +453,7 @@ canvas {
   }
 
   .metrics,
+  .integration-strip,
   .persona-stats,
   .persona-roster {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -434,6 +471,7 @@ canvas {
   }
 
   .metrics,
+  .integration-strip,
   .persona-stats,
   .persona-roster {
     grid-template-columns: 1fr;

@@ -85,6 +85,12 @@ const els = {
   claimableYield: document.querySelector("#claimableYield"),
   walletSignal: document.querySelector("#walletSignal"),
   personaBadge: document.querySelector("#personaBadge"),
+  signalSummary: document.querySelector("#signalSummary"),
+  signalAddress: document.querySelector("#signalAddress"),
+  badgeSummary: document.querySelector("#badgeSummary"),
+  badgeAddress: document.querySelector("#badgeAddress"),
+  rehypothecationSummary: document.querySelector("#rehypothecationSummary"),
+  rehypothecationAddress: document.querySelector("#rehypothecationAddress"),
   personaName: document.querySelector("#personaName"),
   personaSummary: document.querySelector("#personaSummary"),
   buyVolume: document.querySelector("#buyVolume"),
@@ -142,6 +148,9 @@ function applyDeployment(name) {
   els.rehypothecationVault.value = deployment.rehypothecationVault;
   els.signalProvider.value = deployment.signalProvider;
   els.badgeContract.value = deployment.badgeContract;
+  els.signalAddress.textContent = shortAddress(deployment.signalProvider);
+  els.badgeAddress.textContent = shortAddress(deployment.badgeContract);
+  els.rehypothecationAddress.textContent = shortAddress(deployment.rehypothecationVault);
   els.rpcUrl.value = deployment.rpc;
   els.walletAddress.value = deployment.wallet;
   els.networkBadge.textContent = `Verified on ${deployment.label}`;
@@ -248,6 +257,8 @@ async function renderRehypothecation(wallet) {
   els.idleDeposits.textContent = `${formatTokenUnits(decodeWords(deposits)[0])} CQUOTE`;
   els.deployedAssets.textContent = `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE`;
   els.claimableYield.textContent = `${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB`;
+  els.rehypothecationSummary.textContent =
+    `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE deployed, ${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB yield`;
 }
 
 async function renderSignalsAndBadge(poolId, wallet) {
@@ -261,8 +272,11 @@ async function renderSignalsAndBadge(poolId, wallet) {
     const walletSignal = signed16(words[1]);
     const marketSignal = signed16(words[2]);
     els.walletSignal.textContent = `${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} / ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
+    els.signalSummary.textContent =
+      `Wallet ${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} bps, market ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
   } else {
     els.walletSignal.textContent = "Not set";
+    els.signalSummary.textContent = "Not set";
   }
 
   if (badgeContract) {
@@ -270,8 +284,10 @@ async function renderSignalsAndBadge(poolId, wallet) {
     const result = await ethCall(badgeContract, selectors.badgeOf + strip0x(poolId) + padAddress(wallet));
     const tokenId = decodeWords(result)[0];
     els.personaBadge.textContent = tokenId === 0n ? "None" : `#${tokenId.toString()}`;
+    els.badgeSummary.textContent = tokenId === 0n ? "No badge for wallet" : `Badge #${tokenId.toString()} minted`;
   } else {
     els.personaBadge.textContent = "Not set";
+    els.badgeSummary.textContent = "Not set";
   }
 }
 
@@ -438,6 +454,11 @@ function formatTokenUnits(value) {
   const whole = value / 10n ** 18n;
   const fraction = (value % 10n ** 18n).toString().padStart(18, "0").slice(0, 4);
   return `${whole}.${fraction}`;
+}
+
+function shortAddress(value) {
+  if (!value) return "Not set";
+  return `${value.slice(0, 6)}...${value.slice(-4)}`;
 }
 
 function signed16(word) {
