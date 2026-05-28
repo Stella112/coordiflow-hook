@@ -82,66 +82,134 @@ const personaSummaries = {
   Restricted: "This wallet triggered toxic-flow rules such as rapid round trips or sell-heavy behavior.",
 };
 
+const verifiedActivity = [
+  {
+    type: "swap",
+    color: "var(--c-builder)",
+    label: "USDT0 swap",
+    text: "0.1 USDT0 -> CFLOW through the funded X Layer v4 route",
+    hash: "0x1048a77f581d8c253433c27de7287e059197efd4aeb9bdc731103ca250214543",
+  },
+  {
+    type: "approval",
+    color: "var(--p)",
+    label: "USDT0 approval",
+    text: "USDT0 spend approved for the CoordiFlow route helper",
+    hash: "0xa46c92c4f72f6738c03166bfc29867110ec05df8caa1575a98dcb59352fd7740",
+  },
+  {
+    type: "builder",
+    color: "var(--c-builder)",
+    label: "Builder flow",
+    text: "Repeated constructive swaps formed the Builder persona",
+    hash: "0xb84f16274199eb5a28f9dc0f760428f93bda68e522e6fe3d38ac31a598c0b604",
+  },
+  {
+    type: "restricted",
+    color: "var(--c-restr)",
+    label: "Restricted flow",
+    text: "Round-trip behavior was recorded and penalized by the hook",
+    hash: "0x61cf0be73f73b352909f086b42e10e81187e4be7591fb6049dd93c79659286e4",
+  },
+  {
+    type: "yield",
+    color: "var(--c-seeder)",
+    label: "Yield accrual",
+    text: "Light rehypothecation yield accrued for eligible positive personas",
+    hash: "0xdd3c0e1f651328c364ce6bdc99aafcf93bc42dd728fd9e954cc0a5b4e266c738",
+  },
+  {
+    type: "signal",
+    color: "var(--p)",
+    label: "Signal layer",
+    text: "X Layer intelligence provider connected to CoordiFlow",
+    hash: "0xbd03eebe93879f0c63f1cbd85024ee9c4987a18bed81d018d13d77684ba8f066",
+  },
+];
+
+function one(selector) {
+  return document.querySelector(selector);
+}
+
+function all(selector) {
+  return Array.from(document.querySelectorAll(selector));
+}
+
+function last(selector) {
+  const nodes = all(selector);
+  return nodes[nodes.length - 1] || null;
+}
+
+function on(node, event, handler) {
+  if (node) node.addEventListener(event, handler);
+}
+
+function setAll(selector, value) {
+  all(selector).forEach((node) => {
+    node.textContent = value;
+  });
+}
+
 const els = {
-  hookAddress: document.querySelector("#hookAddress"),
-  userActions: document.querySelector("#userActions"),
-  poolId: document.querySelector("#poolId"),
-  vaultAddress: document.querySelector("#vaultAddress"),
-  rehypothecationVault: document.querySelector("#rehypothecationVault"),
-  signalProvider: document.querySelector("#signalProvider"),
-  badgeContract: document.querySelector("#badgeContract"),
-  walletAddress: document.querySelector("#walletAddress"),
-  rpcUrl: document.querySelector("#rpcUrl"),
-  status: document.querySelector("#status"),
-  connectWallet: document.querySelector("#connectWallet"),
-  refreshState: document.querySelector("#refreshState"),
-  walletNetwork: document.querySelector("#walletNetwork"),
-  txStatus: document.querySelector("#txStatus"),
-  swapRoute: document.querySelector("#swapRoute"),
-  swapAmount: document.querySelector("#swapAmount"),
-  approveSwap: document.querySelector("#approveSwap"),
-  executeSwap: document.querySelector("#executeSwap"),
-  liquidityAmount: document.querySelector("#liquidityAmount"),
-  liquidityMax: document.querySelector("#liquidityMax"),
-  approveLiquidity: document.querySelector("#approveLiquidity"),
-  addLiquidity: document.querySelector("#addLiquidity"),
-  claimRewards: document.querySelector("#claimRewards"),
-  rehypDepositAmount: document.querySelector("#rehypDepositAmount"),
-  approveRehyp: document.querySelector("#approveRehyp"),
-  depositRehyp: document.querySelector("#depositRehyp"),
-  claimYieldButton: document.querySelector("#claimYield"),
-  coordinationScore: document.querySelector("#coordinationScore"),
-  phaseLabel: document.querySelector("#phaseLabel"),
-  stageTitle: document.querySelector("#stageTitle"),
-  stageFill: document.querySelector("#stageFill"),
-  uniqueParticipants: document.querySelector("#uniqueParticipants"),
-  positiveParticipants: document.querySelector("#positiveParticipants"),
-  restrictedParticipants: document.querySelector("#restrictedParticipants"),
-  liquidityRelease: document.querySelector("#liquidityRelease"),
-  marketSignal: document.querySelector("#marketSignal"),
-  claimableRewards: document.querySelector("#claimableRewards"),
-  idleDeposits: document.querySelector("#idleDeposits"),
-  availableAssets: document.querySelector("#availableAssets"),
-  deployedAssets: document.querySelector("#deployedAssets"),
-  yieldPool: document.querySelector("#yieldPool"),
-  claimableYield: document.querySelector("#claimableYield"),
-  walletSignal: document.querySelector("#walletSignal"),
-  personaBadge: document.querySelector("#personaBadge"),
-  signalSummary: document.querySelector("#signalSummary"),
-  signalAddress: document.querySelector("#signalAddress"),
-  badgeSummary: document.querySelector("#badgeSummary"),
-  badgeAddress: document.querySelector("#badgeAddress"),
-  rehypothecationSummary: document.querySelector("#rehypothecationSummary"),
-  rehypothecationAddress: document.querySelector("#rehypothecationAddress"),
-  personaName: document.querySelector("#personaName"),
-  personaSummary: document.querySelector("#personaSummary"),
-  buyVolume: document.querySelector("#buyVolume"),
-  sellVolume: document.querySelector("#sellVolume"),
-  swapCount: document.querySelector("#swapCount"),
-  liquidityActions: document.querySelector("#liquidityActions"),
-  rapidRoundTrips: document.querySelector("#rapidRoundTrips"),
-  networkBadge: document.querySelector("#networkBadge"),
-  canvas: document.querySelector("#signalCanvas"),
+  hookAddress: one("#hookAddress"),
+  userActions: one("#userActions"),
+  poolId: one("#poolId"),
+  vaultAddress: one("#vaultAddress"),
+  rehypothecationVault: one("#rehypothecationVault"),
+  signalProvider: one("#signalProvider"),
+  badgeContract: one("#badgeContract"),
+  walletAddress: one("#walletAddress"),
+  rpcUrl: one("#rpcUrl"),
+  status: last("#status"),
+  connectWallet: one("#connectWallet"),
+  refreshState: one("#refreshState"),
+  walletNetwork: one("#walletNetwork"),
+  txStatus: last("#txStatus"),
+  swapRoute: one("#swapRoute"),
+  swapAmount: one("#swapAmount"),
+  approveSwap: one("#approveSwap"),
+  executeSwap: one("#executeSwap"),
+  liquidityAmount: one("#liquidityAmount"),
+  liquidityMax: one("#liquidityMax"),
+  approveLiquidity: one("#approveLiquidity"),
+  addLiquidity: one("#addLiquidity"),
+  claimRewards: one("#claimRewards"),
+  rehypDepositAmount: one("#rehypDepositAmount"),
+  approveRehyp: one("#approveRehyp"),
+  depositRehyp: one("#depositRehyp"),
+  claimYieldButton: one("#claimYield"),
+  coordinationScore: one("#coordinationScore"),
+  phaseLabel: one("#phaseLabel"),
+  stageTitle: one("#stageTitle"),
+  stageFill: one("#stageFill"),
+  uniqueParticipants: one("#uniqueParticipants"),
+  positiveParticipants: one("#positiveParticipants"),
+  restrictedParticipants: one("#restrictedParticipants"),
+  liquidityRelease: one("#liquidityRelease"),
+  marketSignal: one("#marketSignal"),
+  claimableRewards: last("#claimableRewards"),
+  idleDeposits: last("#idleDeposits"),
+  availableAssets: last("#availableAssets"),
+  deployedAssets: last("#deployedAssets"),
+  yieldPool: last("#yieldPool"),
+  claimableYield: last("#claimableYield"),
+  walletSignal: last("#walletSignal"),
+  personaBadge: last("#personaBadge"),
+  signalSummary: last("#signalSummary"),
+  signalAddress: last("#signalAddress"),
+  badgeSummary: last("#badgeSummary"),
+  badgeAddress: last("#badgeAddress"),
+  rehypothecationSummary: last("#rehypothecationSummary"),
+  rehypothecationAddress: last("#rehypothecationAddress"),
+  personaName: one("#personaName"),
+  personaSummary: one("#personaSummary"),
+  buyVolume: one("#buyVolume"),
+  sellVolume: one("#sellVolume"),
+  swapCount: one("#swapCount"),
+  liquidityActions: one("#liquidityActions"),
+  rapidRoundTrips: one("#rapidRoundTrips"),
+  networkBadge: one("#networkBadge"),
+  canvas: one("#signalCanvas"),
 };
 
 let latestState = {
@@ -156,7 +224,7 @@ let latestState = {
 
 let activeDeployment = deployments.mainnet;
 
-els.connectWallet.addEventListener("click", async () => {
+on(els.connectWallet, "click", async () => {
   if (!window.ethereum) {
     setStatus("No injected wallet found.");
     return;
@@ -168,15 +236,19 @@ els.connectWallet.addEventListener("click", async () => {
   setStatus("Wallet connected. Refresh to load verified state.");
 });
 
-els.refreshState.addEventListener("click", refresh);
-els.approveSwap.addEventListener("click", approveSwap);
-els.executeSwap.addEventListener("click", executeSwap);
-els.approveLiquidity.addEventListener("click", approveLiquidity);
-els.addLiquidity.addEventListener("click", addLiquidity);
-els.claimRewards.addEventListener("click", claimRewards);
-els.approveRehyp.addEventListener("click", approveRehypothecation);
-els.depositRehyp.addEventListener("click", depositRehypothecation);
-els.claimYieldButton.addEventListener("click", claimYield);
+on(els.refreshState, "click", refresh);
+on(els.approveSwap, "click", approveSwap);
+on(els.executeSwap, "click", executeSwap);
+on(els.approveLiquidity, "click", approveLiquidity);
+on(els.addLiquidity, "click", addLiquidity);
+on(els.claimRewards, "click", claimRewards);
+on(els.approveRehyp, "click", approveRehypothecation);
+on(els.depositRehyp, "click", depositRehypothecation);
+on(els.claimYieldButton, "click", claimYield);
+on(els.swapRoute, "change", () => {
+  updateSwapRouteUi();
+  refreshWalletBalances().catch((error) => setTxStatus(error.message));
+});
 document.querySelectorAll("[data-wallet]").forEach((button) => {
   button.addEventListener("click", () => {
     els.walletAddress.value = button.dataset.wallet;
@@ -206,9 +278,13 @@ function applyDeployment(name) {
   els.signalAddress.textContent = shortAddress(deployment.signalProvider);
   els.badgeAddress.textContent = shortAddress(deployment.badgeContract);
   els.rehypothecationAddress.textContent = shortAddress(deployment.rehypothecationVault);
+  setAll("#signalAddress, #signalAddressB", shortAddress(deployment.signalProvider));
+  setAll("#badgeAddress, #badgeAddressB", shortAddress(deployment.badgeContract));
+  setAll("#rehypothecationAddress", shortAddress(deployment.rehypothecationVault));
   els.rpcUrl.value = deployment.rpc;
   els.walletAddress.value = deployment.wallet;
   els.networkBadge.textContent = `Verified on ${deployment.label}`;
+  setAll("#networkBadge", `Verified on ${deployment.label}`);
   document.querySelectorAll("[data-preset]").forEach((button) => {
     button.classList.toggle("selected", button.dataset.preset === name);
   });
@@ -216,6 +292,8 @@ function applyDeployment(name) {
     button.dataset.wallet = deployment.participants[button.dataset.persona];
   });
   highlightSelectedWallet(deployment.wallet);
+  updateSwapRouteUi();
+  renderVerifiedActivity();
 }
 
 async function refresh() {
@@ -234,7 +312,10 @@ async function refresh() {
     await renderRewards(poolId, wallet);
     await renderRehypothecation(wallet);
     await renderSignalsAndBadge(poolId, wallet);
+    await refreshWalletBalances();
     await updateWalletNetworkLabel();
+    await renderLatestBlock();
+    renderVerifiedActivity();
     drawSignal();
 
     setStatus("Loaded verified on-chain state.");
@@ -261,6 +342,46 @@ async function ethCall(to, data) {
   return json.result;
 }
 
+async function renderLatestBlock() {
+  try {
+    const response = await fetch(els.rpcUrl.value.trim(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: Date.now(), method: "eth_blockNumber", params: [] }),
+    });
+    const json = await response.json();
+    if (!json.result) return;
+    const block = Number(BigInt(json.result)).toLocaleString();
+    setAll("#latestBlock", `BLOCK ${block}`);
+  } catch {
+    setAll("#latestBlock", "BLOCK unavailable");
+  }
+}
+
+async function tokenBalance(token, wallet, decimals = 18) {
+  if (!token) return "-";
+  const result = await ethCall(assertAddress(token, "Token"), selectors.balanceOf + padAddress(wallet));
+  return formatUnits(decodeWords(result)[0], decimals, decimals === 6 ? 2 : 4);
+}
+
+async function refreshWalletBalances() {
+  const wallet = els.walletAddress?.value?.trim();
+  if (!wallet || !/^0x[a-fA-F0-9]{40}$/.test(wallet)) return;
+  const route = selectedSwapRoute();
+  const receiveToken = route.outputToken;
+  const [payBalance, receiveBalance, launchBalance, quoteBalance] = await Promise.all([
+    tokenBalance(route.tokenIn, wallet, route.decimals),
+    tokenBalance(receiveToken, wallet, route.outputDecimals),
+    tokenBalance(activeDeployment.launchToken, wallet),
+    tokenBalance(activeDeployment.quoteToken, wallet),
+  ]);
+
+  setAll("#swapBalPay", payBalance);
+  setAll("#swapBalRec", receiveBalance);
+  setAll("#liqBalLaunch", launchBalance);
+  setAll("#liqBalQuote", quoteBalance);
+}
+
 function renderPoolState(words) {
   latestState = {
     unique: words[0],
@@ -272,36 +393,39 @@ function renderPoolState(words) {
     marketSignal: signed16(words[6]),
   };
 
-  els.coordinationScore.textContent = latestState.score.toString();
-  els.phaseLabel.textContent = `Phase ${latestState.phase.toString()}`;
-  els.uniqueParticipants.textContent = latestState.unique.toString();
-  els.positiveParticipants.textContent = latestState.positive.toString();
-  els.restrictedParticipants.textContent = latestState.restricted.toString();
-  els.liquidityRelease.textContent = `${Number(latestState.releaseBps) / 100}%`;
-  els.marketSignal.textContent = `${latestState.marketSignal > 0 ? "+" : ""}${latestState.marketSignal.toString()} bps`;
+  const score = latestState.score.toString();
+  const phase = latestState.phase.toString();
+  const release = `${Number(latestState.releaseBps) / 100}%`;
+  const signal = `${latestState.marketSignal > 0 ? "+" : ""}${latestState.marketSignal.toString()} bps`;
+
+  setAll("#coordinationScore, #heroCoordinationScore, #landingCoordinationScore", score);
+  setAll("#phaseLabel, #landingPhaseLabel", `Phase ${phase}`);
+  setAll("#uniqueParticipants", latestState.unique.toString());
+  setAll("#positiveParticipants", latestState.positive.toString());
+  setAll("#restrictedParticipants", latestState.restricted.toString());
+  setAll("#liquidityRelease", release);
+  setAll("#marketSignal, #marketSignalB", signal);
+  setAll("#liquidityStage", `Phase ${phase}`);
   renderStage();
 }
 
 async function renderRewards(poolId, wallet) {
   const vault = els.vaultAddress.value.trim();
   if (!vault) {
-    els.claimableRewards.textContent = "Not set";
+    setAll("#claimableRewards, #claimableRewardsDisplay", "Not set");
     return;
   }
 
   assertAddress(vault, "Rewards vault");
   const result = await ethCall(vault, selectors.claimable + strip0x(poolId) + padAddress(wallet));
-  els.claimableRewards.textContent = `${formatTokenUnits(decodeWords(result)[0])} OKB`;
+  const claimable = `${formatTokenUnits(decodeWords(result)[0])} OKB`;
+  setAll("#claimableRewards, #claimableRewardsDisplay", claimable);
 }
 
 async function renderRehypothecation(wallet) {
   const vault = els.rehypothecationVault.value.trim();
   if (!vault) {
-    els.idleDeposits.textContent = "Not set";
-    els.availableAssets.textContent = "Not set";
-    els.deployedAssets.textContent = "Not set";
-    els.yieldPool.textContent = "Not set";
-    els.claimableYield.textContent = "Not set";
+    setAll("#idleDeposits, #availableAssets, #deployedAssets, #yieldPool, #claimableYield", "Not set");
     return;
   }
 
@@ -314,13 +438,19 @@ async function renderRehypothecation(wallet) {
     ethCall(vault, selectors.claimableYield + padAddress(wallet)),
   ]);
 
-  els.idleDeposits.textContent = `${formatTokenUnits(decodeWords(deposits)[0])} CQUOTE`;
-  els.availableAssets.textContent = `${formatTokenUnits(decodeWords(available)[0])} CQUOTE`;
-  els.deployedAssets.textContent = `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE`;
-  els.yieldPool.textContent = `${formatTokenUnits(decodeWords(yieldPool)[0])} OKB`;
-  els.claimableYield.textContent = `${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB`;
-  els.rehypothecationSummary.textContent =
-    `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE deployed, ${formatTokenUnits(decodeWords(available)[0])} CQUOTE idle`;
+  const idleText = `${formatTokenUnits(decodeWords(deposits)[0])} CQUOTE`;
+  const availableText = `${formatTokenUnits(decodeWords(available)[0])} CQUOTE`;
+  const deployedText = `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE`;
+  const yieldPoolText = `${formatTokenUnits(decodeWords(yieldPool)[0])} OKB`;
+  const yieldText = `${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB`;
+  const summary = `${deployedText} deployed, ${availableText} idle`;
+
+  setAll("#idleDeposits", idleText);
+  setAll("#availableAssets", availableText);
+  setAll("#deployedAssets", deployedText);
+  setAll("#yieldPool", yieldPoolText);
+  setAll("#claimableYield", yieldText);
+  setAll("#rehypothecationSummary", summary);
 }
 
 async function approveSwap() {
@@ -446,32 +576,60 @@ async function updateWalletNetworkLabel() {
 }
 
 function selectedSwapRoute() {
-  const route = els.swapRoute.value;
+  const route = els.swapRoute?.value || "quoteToLaunch";
   if (route === "quoteToLaunch") {
     return {
+      id: route,
+      label: "CQUOTE -> CFLOW",
+      inputSymbol: "CQUOTE",
+      outputSymbol: "CFLOW",
       tokenIn: activeDeployment.quoteToken,
+      outputToken: activeDeployment.launchToken,
       actions: els.userActions.value.trim(),
       zeroForOne: !activeDeployment.launchTokenIsCurrency0,
       decimals: 18,
+      outputDecimals: 18,
     };
   }
   if (route === "launchToQuote") {
     return {
+      id: route,
+      label: "CFLOW -> CQUOTE",
+      inputSymbol: "CFLOW",
+      outputSymbol: "CQUOTE",
       tokenIn: activeDeployment.launchToken,
+      outputToken: activeDeployment.quoteToken,
       actions: els.userActions.value.trim(),
       zeroForOne: activeDeployment.launchTokenIsCurrency0,
       decimals: 18,
+      outputDecimals: 18,
     };
   }
   if (route === "usdt0ToLaunch") {
     return {
+      id: route,
+      label: "USDT0 -> CFLOW",
+      inputSymbol: "USDT0",
+      outputSymbol: "CFLOW",
       tokenIn: activeDeployment.assets.usdt0,
+      outputToken: activeDeployment.launchToken,
       actions: activeDeployment.usdt0UserActions,
       zeroForOne: true,
       decimals: 6,
+      outputDecimals: 18,
     };
   }
   throw new Error("This route needs a funded CoordiFlow pool or external route before it can be enabled.");
+}
+
+function updateSwapRouteUi() {
+  const route = selectedSwapRoute();
+  setAll("#swapPairName", route.label);
+  setAll("#swapPaySymbol", route.inputSymbol);
+  setAll("#swapReceiveSymbol", route.outputSymbol);
+  setAll("#swapReceiveEstimate", "On-chain tx");
+  setAll("#swapRate", "Quoted by v4 execution");
+  setAll("#swapCap", "Enforced by hook state");
 }
 
 async function renderSignalsAndBadge(poolId, wallet) {
@@ -484,23 +642,24 @@ async function renderSignalsAndBadge(poolId, wallet) {
     const words = decodeWords(result);
     const walletSignal = signed16(words[1]);
     const marketSignal = signed16(words[2]);
-    els.walletSignal.textContent = `${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} / ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
-    els.signalSummary.textContent =
-      `Wallet ${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} bps, market ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
+    const walletText = `${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} / ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
+    const summary = `Wallet ${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} bps, market ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
+    setAll("#walletSignal", walletText);
+    setAll("#signalSummary, #signalSummaryB", summary);
   } else {
-    els.walletSignal.textContent = "Not set";
-    els.signalSummary.textContent = "Not set";
+    setAll("#walletSignal", "Not set");
+    setAll("#signalSummary, #signalSummaryB", "Not set");
   }
 
   if (badgeContract) {
     assertAddress(badgeContract, "Persona badge");
     const result = await ethCall(badgeContract, selectors.badgeOf + strip0x(poolId) + padAddress(wallet));
     const tokenId = decodeWords(result)[0];
-    els.personaBadge.textContent = tokenId === 0n ? "None" : `#${tokenId.toString()}`;
-    els.badgeSummary.textContent = tokenId === 0n ? "No badge for wallet" : `Badge #${tokenId.toString()} minted`;
+    setAll("#personaBadge", tokenId === 0n ? "None" : `#${tokenId.toString()}`);
+    setAll("#badgeSummary, #badgeSummaryB", tokenId === 0n ? "No badge for wallet" : `Badge #${tokenId.toString()} minted`);
   } else {
-    els.personaBadge.textContent = "Not set";
-    els.badgeSummary.textContent = "Not set";
+    setAll("#personaBadge", "Not set");
+    setAll("#badgeSummary, #badgeSummaryB", "Not set");
   }
 }
 
@@ -512,18 +671,30 @@ function renderWalletStats(words) {
   const rapidRoundTrips = words[9];
   const persona = Number(words[10]);
   const personaName = personas[persona] || "Unknown";
+  const summary = personaSummaries[personaName] || "Persona unavailable.";
 
-  els.personaName.textContent = personaName;
-  els.personaSummary.textContent = personaSummaries[personaName] || "Persona unavailable.";
-  els.buyVolume.textContent = formatTokenUnits(buyVolume);
-  els.sellVolume.textContent = formatTokenUnits(sellVolume);
-  els.swapCount.textContent = swapCount.toString();
-  els.liquidityActions.textContent = liquidityActions.toString();
-  els.rapidRoundTrips.textContent = rapidRoundTrips.toString();
+  setAll("#personaName, #walletPersonaName", personaName);
+  setAll("#personaSummary, #walletPersonaSummary", summary);
+  setAll("#buyVolume", formatTokenUnits(buyVolume));
+  setAll("#sellVolume", formatTokenUnits(sellVolume));
+  setAll("#swapCount", swapCount.toString());
+  setAll("#liquidityActions", liquidityActions.toString());
+  setAll("#rapidRoundTrips", rapidRoundTrips.toString());
+  setAll("#walletScoreContribution", `${persona === 4 ? "-" : "+"}${scoreContribution(persona)}`);
+  setAll("#walletLastSwaps", `${swapCount.toString()} hook-recorded swaps`);
+}
+
+function scoreContribution(persona) {
+  if (persona === 1) return "1.0";
+  if (persona === 2) return "0.8";
+  if (persona === 3) return "0.9";
+  if (persona === 4) return "1.0";
+  return "0.0";
 }
 
 function drawSignal() {
   const canvas = els.canvas;
+  if (!canvas) return;
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
   const height = canvas.height;
@@ -630,6 +801,27 @@ function renderStage() {
   });
 }
 
+function renderVerifiedActivity() {
+  const rows = verifiedActivity
+    .map(
+      (item) => `
+        <li class="act-item">
+          <span class="act-time">TX</span>
+          <span class="act-bar" style="background:${item.color}"></span>
+          <span class="act-type">${item.label}</span>
+          <span class="act-text">
+            ${item.text} ·
+            <a href="https://www.oklink.com/x-layer/tx/${item.hash}" target="_blank" rel="noreferrer">${shortHash(item.hash)}</a>
+          </span>
+        </li>`,
+    )
+    .join("");
+
+  document.querySelectorAll(".activity-list").forEach((list) => {
+    list.innerHTML = rows;
+  });
+}
+
 function highlightSelectedWallet(wallet) {
   document.querySelectorAll("[data-wallet]").forEach((node) => {
     node.classList.toggle("selected", node.dataset.wallet?.toLowerCase() === wallet.toLowerCase());
@@ -678,8 +870,13 @@ function strip0x(value) {
 }
 
 function formatTokenUnits(value) {
-  const whole = value / 10n ** 18n;
-  const fraction = (value % 10n ** 18n).toString().padStart(18, "0").slice(0, 4);
+  return formatUnits(value, 18, 4);
+}
+
+function formatUnits(value, decimals = 18, precision = 4) {
+  const unit = 10n ** BigInt(decimals);
+  const whole = value / unit;
+  const fraction = (value % unit).toString().padStart(decimals, "0").slice(0, precision);
   return `${whole}.${fraction}`;
 }
 
@@ -706,13 +903,15 @@ function signed16(word) {
 }
 
 function setStatus(message) {
-  els.status.textContent = message;
+  if (els.status) els.status.textContent = message;
 }
 
 function setTxStatus(message) {
-  els.txStatus.textContent = message;
+  if (els.txStatus) els.txStatus.textContent = message;
 }
 
 highlightSelectedWallet(els.walletAddress.value);
+updateSwapRouteUi();
+renderVerifiedActivity();
 drawSignal();
 refresh();
