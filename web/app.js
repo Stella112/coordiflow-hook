@@ -533,7 +533,7 @@ async function renderPenaltyCredits(vault, poolId, wallet) {
     setAll("#walletPenaltyCredits", "V2 redeploy required");
     setAll(
       "#penaltyStatus",
-      "Current mainnet v1 vault is real but predates automatic penalty getters. The v2 contracts now implement and test automatic penalty accounting; a v2 hook/pool redeploy makes this live on-chain.",
+      "The selected vault does not expose the v2 penalty getters. Switch to the X Layer mainnet v2 preset to read live automatic penalty credits.",
     );
   }
 }

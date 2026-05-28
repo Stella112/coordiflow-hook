@@ -61,6 +61,11 @@ This repo does not claim a private Flap API integration. The MVP is intentionall
 - `script/03_CreateCoordiFlowPool.s.sol` initializes a real dynamic-fee v4 pool, configures the hook, mints liquidity, and can fund rewards.
 - `web/` is a no-fake-data dashboard that reads hook state from X Layer RPC.
 
+## Documentation
+
+- Full product docs: [`docs/coordiflow-product-docs.md`](docs/coordiflow-product-docs.md)
+- Submission description: [`docs/submission-description.md`](docs/submission-description.md)
+
 ## Local Secret Setup
 
 Create a local `.env` file in this folder:
@@ -191,7 +196,7 @@ Mainnet verification reads:
 - Hook bytecode is present at the deployed hook address.
 - `poolState`: 4 unique participants, 4 positive participants, 1 restricted participant, coordination score 400.
 - Mainnet personas: Builder `2`, Stabilizer `3`, Restricted `4`.
-- Rewards vault pool balance after real reward accrual: `525076889504992` wei.
+- Rewards vault penalty ledger is live for v2 restricted-flow accounting. The v2 vault was not pre-funded with OKB rewards during redeploy, so reward claims require future reward funding while penalty-credit reads are live now.
 - Rehypothecation proof: `10 CQUOTE` deposited by a positive persona, `3 CQUOTE` currently deployed in the strategy reserve, and `0.0001 OKB` claimable yield accrued on-chain.
 - X Layer intelligence proof: hook is connected to the signal provider; restricted wallet signal is `-3000 bps`, market momentum signal is `+500 bps`.
 - Persona badge proof: Seeder badge `#1`, Builder badge `#2`, Stabilizer badge `#3`, Restricted badge `#4`.
@@ -239,7 +244,7 @@ The dashboard can also send real wallet transactions:
 
 - approve and swap through the deployed `CoordiFlowUserActions` helper
 - approve both pool tokens and add liquidity through the same helper
-- claim rewards from the penalty-funded rewards vault
+- read automatic restricted-flow penalty credits and claim funded rewards when available
 - approve and deposit CQUOTE into the rehypothecation vault
 - claim accrued OKB yield
 
