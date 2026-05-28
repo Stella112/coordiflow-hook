@@ -25,7 +25,6 @@ const selectors = {
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
-const demoCflowBalance = "2,500.0000 demo";
 const deployments = {
   mainnet: {
     label: "X Layer mainnet",
@@ -442,22 +441,14 @@ async function refreshWalletBalances() {
     tokenBalance(activeDeployment.quoteToken, wallet),
   ]);
 
-  setAll("#swapBalPay", displayBalance(payBalance, route.tokenIn));
-  setAll("#swapBalRec", displayBalance(receiveBalance, receiveToken));
-  setAll("#liqBalLaunch", displayBalance(launchBalance, activeDeployment.launchToken));
+  setAll("#swapBalPay", payBalance);
+  setAll("#swapBalRec", receiveBalance);
+  setAll("#liqBalLaunch", launchBalance);
   setAll("#liqBalQuote", quoteBalance);
   setAll("#balanceSource", `${route.inputSymbol}.balanceOf(${shortAddress(wallet)})`);
   setAll("#payTokenAddress", shortAddress(route.tokenIn));
   setAll("#receiveTokenAddress", shortAddress(route.outputToken));
   setAll("#activeWalletSource", shortAddress(wallet));
-}
-
-function displayBalance(balance, token) {
-  const isLaunchToken = token?.toLowerCase?.() === activeDeployment.launchToken?.toLowerCase?.();
-  if (isLaunchToken && (balance === "0.0000" || balance === "0.00" || balance === "0")) {
-    return demoCflowBalance;
-  }
-  return balance;
 }
 
 function renderPoolState(words) {
@@ -849,7 +840,7 @@ function updateSwapRouteUi() {
   if (els.swapRouteHint) {
     const action = route.id === "usdt0ToLaunch" || route.id === "quoteToLaunch" ? "BUYING" : "SELLING";
     els.swapRouteHint.textContent =
-      `${action} route selected: you spend ${route.inputSymbol} and receive ${route.outputSymbol}. Demo CFLOW balance is visual only; real sends still require on-chain balance.`;
+      `${action} route selected: you spend ${route.inputSymbol} and receive ${route.outputSymbol}. Approval only gives permission; Swap sends the trade.`;
   }
 }
 
