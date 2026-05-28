@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CoordiFlow</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260528-actions" />
   </head>
   <body>
     <main class="shell">
@@ -55,6 +55,15 @@
               autocomplete="off"
               spellcheck="false"
               value="0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb"
+            />
+          </label>
+          <label>
+            User actions
+            <input
+              id="userActions"
+              autocomplete="off"
+              spellcheck="false"
+              value="0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1"
             />
           </label>
           <label>
@@ -117,6 +126,7 @@
             <div class="stage-copy">
               <p class="eyebrow">Market Maturity</p>
               <h2 id="stageTitle">Awaiting State</h2>
+              <p class="compact-copy">Fees, personas, rewards, and launch stage are controlled by live hook state.</p>
             </div>
             <div class="stage-track" aria-label="Market phase progression">
               <div id="stageFill" class="stage-fill"></div>
@@ -125,6 +135,105 @@
               <span data-stage="2">Phase 2</span>
               <span data-stage="3">Phase 3</span>
             </div>
+          </section>
+
+          <section class="demo-flow">
+            <article class="panel flow-card">
+              <p class="eyebrow">Verified Flow</p>
+              <h2>Wallets enter, personas form, rewards unlock.</h2>
+              <div class="flow-steps">
+                <span>Seeder added liquidity</span>
+                <span>Builder made repeated buys</span>
+                <span>Stabilizer traded cleanly</span>
+                <span>Restricted triggered round-trip rules</span>
+              </div>
+            </article>
+            <article class="panel flap-card">
+              <p class="eyebrow">Flap-Compatible Layer</p>
+              <h2>Launch infrastructure + behavior-aware hook logic.</h2>
+              <p>
+                CoordiFlow is built as the smart coordination layer for Flap-style launches on X Layer: token creation
+                can stay simple, while liquidity, fees, badges, rewards, and yield access respond to participation quality.
+              </p>
+            </article>
+          </section>
+
+          <section class="panel action-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Launch Actions</p>
+                <h2>Swap, seed liquidity, earn rewards.</h2>
+              </div>
+              <span id="walletNetwork">Wallet not connected</span>
+            </div>
+            <div class="action-grid">
+              <article class="action-card">
+                <span>Direct pool swap</span>
+                <strong>CFLOW / CQUOTE</strong>
+                <label>
+                  Route
+                  <select id="swapRoute">
+                    <option value="quoteToLaunch">CQUOTE -> CFLOW</option>
+                    <option value="launchToQuote">CFLOW -> CQUOTE</option>
+                    <option value="usdt0ToLaunch" disabled>USDT0 -> CFLOW needs funded route</option>
+                    <option value="usdtToLaunch" disabled>USDT -> CFLOW needs funded route</option>
+                    <option value="wokbToLaunch" disabled>WOKB -> CFLOW needs funded route</option>
+                  </select>
+                </label>
+                <label>
+                  Amount in
+                  <input id="swapAmount" inputmode="decimal" value="1" />
+                </label>
+                <div class="button-row">
+                  <button id="approveSwap" type="button">Approve</button>
+                  <button id="executeSwap" type="button">Swap</button>
+                </div>
+              </article>
+              <article class="action-card">
+                <span>Add liquidity</span>
+                <strong>Become a Seeder</strong>
+                <label>
+                  Liquidity units
+                  <input id="liquidityAmount" inputmode="numeric" value="1000000000000" />
+                </label>
+                <label>
+                  Max token spend
+                  <input id="liquidityMax" inputmode="decimal" value="10" />
+                </label>
+                <div class="button-row">
+                  <button id="approveLiquidity" type="button">Approve both</button>
+                  <button id="addLiquidity" type="button">Add LP</button>
+                </div>
+              </article>
+              <article class="action-card">
+                <span>Restricted Vault</span>
+                <strong>Toxic flow pays. Good coordination earns.</strong>
+                <div class="button-row single">
+                  <button id="claimRewards" type="button">Claim rewards</button>
+                </div>
+                <p>Claims real OKB from the reward vault when the selected wallet has accrued coordination rewards.</p>
+              </article>
+              <article class="action-card">
+                <span>Light Rehypothecation</span>
+                <strong>Deposit idle CQUOTE</strong>
+                <label>
+                  Deposit amount
+                  <input id="rehypDepositAmount" inputmode="decimal" value="1" />
+                </label>
+                <div class="button-row">
+                  <button id="approveRehyp" type="button">Approve</button>
+                  <button id="depositRehyp" type="button">Deposit</button>
+                </div>
+                <button id="claimYield" type="button">Claim yield</button>
+              </article>
+            </div>
+            <div class="asset-routes">
+              <span>Official X Layer assets</span>
+              <code>USDT0 0x779D...3736</code>
+              <code>USDT 0x1E4a...D41d</code>
+              <code>WOKB 0xe538...9b2b</code>
+            </div>
+            <p id="txStatus" class="tx-status">Connect wallet to send real X Layer mainnet transactions.</p>
           </section>
 
           <section class="integration-strip" aria-label="Live CoordiFlow integrations">
@@ -180,8 +289,16 @@
               <strong id="idleDeposits">-</strong>
             </article>
             <article class="metric">
+              <span>Available for lending</span>
+              <strong id="availableAssets">-</strong>
+            </article>
+            <article class="metric">
               <span>Rehypothecated</span>
               <strong id="deployedAssets">-</strong>
+            </article>
+            <article class="metric">
+              <span>Yield pool</span>
+              <strong id="yieldPool">-</strong>
             </article>
             <article class="metric">
               <span>Claimable yield</span>
@@ -194,6 +311,28 @@
             <article class="metric">
               <span>Persona badge</span>
               <strong id="personaBadge">-</strong>
+            </article>
+          </section>
+
+          <section class="security-grid">
+            <article class="panel security-card">
+              <p class="eyebrow">Security</p>
+              <h2>Guardrails judges can verify.</h2>
+              <ul>
+                <li>Owner-gated pool, reward vault, and signal configuration.</li>
+                <li>User action helper uses a reentrancy lock and PoolManager-only callback.</li>
+                <li>Dynamic hook fees are bounded by Uniswap v4 fee validation.</li>
+                <li>Signal provider and source hash are visible on-chain.</li>
+              </ul>
+            </article>
+            <article class="panel security-card">
+              <p class="eyebrow">Flap-Compatible Launch</p>
+              <h2>Launch layer plus coordination intelligence.</h2>
+              <ul>
+                <li>Works with standard Uniswap v4 pool initialization.</li>
+                <li>Launches can keep Flap-style creation simple while CoordiFlow scores flow quality.</li>
+                <li>Swap and LP actions trigger personas, fees, rewards, badges, and market stage updates.</li>
+              </ul>
             </article>
           </section>
 
@@ -234,10 +373,42 @@
               <code>0x64dD...55cd</code>
             </article>
           </section>
+
+          <section class="panel activity-panel">
+            <div class="activity-header">
+              <div>
+                <p class="eyebrow">Verified Mainnet Activity</p>
+                <h2>Real transactions that changed the dashboard state</h2>
+              </div>
+              <span>Chain 196</span>
+            </div>
+            <div class="activity-list">
+              <article>
+                <strong>Builder persona formed</strong>
+                <span>Three constructive swaps updated wallet stats and minted badge #2.</span>
+                <code>0xb84f...b604</code>
+              </article>
+              <article>
+                <strong>Restricted persona flagged</strong>
+                <span>Rapid round-trip flow triggered restricted classification and negative signal.</span>
+                <code>0x61cf...86e4</code>
+              </article>
+              <article>
+                <strong>Rehypothecation proof</strong>
+                <span>10 CQUOTE deposited, 3 CQUOTE left deployed, 0.0001 OKB yield accrued.</span>
+                <code>0xdd3c...c738</code>
+              </article>
+              <article>
+                <strong>Signal provider connected</strong>
+                <span>Hook now reads wallet and market signal bps from the X Layer intelligence adapter.</span>
+                <code>0xbd03...f066</code>
+              </article>
+            </div>
+          </section>
         </section>
       </section>
     </main>
 
-    <script src="./app.js?v=20260528-integrations"></script>
+    <script src="./app.js?v=20260528-actions"></script>
   </body>
 </html>

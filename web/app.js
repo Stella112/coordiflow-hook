@@ -11,6 +11,14 @@ const selectors = {
   yieldPool: "0x8f188dd4",
   getSignal: "0x8dc09e01",
   badgeOf: "0x26f61604",
+  balanceOf: "0x70a08231",
+  allowance: "0xdd62ed3e",
+  approve: "0x095ea7b3",
+  swapExactInput: "0x58f3f1da",
+  addLiquidity: "0xc9158c51",
+  claimRewards: "0xbd66528a",
+  deposit: "0xb6b55f25",
+  claimYieldTx: "0x406cf229",
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
@@ -18,6 +26,7 @@ const deployments = {
   mainnet: {
     label: "X Layer mainnet",
     hook: "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
+    userActions: "0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1",
     poolId: "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
     vault: "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
     rehypothecationVault: "0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb",
@@ -25,6 +34,14 @@ const deployments = {
     badgeContract: "0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd",
     rpc: "https://rpc.xlayer.tech",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+    launchToken: "0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081",
+    quoteToken: "0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5",
+    launchTokenIsCurrency0: true,
+    assets: {
+      usdt0: "0x779Ded0c9e1022225f8E0630b35a9b54bE713736",
+      usdt: "0x1E4a5963aBFD975d8c9021ce480b42188849D41d",
+      wokb: "0xe538905cf8410324e03A5A23C1c177a474D59b2b",
+    },
     participants: {
       seeder: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
       builder: "0x0F80054095F3A4cb2A2d14b7326303102B56D137",
@@ -35,6 +52,7 @@ const deployments = {
   testnet: {
     label: "X Layer testnet",
     hook: "0xDee0822330A786313E46A4f6d9E2d58c33B20AC0",
+    userActions: "",
     poolId: "0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2",
     vault: "0x90407637D45588F0663b722438C6452c637c51d2",
     rehypothecationVault: "",
@@ -42,6 +60,10 @@ const deployments = {
     badgeContract: "",
     rpc: "https://testrpc.xlayer.tech/terigon",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
+    launchToken: "",
+    quoteToken: "",
+    launchTokenIsCurrency0: true,
+    assets: {},
     participants: {
       seeder: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
       builder: "0xCD5aB02bF3B5fBEB12d118B25e53692dc4321fd2",
@@ -60,6 +82,7 @@ const personaSummaries = {
 
 const els = {
   hookAddress: document.querySelector("#hookAddress"),
+  userActions: document.querySelector("#userActions"),
   poolId: document.querySelector("#poolId"),
   vaultAddress: document.querySelector("#vaultAddress"),
   rehypothecationVault: document.querySelector("#rehypothecationVault"),
@@ -70,6 +93,21 @@ const els = {
   status: document.querySelector("#status"),
   connectWallet: document.querySelector("#connectWallet"),
   refreshState: document.querySelector("#refreshState"),
+  walletNetwork: document.querySelector("#walletNetwork"),
+  txStatus: document.querySelector("#txStatus"),
+  swapRoute: document.querySelector("#swapRoute"),
+  swapAmount: document.querySelector("#swapAmount"),
+  approveSwap: document.querySelector("#approveSwap"),
+  executeSwap: document.querySelector("#executeSwap"),
+  liquidityAmount: document.querySelector("#liquidityAmount"),
+  liquidityMax: document.querySelector("#liquidityMax"),
+  approveLiquidity: document.querySelector("#approveLiquidity"),
+  addLiquidity: document.querySelector("#addLiquidity"),
+  claimRewards: document.querySelector("#claimRewards"),
+  rehypDepositAmount: document.querySelector("#rehypDepositAmount"),
+  approveRehyp: document.querySelector("#approveRehyp"),
+  depositRehyp: document.querySelector("#depositRehyp"),
+  claimYieldButton: document.querySelector("#claimYield"),
   coordinationScore: document.querySelector("#coordinationScore"),
   phaseLabel: document.querySelector("#phaseLabel"),
   stageTitle: document.querySelector("#stageTitle"),
@@ -81,7 +119,9 @@ const els = {
   marketSignal: document.querySelector("#marketSignal"),
   claimableRewards: document.querySelector("#claimableRewards"),
   idleDeposits: document.querySelector("#idleDeposits"),
+  availableAssets: document.querySelector("#availableAssets"),
   deployedAssets: document.querySelector("#deployedAssets"),
+  yieldPool: document.querySelector("#yieldPool"),
   claimableYield: document.querySelector("#claimableYield"),
   walletSignal: document.querySelector("#walletSignal"),
   personaBadge: document.querySelector("#personaBadge"),
@@ -112,6 +152,8 @@ let latestState = {
   marketSignal: 0n,
 };
 
+let activeDeployment = deployments.mainnet;
+
 els.connectWallet.addEventListener("click", async () => {
   if (!window.ethereum) {
     setStatus("No injected wallet found.");
@@ -120,10 +162,19 @@ els.connectWallet.addEventListener("click", async () => {
 
   const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
   els.walletAddress.value = accounts[0] || "";
+  await updateWalletNetworkLabel();
   setStatus("Wallet connected. Refresh to load verified state.");
 });
 
 els.refreshState.addEventListener("click", refresh);
+els.approveSwap.addEventListener("click", approveSwap);
+els.executeSwap.addEventListener("click", executeSwap);
+els.approveLiquidity.addEventListener("click", approveLiquidity);
+els.addLiquidity.addEventListener("click", addLiquidity);
+els.claimRewards.addEventListener("click", claimRewards);
+els.approveRehyp.addEventListener("click", approveRehypothecation);
+els.depositRehyp.addEventListener("click", depositRehypothecation);
+els.claimYieldButton.addEventListener("click", claimYield);
 document.querySelectorAll("[data-wallet]").forEach((button) => {
   button.addEventListener("click", () => {
     els.walletAddress.value = button.dataset.wallet;
@@ -142,7 +193,9 @@ function applyDeployment(name) {
   const deployment = deployments[name];
   if (!deployment) return;
 
+  activeDeployment = deployment;
   els.hookAddress.value = deployment.hook;
+  els.userActions.value = deployment.userActions;
   els.poolId.value = deployment.poolId;
   els.vaultAddress.value = deployment.vault;
   els.rehypothecationVault.value = deployment.rehypothecationVault;
@@ -179,6 +232,7 @@ async function refresh() {
     await renderRewards(poolId, wallet);
     await renderRehypothecation(wallet);
     await renderSignalsAndBadge(poolId, wallet);
+    await updateWalletNetworkLabel();
     drawSignal();
 
     setStatus("Loaded verified on-chain state.");
@@ -242,23 +296,162 @@ async function renderRehypothecation(wallet) {
   const vault = els.rehypothecationVault.value.trim();
   if (!vault) {
     els.idleDeposits.textContent = "Not set";
+    els.availableAssets.textContent = "Not set";
     els.deployedAssets.textContent = "Not set";
+    els.yieldPool.textContent = "Not set";
     els.claimableYield.textContent = "Not set";
     return;
   }
 
   assertAddress(vault, "Rehypothecation vault");
-  const [deposits, deployed, yieldAmount] = await Promise.all([
+  const [deposits, available, deployed, yieldPool, yieldAmount] = await Promise.all([
     ethCall(vault, selectors.deposits + padAddress(wallet)),
+    ethCall(vault, selectors.availableAssets),
     ethCall(vault, selectors.deployedAssets),
+    ethCall(vault, selectors.yieldPool),
     ethCall(vault, selectors.claimableYield + padAddress(wallet)),
   ]);
 
   els.idleDeposits.textContent = `${formatTokenUnits(decodeWords(deposits)[0])} CQUOTE`;
+  els.availableAssets.textContent = `${formatTokenUnits(decodeWords(available)[0])} CQUOTE`;
   els.deployedAssets.textContent = `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE`;
+  els.yieldPool.textContent = `${formatTokenUnits(decodeWords(yieldPool)[0])} OKB`;
   els.claimableYield.textContent = `${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB`;
   els.rehypothecationSummary.textContent =
-    `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE deployed, ${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB yield`;
+    `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE deployed, ${formatTokenUnits(decodeWords(available)[0])} CQUOTE idle`;
+}
+
+async function approveSwap() {
+  const route = selectedSwapRoute();
+  await approveToken(route.tokenIn, els.userActions.value.trim(), parseAmount(els.swapAmount.value));
+}
+
+async function executeSwap() {
+  const actions = assertAddress(els.userActions.value.trim(), "User actions");
+  const route = selectedSwapRoute();
+  const amountIn = parseAmount(els.swapAmount.value);
+  const data = selectors.swapExactInput + encodeUint(amountIn) + encodeBool(route.zeroForOne) + encodeUint(0n);
+  await sendAndTrack(actions, data, "Swap sent. Waiting for X Layer confirmation...");
+}
+
+async function approveLiquidity() {
+  const actions = assertAddress(els.userActions.value.trim(), "User actions");
+  const maxSpend = parseAmount(els.liquidityMax.value);
+  await approveToken(activeDeployment.launchToken, actions, maxSpend);
+  await approveToken(activeDeployment.quoteToken, actions, maxSpend);
+}
+
+async function addLiquidity() {
+  const actions = assertAddress(els.userActions.value.trim(), "User actions");
+  const liquidity = BigInt(els.liquidityAmount.value.trim());
+  const maxSpend = parseAmount(els.liquidityMax.value);
+  const tickLower = -887220n;
+  const tickUpper = 887220n;
+  const data =
+    selectors.addLiquidity +
+    encodeSigned(tickLower) +
+    encodeSigned(tickUpper) +
+    encodeSigned(liquidity) +
+    "0".repeat(64) +
+    encodeUint(maxSpend) +
+    encodeUint(maxSpend);
+  await sendAndTrack(actions, data, "Add liquidity sent. Waiting for Seeder state...");
+}
+
+async function claimRewards() {
+  const vault = assertAddress(els.vaultAddress.value.trim(), "Rewards vault");
+  const poolId = assertBytes32(els.poolId.value.trim(), "Pool ID");
+  await sendAndTrack(vault, selectors.claimRewards + strip0x(poolId), "Reward claim sent...");
+}
+
+async function approveRehypothecation() {
+  await approveToken(activeDeployment.quoteToken, els.rehypothecationVault.value.trim(), parseAmount(els.rehypDepositAmount.value));
+}
+
+async function depositRehypothecation() {
+  const vault = assertAddress(els.rehypothecationVault.value.trim(), "Rehypothecation vault");
+  const amount = parseAmount(els.rehypDepositAmount.value);
+  await sendAndTrack(vault, selectors.deposit + encodeUint(amount), "Rehypothecation deposit sent...");
+}
+
+async function claimYield() {
+  const vault = assertAddress(els.rehypothecationVault.value.trim(), "Rehypothecation vault");
+  await sendAndTrack(vault, selectors.claimYieldTx, "Yield claim sent...");
+}
+
+async function approveToken(token, spender, amount) {
+  assertAddress(token, "Token");
+  assertAddress(spender, "Spender");
+  const data = selectors.approve + padAddress(spender) + encodeUint(amount);
+  await sendAndTrack(token, data, `Approval sent for ${shortAddress(spender)}...`);
+}
+
+async function sendAndTrack(to, data, pendingMessage) {
+  if (!window.ethereum) throw new Error("No injected wallet found.");
+  await ensureXLayer();
+  const from = await connectedAccount();
+  setTxStatus(pendingMessage);
+  const hash = await window.ethereum.request({
+    method: "eth_sendTransaction",
+    params: [{ from, to, data }],
+  });
+  setTxStatus(`Tx submitted: ${shortHash(hash)}. Waiting for confirmation...`);
+  await waitForReceipt(hash);
+  setTxStatus(`Confirmed: ${shortHash(hash)}. Refreshing on-chain state...`);
+  await refresh();
+}
+
+async function ensureXLayer() {
+  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+  if (chainId === "0xc4") return;
+  await window.ethereum.request({
+    method: "wallet_switchEthereumChain",
+    params: [{ chainId: "0xc4" }],
+  });
+}
+
+async function connectedAccount() {
+  const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+  const account = accounts[0];
+  if (!account) throw new Error("Wallet connection failed.");
+  els.walletAddress.value = account;
+  return account;
+}
+
+async function waitForReceipt(hash) {
+  for (let i = 0; i < 40; i++) {
+    const receipt = await window.ethereum.request({
+      method: "eth_getTransactionReceipt",
+      params: [hash],
+    });
+    if (receipt) {
+      if (receipt.status !== "0x1") throw new Error(`Transaction reverted: ${shortHash(hash)}`);
+      return receipt;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 2500));
+  }
+  throw new Error(`Transaction still pending: ${shortHash(hash)}`);
+}
+
+async function updateWalletNetworkLabel() {
+  if (!window.ethereum || !els.walletNetwork) return;
+  try {
+    const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    els.walletNetwork.textContent = chainId === "0xc4" ? "Wallet on X Layer" : `Wallet chain ${chainId}`;
+  } catch {
+    els.walletNetwork.textContent = "Wallet not connected";
+  }
+}
+
+function selectedSwapRoute() {
+  const route = els.swapRoute.value;
+  if (route === "quoteToLaunch") {
+    return { tokenIn: activeDeployment.quoteToken, zeroForOne: !activeDeployment.launchTokenIsCurrency0 };
+  }
+  if (route === "launchToQuote") {
+    return { tokenIn: activeDeployment.launchToken, zeroForOne: activeDeployment.launchTokenIsCurrency0 };
+  }
+  throw new Error("This route needs a funded CoordiFlow pool or external route before it can be enabled.");
 }
 
 async function renderSignalsAndBadge(poolId, wallet) {
@@ -436,6 +629,20 @@ function padAddress(address) {
   return strip0x(address).padStart(64, "0");
 }
 
+function encodeUint(value) {
+  return BigInt(value).toString(16).padStart(64, "0");
+}
+
+function encodeSigned(value) {
+  const signed = BigInt(value);
+  const encoded = signed < 0n ? (1n << 256n) + signed : signed;
+  return encoded.toString(16).padStart(64, "0");
+}
+
+function encodeBool(value) {
+  return encodeUint(value ? 1n : 0n);
+}
+
 function assertAddress(value, label) {
   if (!/^0x[a-fA-F0-9]{40}$/.test(value)) throw new Error(`${label} must be a valid address.`);
   return value;
@@ -456,9 +663,20 @@ function formatTokenUnits(value) {
   return `${whole}.${fraction}`;
 }
 
+function parseAmount(value) {
+  const normalized = value.trim();
+  if (!/^\d+(\.\d{0,18})?$/.test(normalized)) throw new Error("Amount must be a positive decimal.");
+  const [whole, fraction = ""] = normalized.split(".");
+  return BigInt(whole) * 10n ** 18n + BigInt(fraction.padEnd(18, "0"));
+}
+
 function shortAddress(value) {
   if (!value) return "Not set";
   return `${value.slice(0, 6)}...${value.slice(-4)}`;
+}
+
+function shortHash(value) {
+  return `${value.slice(0, 8)}...${value.slice(-6)}`;
 }
 
 function signed16(word) {
@@ -468,6 +686,10 @@ function signed16(word) {
 
 function setStatus(message) {
   els.status.textContent = message;
+}
+
+function setTxStatus(message) {
+  els.txStatus.textContent = message;
 }
 
 highlightSelectedWallet(els.walletAddress.value);

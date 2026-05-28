@@ -70,6 +70,9 @@ contract CoordiFlowHook is BaseHook {
     mapping(PoolId poolId => PoolConfig config) public poolConfig;
     mapping(PoolId poolId => PoolState state) public poolState;
     mapping(PoolId poolId => mapping(address wallet => WalletStats stats)) public walletStats;
+    mapping(PoolId poolId => bool locked) public poolConfigLocked;
+    mapping(PoolId poolId => mapping(address wallet => uint256 blockNumber)) public lastPersonaTransitionBlock;
+    mapping(PoolId poolId => mapping(address wallet => uint8 count)) public personaTransitionsInBlock;
 
     event PoolConfigured(
         bytes32 indexed poolId,
@@ -101,9 +104,12 @@ contract CoordiFlowHook is BaseHook {
     );
     event SignalProviderUpdated(address indexed signalProvider);
     event RewardsVaultUpdated(address indexed rewardsVault);
+    event PoolConfigLocked(bytes32 indexed poolId);
 
     error OnlyOwner();
     error SwapCapExceeded(uint256 amount, uint256 cap);
+    error PoolConfigAlreadyLocked();
+    error FeeOutOfRange(uint24 fee);
 
     constructor(IPoolManager _poolManager, address owner_) BaseHook(_poolManager) {
         owner = owner_;
@@ -143,6 +149,10 @@ contract CoordiFlowHook is BaseHook {
         uint40 rapidRoundTripWindow,
         uint16 rewardBps
     ) external onlyOwner {
+        if (poolConfigLocked[key.toId()]) revert PoolConfigAlreadyLocked();
+        _validateFeeRange(baseFee);
+        _validateFeeRange(builderFee);
+        _validateFeeRange(restrictedFee);
         baseFee.validate();
         builderFee.validate();
         restrictedFee.validate();
@@ -163,6 +173,12 @@ contract CoordiFlowHook is BaseHook {
         emit PoolConfigured(
             PoolId.unwrap(poolId), launchTokenIsCurrency0, baseFee, builderFee, restrictedFee, maxSwapAmount, rewardBps
         );
+    }
+
+    function lockPoolConfig(PoolKey calldata key) external onlyOwner {
+        PoolId poolId = key.toId();
+        poolConfigLocked[poolId] = true;
+        emit PoolConfigLocked(PoolId.unwrap(poolId));
     }
 
     function setSignalProvider(IExchangeOSSignalProvider signalProvider_) external onlyOwner {
@@ -296,6 +312,19 @@ contract CoordiFlowHook is BaseHook {
         Persona nextPersona = _classify(stats, signal.walletSignalBps);
 
         if (oldPersona != nextPersona) {
+            if (lastPersonaTransitionBlock[poolId][wallet] == block.number) {
+                if (personaTransitionsInBlock[poolId][wallet] >= 3) {
+                    nextPersona = oldPersona;
+                } else {
+                    personaTransitionsInBlock[poolId][wallet]++;
+                }
+            } else {
+                lastPersonaTransitionBlock[poolId][wallet] = block.number;
+                personaTransitionsInBlock[poolId][wallet] = 1;
+            }
+        }
+
+        if (oldPersona != nextPersona) {
             bool wasPositive = _isPositive(oldPersona);
             bool isPositive = _isPositive(nextPersona);
 
@@ -388,6 +417,10 @@ contract CoordiFlowHook is BaseHook {
         if (persona == Persona.Builder || persona == Persona.Seeder) return config.builderFee;
         if (persona == Persona.Restricted) return config.restrictedFee;
         return config.baseFee;
+    }
+
+    function _validateFeeRange(uint24 fee) internal pure {
+        if (fee < 1_000 || fee > 50_000) revert FeeOutOfRange(fee);
     }
 
     function _configOrDefault(PoolId poolId) internal view returns (PoolConfig memory config) {

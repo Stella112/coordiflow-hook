@@ -11,6 +11,7 @@
   },
   "coordiFlow": {
     "hook": "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
+    "userActions": "0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1",
     "launchToken": "0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081",
     "quoteToken": "0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5",
     "rewardsVault": "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
@@ -22,6 +23,11 @@
       "stabilizer": "0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3",
       "restricted": "0x64dD322ac2eADb4864c014E5206683a73B8055cd"
     }
+  },
+  "xlayerAssets": {
+    "wokb": "0xe538905cf8410324e03A5A23C1c177a474D59b2b",
+    "usdt": "0x1E4a5963aBFD975d8c9021ce480b42188849D41d",
+    "usdt0": "0x779Ded0c9e1022225f8E0630b35a9b54bE713736"
   },
   "rehypothecation": {
     "vault": "0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb",

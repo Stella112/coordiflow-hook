@@ -50,6 +50,8 @@ This repo does not claim a private Flap API integration. The MVP is intentionall
 - `src/CoordiFlowHook.sol` tracks real wallet behavior per pool.
 - `src/interfaces/IExchangeOSSignalProvider.sol` defines the optional X Layer intelligence adapter.
 - `src/CoordiFlowRewardsVault.sol` holds and pays real claimable rewards for positive coordination.
+- `src/CoordiFlowRehypothecationVault.sol` lets positive personas deposit idle CQUOTE and claim real OKB yield.
+- `src/CoordiFlowUserActions.sol` is the public user-facing helper for real swaps and LP actions against the CoordiFlow v4 pool.
 - `src/CoordiFlowToken.sol` is a launch token contract for an on-chain CoordiFlow launch asset.
 - `script/00_DeployCoordiFlowHook.s.sol` mines and deploys the hook at a valid Uniswap v4 hook-permission address.
 - `script/01_DeployCoordiFlowToken.s.sol` deploys the launch token.
@@ -157,6 +159,7 @@ Use `xlayer_mainnet` for the official X Layer mainnet deployment.
 Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.json`.
 
 - Hook: `0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0`
+- User actions helper: `0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1`
 - Pool ID: `0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577`
 - Launch token: `0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081`
 - Quote token: `0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5`
@@ -172,6 +175,12 @@ Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.j
 - PoolManager: `0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32`
 - PositionManager: `0xcF1eAFC6928dC385A342E7c6491D371d2871458B`
 - Permit2: `0x000000000022D473030F116dDEE9F6B43aC78BA3`
+
+Official X Layer assets surfaced in the dashboard:
+
+- WOKB: `0xe538905cf8410324e03A5A23C1c177a474D59b2b`
+- USDT: `0x1E4a5963aBFD975d8c9021ce480b42188849D41d`
+- USDT0: `0x779Ded0c9e1022225f8E0630b35a9b54bE713736`
 
 Mainnet verification reads:
 
@@ -220,3 +229,32 @@ The dashboard requires:
 - X Layer RPC endpoint
 
 The checked-in dashboard is prefilled with the current X Layer mainnet deployment and includes a testnet preset. It does not simulate data. It reads `poolState`, `walletStats`, and reward claims directly from deployed contracts.
+
+The dashboard can also send real wallet transactions:
+
+- approve and swap through the deployed `CoordiFlowUserActions` helper
+- approve both pool tokens and add liquidity through the same helper
+- claim rewards from the penalty-funded rewards vault
+- approve and deposit CQUOTE into the rehypothecation vault
+- claim accrued OKB yield
+
+USDT, USDT0, and WOKB are displayed as official X Layer funding assets. Their swap options remain disabled until a funded CoordiFlow route/pool is deployed for those assets; this keeps the dashboard verifiable instead of pretending unsupported routes exist.
+
+## Security Notes
+
+CoordiFlow is a hackathon product, not an audited production deployment. The current security posture is:
+
+- Hook configuration, rewards-vault configuration, signal-provider updates, badge minting, strategy deployment, and yield accrual are owner-gated.
+- The public user-actions helper has a reentrancy lock and only accepts `unlockCallback` from the official X Layer v4 PoolManager.
+- Dynamic fees are passed through Uniswap v4 `LPFeeLibrary.validate()` during pool configuration.
+- Oversized swaps can be capped by pool configuration.
+- Signal data is transparent through an on-chain signal provider and source hash.
+- The Aave strategy adapter is deployed but intentionally has no hardcoded Aave pool until an official X Layer Aave pool address is available.
+
+Recommended post-hackathon hardening:
+
+- freeze/lock pool configuration after launch
+- cap persona transitions per wallet per block
+- replace owner keys with multisig/timelock roles
+- add full integration tests for the user-actions helper against forked X Layer state
+- complete third-party review before handling meaningful user funds
