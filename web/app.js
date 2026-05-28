@@ -304,7 +304,7 @@ on(els.depositRehyp, "click", depositRehypothecation);
 on(els.claimYieldButton, "click", claimYield);
 on(els.swapRoute, "change", () => {
   updateSwapRouteUi();
-  refreshWalletBalances().catch((error) => setTxStatus(error.message));
+  refresh().catch((error) => setTxStatus(error.message));
 });
 on(els.swapFlip, "click", flipSwapRoute);
 on(els.mintBadge, "click", mintPersonaBadge);
@@ -359,7 +359,7 @@ async function refresh() {
   try {
     const hook = assertAddress(els.hookAddress.value.trim(), "Hook contract");
     const wallet = assertAddress(els.walletAddress.value.trim(), "Wallet");
-    const poolId = assertBytes32(els.poolId.value.trim(), "Pool ID");
+    const poolId = selectedPoolId();
 
     setStatus("Reading hook state from X Layer RPC...");
 
@@ -417,10 +417,10 @@ async function renderLatestBlock() {
   }
 }
 
-async function tokenBalance(token, wallet, decimals = 18) {
+async function tokenBalance(token, wallet, decimals = 18, precision) {
   if (!token) return "-";
   const result = await ethCall(assertAddress(token, "Token"), selectors.balanceOf + padAddress(wallet));
-  return formatUnits(decodeWords(result)[0], decimals, decimals === 6 ? 2 : 4);
+  return formatUnits(decodeWords(result)[0], decimals, precision ?? (decimals === 6 ? 6 : 8));
 }
 
 async function tokenBalanceRaw(token, wallet) {
@@ -435,10 +435,10 @@ async function refreshWalletBalances() {
   const route = selectedSwapRoute();
   const receiveToken = route.outputToken;
   const [payBalance, receiveBalance, launchBalance, quoteBalance] = await Promise.all([
-    tokenBalance(route.tokenIn, wallet, route.decimals),
-    tokenBalance(receiveToken, wallet, route.outputDecimals),
-    tokenBalance(activeDeployment.launchToken, wallet),
-    tokenBalance(activeDeployment.quoteToken, wallet),
+    tokenBalance(route.tokenIn, wallet, route.decimals, displayPrecision(route.inputSymbol, route.decimals)),
+    tokenBalance(receiveToken, wallet, route.outputDecimals, displayPrecision(route.outputSymbol, route.outputDecimals)),
+    tokenBalance(activeDeployment.launchToken, wallet, 18, displayPrecision("CFLOW", 18)),
+    tokenBalance(activeDeployment.quoteToken, wallet, 18, displayPrecision("CQUOTE", 18)),
   ]);
 
   setAll("#swapBalPay", payBalance);
@@ -628,7 +628,7 @@ async function addLiquidity() {
 
 async function claimRewards() {
   const vault = assertAddress(els.vaultAddress.value.trim(), "Rewards vault");
-  const poolId = assertBytes32(els.poolId.value.trim(), "Pool ID");
+  const poolId = selectedPoolId();
   await sendAndTrack(vault, selectors.claimRewards + strip0x(poolId), "Reward claim sent...");
 }
 
@@ -763,6 +763,9 @@ function selectedSwapRoute() {
       tokenIn: activeDeployment.quoteToken,
       outputToken: activeDeployment.launchToken,
       actions: els.userActions.value.trim(),
+      poolId: activeDeployment.poolId,
+      currency0: activeDeployment.launchTokenIsCurrency0 ? activeDeployment.launchToken : activeDeployment.quoteToken,
+      currency1: activeDeployment.launchTokenIsCurrency0 ? activeDeployment.quoteToken : activeDeployment.launchToken,
       zeroForOne: !activeDeployment.launchTokenIsCurrency0,
       decimals: 18,
       outputDecimals: 18,
@@ -777,6 +780,9 @@ function selectedSwapRoute() {
       tokenIn: activeDeployment.launchToken,
       outputToken: activeDeployment.quoteToken,
       actions: els.userActions.value.trim(),
+      poolId: activeDeployment.poolId,
+      currency0: activeDeployment.launchTokenIsCurrency0 ? activeDeployment.launchToken : activeDeployment.quoteToken,
+      currency1: activeDeployment.launchTokenIsCurrency0 ? activeDeployment.quoteToken : activeDeployment.launchToken,
       zeroForOne: activeDeployment.launchTokenIsCurrency0,
       decimals: 18,
       outputDecimals: 18,
@@ -791,6 +797,9 @@ function selectedSwapRoute() {
       tokenIn: activeDeployment.assets.usdt0,
       outputToken: activeDeployment.launchToken,
       actions: activeDeployment.usdt0UserActions,
+      poolId: activeDeployment.usdt0PoolId,
+      currency0: activeDeployment.assets.usdt0,
+      currency1: activeDeployment.launchToken,
       zeroForOne: true,
       decimals: 6,
       outputDecimals: 18,
@@ -805,6 +814,9 @@ function selectedSwapRoute() {
       tokenIn: activeDeployment.launchToken,
       outputToken: activeDeployment.assets.usdt0,
       actions: activeDeployment.usdt0UserActions,
+      poolId: activeDeployment.usdt0PoolId,
+      currency0: activeDeployment.assets.usdt0,
+      currency1: activeDeployment.launchToken,
       zeroForOne: false,
       decimals: 18,
       outputDecimals: 6,
@@ -823,7 +835,7 @@ function flipSwapRoute() {
   if (!els.swapRoute) return;
   els.swapRoute.value = flips[els.swapRoute.value] || "usdt0ToLaunch";
   updateSwapRouteUi();
-  refreshWalletBalances().catch((error) => setTxStatus(error.message));
+  refresh().catch((error) => setTxStatus(error.message));
 }
 
 function updateSwapRouteUi() {
@@ -850,9 +862,16 @@ async function mintPersonaBadge() {
   await sendAndTrack(badge, data, "Persona badge mint sent...");
 }
 
+function selectedPoolId() {
+  const route = selectedSwapRoute();
+  const poolId = route.poolId || els.poolId.value.trim();
+  return assertBytes32(poolId, "Pool ID");
+}
+
 function encodePoolKey() {
-  const currency0 = activeDeployment.launchTokenIsCurrency0 ? activeDeployment.launchToken : activeDeployment.quoteToken;
-  const currency1 = activeDeployment.launchTokenIsCurrency0 ? activeDeployment.quoteToken : activeDeployment.launchToken;
+  const route = selectedSwapRoute();
+  const currency0 = route.currency0 || (activeDeployment.launchTokenIsCurrency0 ? activeDeployment.launchToken : activeDeployment.quoteToken);
+  const currency1 = route.currency1 || (activeDeployment.launchTokenIsCurrency0 ? activeDeployment.quoteToken : activeDeployment.launchToken);
   return (
     padAddress(currency0) +
     padAddress(currency1) +
@@ -1122,8 +1141,26 @@ function formatTokenUnits(value) {
 function formatUnits(value, decimals = 18, precision = 4) {
   const unit = 10n ** BigInt(decimals);
   const whole = value / unit;
-  const fraction = (value % unit).toString().padStart(decimals, "0").slice(0, precision);
+  if (precision <= 0 || decimals === 0) return whole.toString();
+  const fractionRaw = (value % unit).toString().padStart(decimals, "0");
+  const fraction = fractionRaw.slice(0, Math.min(precision, decimals)).replace(/0+$/, "");
+  if (!fraction) {
+    if (value > 0n && whole === 0n) return `< ${formatSmallestVisible(decimals, precision)}`;
+    return whole.toString();
+  }
   return `${whole}.${fraction}`;
+}
+
+function formatSmallestVisible(decimals, precision) {
+  const visible = Math.min(precision, decimals);
+  return `0.${"0".repeat(Math.max(visible - 1, 0))}1`;
+}
+
+function displayPrecision(symbol, decimals) {
+  if (symbol === "CFLOW") return 18;
+  if (symbol === "CQUOTE") return 8;
+  if (decimals === 6) return 6;
+  return 8;
 }
 
 function parseAmount(value, decimals = 18) {
