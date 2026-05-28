@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoordiFlow â€” Behavior-aware coordination markets on X Layer</title>
   <meta name="description" content="A Uniswap v4 Hook that turns token launches into behavior-aware coordination markets. Liquidity, fees, rewards, and market stages respond to the quality of participation â€” not just volume." />
-  <link rel="stylesheet" href="./styles.css?v=20260528-v6" />
+  <link rel="stylesheet" href="./styles.css?v=20260528-v7" />
 </head>
 <body>
 
@@ -678,6 +678,31 @@
           </div>
         </div>
 
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Hook + Flap launch path</h3><span class="card-meta">V4-compatible launch layer</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+              <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:14px;color:var(--muted);line-height:1.55;">
+                CoordiFlow attaches as the Uniswap v4 Hook on a launch pool. A Flap-style launcher can create the token and initial market; this hook then classifies swaps and liquidity actions to adjust persona state, rewards, and stage progression.
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+                <div class="liq-detail-row"><span class="ldr-key">beforeSwap</span><span class="ldr-val">persona fee/cap</span></div>
+                <div class="liq-detail-row"><span class="ldr-key">afterSwap</span><span class="ldr-val">score update</span></div>
+                <div class="liq-detail-row"><span class="ldr-key">afterAddLiquidity</span><span class="ldr-val">Seeder path</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>X Layer Exchange OS</h3><span class="card-meta">Signal adapter</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+              <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:14px;color:var(--muted);line-height:1.55;">
+                The deployed signal provider is the Exchange OS intelligence adapter. It feeds wallet and market bps into the hook so X Layer-native signal quality can boost or restrict behavior-aware launch scoring.
+              </div>
+              <div class="liq-detail-row"><span class="ldr-key">Provider</span><span class="ldr-val" id="signalAddressB">-</span></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Stage controls -->
         <div class="card">
           <div class="card-head">
@@ -838,7 +863,7 @@
 
               <!-- Flip arrow -->
               <div class="swap-arrow-row">
-                <button class="swap-arrow-btn" title="Flip pair">
+                <button id="swapFlip" class="swap-arrow-btn" title="Flip pair" type="button">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/></svg>
                 </button>
               </div>
@@ -857,6 +882,7 @@
 
               <select id="swapRoute" class="field-input" style="margin-bottom:12px;">
                 <option value="usdt0ToLaunch">USDT0 -> CFLOW</option>
+                <option value="launchToUsdt0">CFLOW -> USDT0</option>
                 <option value="quoteToLaunch">CQUOTE -> CFLOW</option>
                 <option value="launchToQuote">CFLOW -> CQUOTE</option>
               </select>
@@ -1113,12 +1139,15 @@
       <div class="view-inner">
         <div class="view-header">
           <h1>Rehypothecation</h1>
-          <p>Deposit idle CQUOTE to earn additional yield via Aave-compatible lending protocols.</p>
+          <p>Positive personas deposit idle CQUOTE. The protocol agent deploys idle assets into the strategy reserve and accrues OKB yield back to eligible wallets.</p>
         </div>
         <div class="grid-2">
           <div class="card">
-            <div class="card-head"><h3>Deposit</h3><span class="card-meta">Idle CQUOTE â†’ Yield</span></div>
+            <div class="card-head"><h3>Agentic deposit</h3><span class="card-meta">User deposit -> strategy agent</span></div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+              <div style="padding:12px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:13px;color:var(--muted);line-height:1.5;">
+                Deposits are real user transactions. Strategy deployment is owner/agent-gated on-chain, so users do not manually route funds to Aave; the agent moves idle CQUOTE after deposit.
+              </div>
               <div class="field"><span class="field-label">Deposit amount</span><input id="rehypDepositAmount" class="field-input" type="number" value="1" /></div>
               <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;">
                 <button id="approveRehyp" class="btn-outline" type="button" style="height:42px;">Approve</button>
@@ -1127,11 +1156,13 @@
             </div>
           </div>
           <div class="card">
-            <div class="card-head"><h3>Your position</h3><span class="card-meta">Yield accrual</span></div>
+            <div class="card-head"><h3>Autopilot state</h3><span class="card-meta">Read from vault</span></div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:5px;">Idle deposits</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="idleDeposits">-</div></div>
                 <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:5px;">Claimable yield</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;color:var(--positive)" id="claimableYield">-</div></div>
+                <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:5px;">Strategy deployed</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="deployedAssets">-</div></div>
+                <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:5px;">Agent yield pool</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;color:var(--positive)" id="yieldPool">-</div></div>
               </div>
               <button id="claimYield" class="btn-primary-full" type="button" style="height:42px;">Claim Yield</button>
             </div>
@@ -1193,13 +1224,14 @@
     <!-- â•â• VIEW: X LAYER SIGNALS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div id="view-signals" class="dash-view hidden">
       <div class="view-inner">
-        <div class="view-header"><h1>X Layer Signals</h1><p>Live signal intelligence from the deployed signal provider contract.</p></div>
+        <div class="view-header"><h1>X Layer Exchange OS Signals</h1><p>Live wallet and market intelligence from the deployed Exchange OS-compatible signal provider.</p></div>
         <div class="card">
           <div class="card-head"><h3>Signal provider</h3><span class="card-meta" id="signalAddress">0x8d89â€¦5D98</span></div>
           <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;">Wallet signal</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="walletSignal">-</div></div>
             <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;">Market signal</div><div style="font-family:var(--fd);font-size:22px;font-weight:500;" id="marketSignalB">-</div></div>
             <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);grid-column:span 2;"><div class="label-xs" style="margin-bottom:6px;">Signal summary</div><div style="font-size:14px;color:var(--muted);line-height:1.55" id="signalSummary">Loading signal data...</div></div>
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);grid-column:span 2;"><div class="label-xs" style="margin-bottom:6px;">How it affects the hook</div><div style="font-size:14px;color:var(--muted);line-height:1.55">Positive wallet signals can push a wallet toward Builder/Stabilizer behavior. Negative signals can restrict the wallet even before repeated toxic swaps accumulate. Market signal bps is also applied to the pool coordination score.</div></div>
           </div>
         </div>
       </div>
@@ -1208,14 +1240,18 @@
     <!-- â•â• VIEW: PERSONA BADGES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div id="view-badges" class="dash-view hidden">
       <div class="view-inner">
-        <div class="view-header"><h1>Persona Badges</h1><p>Soulbound tokens (SBTs) issued on-chain representing wallet persona history.</p></div>
+        <div class="view-header"><h1>Persona Badges</h1><p>Mint a real soulbound persona receipt from the deployed badge contract after the hook has classified your wallet.</p></div>
         <div class="card">
           <div class="card-head"><h3>Persona Badge SBT</h3><span class="card-meta" id="badgeAddress">0xD85eâ€¦58Cd</span></div>
-          <div class="card-body">
+          <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
               <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);"><div class="label-xs" style="margin-bottom:6px;">Your badge</div><div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--p)" id="personaBadge">-</div></div>
               <div style="padding:16px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);grid-column:span 2;"><div class="label-xs" style="margin-bottom:6px;">Badge summary</div><div style="font-size:14px;color:var(--muted);line-height:1.55" id="badgeSummary">Loading badge data...</div></div>
             </div>
+            <div style="padding:14px;border-radius:var(--r);border:1px solid var(--hairline);background:var(--surface2);font-size:13px;color:var(--muted);line-height:1.55;">
+              Existing demo badges were minted with the owner script for the verified persona wallets. New users can mint their own badge here after swap or LP activity gives them a persona in the hook.
+            </div>
+            <button id="mintBadge" class="btn-primary-full" type="button" style="height:46px;">Mint my Persona SBT</button>
           </div>
         </div>
       </div>
@@ -1395,7 +1431,7 @@
   });
 </script>
 
-<script src="./app.js?v=20260528-v6"></script>
+<script src="./app.js?v=20260528-v7"></script>
 </body>
 </html>
 

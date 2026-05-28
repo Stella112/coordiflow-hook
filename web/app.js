@@ -19,6 +19,7 @@ const selectors = {
   claimRewards: "0xbd66528a",
   deposit: "0xb6b55f25",
   claimYieldTx: "0x406cf229",
+  badgeMint: "0x509d58f8",
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
@@ -125,6 +126,13 @@ const verifiedActivity = [
     text: "X Layer intelligence provider connected to CoordiFlow",
     hash: "0xbd03eebe93879f0c63f1cbd85024ee9c4987a18bed81d018d13d77684ba8f066",
   },
+  {
+    type: "badge",
+    color: "var(--c-stab)",
+    label: "Persona SBT",
+    text: "Seeder persona badge minted from hook-recorded behavior",
+    hash: "0xc41b4fb0784728b8abac4644b659ed19d3bcb08e56460a59513feddd935d4484",
+  },
 ];
 
 function one(selector) {
@@ -167,6 +175,7 @@ const els = {
   walletNetwork: one("#walletNetwork"),
   txStatus: last("#txStatus"),
   swapRoute: one("#swapRoute"),
+  swapFlip: one("#swapFlip"),
   swapAmount: one("#swapAmount"),
   approveSwap: one("#approveSwap"),
   executeSwap: one("#executeSwap"),
@@ -179,6 +188,7 @@ const els = {
   approveRehyp: one("#approveRehyp"),
   depositRehyp: one("#depositRehyp"),
   claimYieldButton: one("#claimYield"),
+  mintBadge: one("#mintBadge"),
   coordinationScore: one("#coordinationScore"),
   phaseLabel: one("#phaseLabel"),
   stageTitle: one("#stageTitle"),
@@ -278,6 +288,8 @@ on(els.swapRoute, "change", () => {
   updateSwapRouteUi();
   refreshWalletBalances().catch((error) => setTxStatus(error.message));
 });
+on(els.swapFlip, "click", flipSwapRoute);
+on(els.mintBadge, "click", mintPersonaBadge);
 document.querySelectorAll("[data-wallet]").forEach((button) => {
   button.addEventListener("click", () => {
     els.walletAddress.value = button.dataset.wallet;
@@ -712,7 +724,34 @@ function selectedSwapRoute() {
       outputDecimals: 18,
     };
   }
+  if (route === "launchToUsdt0") {
+    return {
+      id: route,
+      label: "CFLOW -> USDT0",
+      inputSymbol: "CFLOW",
+      outputSymbol: "USDT0",
+      tokenIn: activeDeployment.launchToken,
+      outputToken: activeDeployment.assets.usdt0,
+      actions: activeDeployment.usdt0UserActions,
+      zeroForOne: false,
+      decimals: 18,
+      outputDecimals: 6,
+    };
+  }
   throw new Error("This route needs a funded CoordiFlow pool or external route before it can be enabled.");
+}
+
+function flipSwapRoute() {
+  const flips = {
+    usdt0ToLaunch: "launchToUsdt0",
+    launchToUsdt0: "usdt0ToLaunch",
+    quoteToLaunch: "launchToQuote",
+    launchToQuote: "quoteToLaunch",
+  };
+  if (!els.swapRoute) return;
+  els.swapRoute.value = flips[els.swapRoute.value] || "usdt0ToLaunch";
+  updateSwapRouteUi();
+  refreshWalletBalances().catch((error) => setTxStatus(error.message));
 }
 
 function updateSwapRouteUi() {
@@ -723,6 +762,24 @@ function updateSwapRouteUi() {
   setAll("#swapReceiveEstimate", "On-chain tx");
   setAll("#swapRate", "Quoted by v4 execution");
   setAll("#swapCap", "Enforced by hook state");
+}
+
+async function mintPersonaBadge() {
+  const badge = assertAddress(els.badgeContract.value.trim(), "Persona badge");
+  const data = selectors.badgeMint + encodePoolKey();
+  await sendAndTrack(badge, data, "Persona badge mint sent...");
+}
+
+function encodePoolKey() {
+  const currency0 = activeDeployment.launchTokenIsCurrency0 ? activeDeployment.launchToken : activeDeployment.quoteToken;
+  const currency1 = activeDeployment.launchTokenIsCurrency0 ? activeDeployment.quoteToken : activeDeployment.launchToken;
+  return (
+    padAddress(currency0) +
+    padAddress(currency1) +
+    encodeUint(0x800000n) +
+    encodeSigned(60n) +
+    padAddress(els.hookAddress.value.trim())
+  );
 }
 
 async function renderSignalsAndBadge(poolId, wallet) {
