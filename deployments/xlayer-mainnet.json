@@ -10,20 +10,20 @@
     "universalRouter": "0xDa00ae15D3a71466517129255255dB7c0C0956d3"
   },
   "coordiFlow": {
-    "hook": "0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0",
-    "userActions": "0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1",
-    "usdt0UserActions": "0x85dd2ddF9614Df62699d1bC37e0d1bd5c8e7c735",
+    "hook": "0x42D04F47EB54d48D39EA177E418E322e1FaF4AC0",
+    "userActions": "0xfb2C898DB77D6FECba6b6A9e4Cd8A0869F166734",
+    "usdt0UserActions": "0x7e4B149Fd681cc2649a3CC7e8Bb3f786b3eAE33b",
     "launchToken": "0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081",
     "quoteToken": "0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5",
-    "rewardsVault": "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
-    "poolId": "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
-    "usdt0PoolId": "0x630a11b29c4147d2eb3ddfd3754501050341e46e2271888422d090b75b87b7ae",
+    "rewardsVault": "0xD26732420947b470B2d92F07B083254E7Bcd6Dfa",
+    "poolId": "0x7dbd1af7f0d60d90005b959f35d17c09ddd8a145b689234d45dbf1ce599938a9",
+    "usdt0PoolId": "0x4dee7db9acada05cd1be6a1bb4d3d63e54dc83dad2cf625ace41c8b3efbaba6a",
     "launchTokenIsCurrency0": true,
     "participants": {
       "seeder": "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
-      "builder": "0x0F80054095F3A4cb2A2d14b7326303102B56D137",
-      "stabilizer": "0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3",
-      "restricted": "0x64dD322ac2eADb4864c014E5206683a73B8055cd"
+      "builder": "0xc313710fA15c76fFac68b90d016209Fd85598a42",
+      "stabilizer": "0x532f7C92cAB420689B7A324724790a20b7c2f406",
+      "restricted": "0x1f5a737Bef38ACFd3C2e51a2b07e8B0CE34d82F8"
     }
   },
   "xlayerAssets": {
@@ -43,7 +43,7 @@
     "claimableYield": "100000000000000"
   },
   "intelligence": {
-    "signalProvider": "0x8d89C6f5d2d961EC39027e5371f6044C96995D98",
+    "signalProvider": "0x904d734b523BFD94542f93A9a3a2d46e3aC6767A",
     "marketSignalBps": 500,
     "builderSignalBps": 1000,
     "stabilizerSignalBps": 600,
@@ -51,38 +51,38 @@
     "source": "0x7b773c5b3acdcdebdc9e3223d7434ae915bd348a9a9962d437b83ba1cb9c2961"
   },
   "badges": {
-    "personaBadge": "0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd",
+    "personaBadge": "0x82b4Cb5AC9C68eB6cbbb4eFcAB637054AA43c815",
     "seederBadge": 1,
     "builderBadge": 2,
     "stabilizerBadge": 3,
     "restrictedBadge": 4
   },
   "aave": {
-    "strategyReserve": "0x87B85324D59E4221f2a37713a85E67a89e2b63b7",
+    "strategyReserve": "0x07062Ef73A544690Ea590B6e75715222f060fa6c",
     "aavePool": "0x0000000000000000000000000000000000000000",
     "status": "adapter deployed; waiting for official X Layer Aave pool address"
   },
   "transactions": {
-    "hookDeploy": "0x13c511c91a6e4a900407d70ecd968452df4caba10b8192f9ab36b2b842bf9ff4",
+    "hookDeploy": "0x863be36f994766bf396adafa7fdec9a02bf1ca00edd5121eb75a7422907ffd08",
     "launchTokenDeploy": "0xcde5a8f295303b0cc777b8837ac372a32b726cffdb90f6638c87ed83719350b2",
     "quoteTokenDeploy": "0x4d13fa0d9fbb31292cf5eb198903e8f609cbc4aeadc77f3eea5ff16f682ed8d5",
-    "rewardsVaultDeploy": "0xdac8df3e48d7c8e9e14dfcfcfddd943169e2e10a06b3dfcffeff3566b54dd57a",
-    "vaultSetHook": "0xdb98e54f0dc88d21220772910a5720ffb08c42e40925244545b00ee9f2e40ae3",
-    "hookSetRewardsVault": "0x7e2809ce389a3e233a58b1eb9cd1134130121c7beeed1dba8a9359a84cb8b0a4",
-    "poolConfigure": "0xfbbecdd34c189d53e2a396cdfde90f15811ab466bb9ee9cc4ddba872486f8db2",
-    "positionManagerMulticall": "0x95604d427f5ef2dec26fe79adfd92f1e61b7de8f85ae8b7b3662f6a555624e1d",
-    "rewardFunding": "0x53efd2424f36576b47a6a029ab28afa0814398cbbbc429fe33c94ac2eb53783a",
+    "rewardsVaultDeploy": "0x56b3824adce3c6935c995da3fa81db9fe142ead37f60e6649e994a4ab1c77cbe",
+    "vaultSetHook": "0x7da555520b31212bceb839e9fa71339124705b85a7b7b9b6b86dff3f764180c6",
+    "hookSetRewardsVault": "0xfea4157cb31feebbb86289296affe4cedeebc67e1b521a0f35c187c99999882d",
+    "poolConfigure": "0x671161cb1b74f1af1904c0eb8459284e70a8515a87e4c3117fd70c5c30e1d830",
+    "positionManagerMulticall": "0x6b8fe76330c8c1b08e170384bdbb0c8109fce4e7d6e961b4ab6d7b5f245196d7",
+    "rewardFunding": null,
     "mainnetScenario": {
-      "builderAgentDeploy": "0xc162de92b62aafaec4e954c27b733e3669ad3de7ac6980590dea1c903b47f21c",
-      "stabilizerAgentDeploy": "0x61ca1aeeddc43f6ebab4bc48828dbc1a5449758029935b3ef37a81f7aed79464",
-      "restrictedAgentDeploy": "0xca59a252d4f79ce56e18da4b3423cb3a63856a48609d3ed7d4d31855e8d079cf",
-      "builderSwap1": "0xaf8bdc4ac26fd4babbe80b24d282ee1e3e7aff1cd2645ecee241f4e28b7d23e7",
-      "builderSwap2": "0x514ab25c71bdcfb2a24a86347109bf818f17efce679b7e9076d8df392f4dc789",
-      "builderSwap3": "0xb84f16274199eb5a28f9dc0f760428f93bda68e522e6fe3d38ac31a598c0b604",
-      "stabilizerSwap": "0xa5de71ace9640ddfb88bec019878fae63aed790e43e11a44ff599abb60d6bef2",
-      "restrictedBuy": "0x5179036ecf54c1b2fb424c2ff56407823da88b84a532b71af67024f0d0e94a4f",
-      "restrictedSell1": "0x864b869a1b21d4349ccb16525b16a15a94ddc681e1553e10f7a2b0b835796413",
-      "restrictedSell2": "0x61cf0be73f73b352909f086b42e10e81187e4be7591fb6049dd93c79659286e4"
+      "builderAgentDeploy": "0xc6549ef69a05353085b889245925393ffe053f611d13de2a417918130ed8c452",
+      "stabilizerAgentDeploy": "0xa0523dc297f877dcb5545ecf576ec6f696be563c80355d2dd5ab25f8021bc825",
+      "restrictedAgentDeploy": "0x43ed3780afa8d9886e83158fae85706b825b1feaea7c53e8551f517d71e6d8c2",
+      "builderSwap1": "0xc4e3970b2e2eee394bd54e621386562d21019c11cb9cbf44a2da65c72a5abf65",
+      "builderSwap2": "0x16f9038ba14dafb3728bd870919afc759abc0c4e8b0d530443896812be40ccb8",
+      "builderSwap3": "0xde2598d5cacedbbb748c894f6d53b75cb206b141b4197deecf303889291e24d4",
+      "stabilizerSwap": "0x5837dd6f58cbf34dfb9d6a78e9d961b5d5119bdef8b13225b5302b7f9fe76ce2",
+      "restrictedBuy": "0x1a44029b55b6d1104e69f98ccdc1d61f7eaf3274aad167053e07eaf772d02903",
+      "restrictedSell1": "0x7956528e6a01bcc6228c8c2caa88c7530c7de4cfae14ca165136097252bf8e02",
+      "restrictedSell2": "0xee3ccdaabaacf0f3c3246756f19504d5d7fee7c9d1cc182edd6c347756ad61f5"
     },
     "rehypothecationDeploy": {
       "strategyReserveDeploy": "0xd554379c044be1456e67f868744896f1f0b85eb2ccfed8aa83d9e9f90baa6985",
@@ -98,27 +98,27 @@
       "accrueYield": "0xdd3c0e1f651328c364ce6bdc99aafcf93bc42dd728fd9e954cc0a5b4e266c738"
     },
     "signalsBadgesAave": {
-      "signalProviderDeploy": "0x22c44f8e5e8d6aea3f2c7bd92f342c0bbe1f18267db5124bee2c60b818a504e6",
-      "aaveReserveDeploy": "0x12383253f88bd174d09c3753f6b7679f24b5db2cfbaa05944a524356a68f6790",
-      "hookSetSignalProvider": "0xbd03eebe93879f0c63f1cbd85024ee9c4987a18bed81d018d13d77684ba8f066"
+      "signalProviderDeploy": "0x80a5b21f253ef25e124ee861a71b3307ec558754bfbe9c941c470e56212bbf32",
+      "aaveReserveDeploy": "0x19758481fc7f47a7c51b2dc078220d2b376d1257ddf0c0ba747d2c93981392eb",
+      "hookSetSignalProvider": "0xbb29bf1c062d904d4ca50ee1a44890e9799019381c1cd0c7d899d80e05c4154d"
     },
     "personaBadgeProof": {
-      "badgeDeploy": "0x2437514832fe40444d7d4ce3e081a9339822f4d8dbb892574c884ad0b3260e3f",
-      "seederMint": "0xc41b4fb0784728b8abac4644b659ed19d3bcb08e56460a59513feddd935d4484",
-      "builderMint": "0x842b2788a8c5c7fbcc2c742245587d4a9e943502b589da6f8fcfc80c6e14d871",
-      "stabilizerMint": "0x296ba119b8c276e5d83b1426e3fc72a13b9ad988a58934db472bedf06675d20f",
-      "restrictedMint": "0x183242aeeb354cfebea542ce6094919cea0790b05bd6182d3f15a68b5e60aa66"
+      "badgeDeploy": "0x7fddde41f952b0dbd6ffa4fd1d7816e28c96c05c286c7544aaa379694edd9c98",
+      "seederMint": "0xf7fbee189cb0de46087c92074f9c04a600d1394709fe2ecd4e99f806d171a306",
+      "builderMint": "0x42f60eff87e767bdff8e10fb773f353e8b132c7b3f62275b2507d45b071be4fd",
+      "stabilizerMint": "0x62a07356944d9c82e09748ac4dc793bee879d4f3fcf9016672823876cf1ccf24",
+      "restrictedMint": "0xd7264fa55df7c8b8a1c2d7327561ab8d9abd794c1c0a05bfe39f677795605b43"
     },
     "usdt0Route": {
-      "poolCreateAndFund": "see broadcast/03_CreateCoordiFlowPool.s.sol/196/run-latest.json",
-      "userActionsDeploy": "see broadcast/10_DeployUserActions.s.sol/196/run-latest.json",
-      "approveProof": "0xa46c92c4f72f6738c03166bfc29867110ec05df8caa1575a98dcb59352fd7740",
-      "swapProof": "0x1048a77f581d8c253433c27de7287e059197efd4aeb9bdc731103ca250214543"
+      "poolCreateAndFund": "0x474c4a7d6fa7306c48c38580ed33eb0da3da22f44c79f639278dc16c9e4be445",
+      "userActionsDeploy": "0x2bceed4d1472186e36139b97a5590fc7fe44d174dd5011506365b287a26f1e10",
+      "approveProof": "0xc2612e99e08bb33bad5b278e07ec14413e4762ed8985e4eae0f575649c848166",
+      "swapProof": "0xc56f7a3c3815820a274142eb6cceaa7ac848510e55b6f091a7f76e9b293457db"
     }
   },
   "verification": {
     "hookBytecodePresent": true,
-    "poolState": {
+      "poolState": {
       "uniqueParticipants": 4,
       "positiveParticipants": 4,
       "restrictedParticipants": 1,
@@ -132,6 +132,8 @@
       "stabilizer": 3,
       "restricted": 4
     },
-    "rewardsVaultPoolBalanceWei": "525076889504992"
+    "rewardsVaultPoolBalanceWei": "0",
+    "penaltyCredits": "17446177346505",
+    "restrictedWalletPenaltyCredits": "17446177346505"
   }
 }

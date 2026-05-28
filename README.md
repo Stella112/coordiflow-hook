@@ -160,22 +160,22 @@ Use `xlayer_mainnet` for the official X Layer mainnet deployment.
 
 Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.json`.
 
-- Hook: `0x20Ac5a29faB456FEF778F2C4f2aab4C75dae4Ac0`
-- User actions helper: `0x440b7076764C6597Cf19aFD548b54Fb3aCa867D1`
-- USDT0 route pool ID: `0x630a11b29c4147d2eb3ddfd3754501050341e46e2271888422d090b75b87b7ae`
-- USDT0 route user actions helper: `0x85dd2ddF9614Df62699d1bC37e0d1bd5c8e7c735`
-- Pool ID: `0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577`
+- Hook: `0x42D04F47EB54d48D39EA177E418E322e1FaF4AC0`
+- User actions helper: `0xfb2C898DB77D6FECba6b6A9e4Cd8A0869F166734`
+- USDT0 route pool ID: `0x4dee7db9acada05cd1be6a1bb4d3d63e54dc83dad2cf625ace41c8b3efbaba6a`
+- USDT0 route user actions helper: `0x7e4B149Fd681cc2649a3CC7e8Bb3f786b3eAE33b`
+- Pool ID: `0x7dbd1af7f0d60d90005b959f35d17c09ddd8a145b689234d45dbf1ce599938a9`
 - Launch token: `0xACdF5260e2d89Cd29c3b09a32EEf3Ae6aB679081`
 - Quote token: `0xB20ECE2960cD24eA0E8476F397bC0F06BCBa2BE5`
-- Rewards vault: `0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D`
+- Rewards vault: `0xD26732420947b470B2d92F07B083254E7Bcd6Dfa`
 - Rehypothecation vault: `0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb`
 - Strategy reserve: `0xDc22FfCDfc4d14D35bF64E0c41FB608Ad2912808`
-- Signal provider: `0x8d89C6f5d2d961EC39027e5371f6044C96995D98`
-- Persona badge SBT: `0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd`
-- Aave-ready strategy reserve: `0x87B85324D59E4221f2a37713a85E67a89e2b63b7`
-- Builder agent: `0x0F80054095F3A4cb2A2d14b7326303102B56D137`
-- Stabilizer agent: `0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3`
-- Restricted agent: `0x64dD322ac2eADb4864c014E5206683a73B8055cd`
+- Signal provider: `0x904d734b523BFD94542f93A9a3a2d46e3aC6767A`
+- Persona badge SBT: `0x82b4Cb5AC9C68eB6cbbb4eFcAB637054AA43c815`
+- Aave-ready strategy reserve: `0x07062Ef73A544690Ea590B6e75715222f060fa6c`
+- Builder agent: `0xc313710fA15c76fFac68b90d016209Fd85598a42`
+- Stabilizer agent: `0x532f7C92cAB420689B7A324724790a20b7c2f406`
+- Restricted agent: `0x1f5a737Bef38ACFd3C2e51a2b07e8B0CE34d82F8`
 - PoolManager: `0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32`
 - PositionManager: `0xcF1eAFC6928dC385A342E7c6491D371d2871458B`
 - Permit2: `0x000000000022D473030F116dDEE9F6B43aC78BA3`
@@ -196,7 +196,7 @@ Mainnet verification reads:
 - X Layer intelligence proof: hook is connected to the signal provider; restricted wallet signal is `-3000 bps`, market momentum signal is `+500 bps`.
 - Persona badge proof: Seeder badge `#1`, Builder badge `#2`, Stabilizer badge `#3`, Restricted badge `#4`.
 - Aave integration: an Aave-compatible strategy reserve is deployed and ready for the official X Layer Aave pool address. The current official BGD Aave address book package did not expose an `AaveV3XLayer` constants file, so no unverified Aave pool address is hardcoded.
-- Current v1 mainnet rewards are real and OKB-funded. Automatic restricted-flow penalty accounting is implemented and tested in the v2 contracts in this repo; because hooks are immutable, making that ledger live for users requires deploying the v2 hook/vault and initializing a v2 pool.
+- Automatic restricted-flow penalty accounting is live in the v2 mainnet hook/vault. The v2 rewards vault reports `17,446,177,346,505` penalty-credit units for the v2 CFLOW/CQUOTE pool after a real Restricted round-trip scenario.
 
 ## X Layer Testnet Deployment
 
@@ -243,12 +243,12 @@ The dashboard can also send real wallet transactions:
 - approve and deposit CQUOTE into the rehypothecation vault
 - claim accrued OKB yield
 
-The rewards page reads automatic penalty getters when the connected vault exposes them. If the selected deployment is the current v1 mainnet vault, the dashboard shows that a v2 redeploy is required instead of inventing penalty-funded numbers.
+The rewards page reads automatic penalty getters from the v2 mainnet vault. Penalty values come from `penaltyCredits(poolId)` and `walletPenaltyCredits(poolId, wallet)`.
 
-USDT0 is enabled as a funded route. The current route was seeded with real USDT0 and CFLOW, then verified with a real `0.1 USDT0 -> CFLOW` swap:
+USDT0 is enabled as a v2 funded route. The current route was seeded with real USDT0 and CFLOW, then verified with a real `0.01 USDT0 -> CFLOW` swap:
 
-- USDT0 approve proof: `0xa46c92c4f72f6738c03166bfc29867110ec05df8caa1575a98dcb59352fd7740`
-- USDT0 swap proof: `0x1048a77f581d8c253433c27de7287e059197efd4aeb9bdc731103ca250214543`
+- USDT0 approve proof: `0xc2612e99e08bb33bad5b278e07ec14413e4762ed8985e4eae0f575649c848166`
+- USDT0 swap proof: `0xc56f7a3c3815820a274142eb6cceaa7ac848510e55b6f091a7f76e9b293457db`
 
 USDT and WOKB are displayed as official X Layer funding assets but remain disabled until funded CoordiFlow routes/pools are deployed for those assets; this keeps the dashboard verifiable instead of pretending unsupported routes exist.
 
