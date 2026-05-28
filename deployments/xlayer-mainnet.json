@@ -34,6 +34,26 @@
     "yieldPool": "100000000000000",
     "claimableYield": "100000000000000"
   },
+  "intelligence": {
+    "signalProvider": "0x8d89C6f5d2d961EC39027e5371f6044C96995D98",
+    "marketSignalBps": 500,
+    "builderSignalBps": 1000,
+    "stabilizerSignalBps": 600,
+    "restrictedSignalBps": -3000,
+    "source": "0x7b773c5b3acdcdebdc9e3223d7434ae915bd348a9a9962d437b83ba1cb9c2961"
+  },
+  "badges": {
+    "personaBadge": "0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd",
+    "seederBadge": 1,
+    "builderBadge": 2,
+    "stabilizerBadge": 3,
+    "restrictedBadge": 4
+  },
+  "aave": {
+    "strategyReserve": "0x87B85324D59E4221f2a37713a85E67a89e2b63b7",
+    "aavePool": "0x0000000000000000000000000000000000000000",
+    "status": "adapter deployed; waiting for official X Layer Aave pool address"
+  },
   "transactions": {
     "hookDeploy": "0x13c511c91a6e4a900407d70ecd968452df4caba10b8192f9ab36b2b842bf9ff4",
     "launchTokenDeploy": "0xcde5a8f295303b0cc777b8837ac372a32b726cffdb90f6638c87ed83719350b2",
@@ -68,6 +88,18 @@
       "returnFromStrategy": "0x76f85c0c0240ae58db8aa99d0896c474792fef8542aa132ce277c947daf2b3c1",
       "fundYield": "0xbb7f7446eef47b0fccf5a6f6a75ba86063a03eea199835163f0fd61b0a946b25",
       "accrueYield": "0xdd3c0e1f651328c364ce6bdc99aafcf93bc42dd728fd9e954cc0a5b4e266c738"
+    },
+    "signalsBadgesAave": {
+      "signalProviderDeploy": "0x22c44f8e5e8d6aea3f2c7bd92f342c0bbe1f18267db5124bee2c60b818a504e6",
+      "aaveReserveDeploy": "0x12383253f88bd174d09c3753f6b7679f24b5db2cfbaa05944a524356a68f6790",
+      "hookSetSignalProvider": "0xbd03eebe93879f0c63f1cbd85024ee9c4987a18bed81d018d13d77684ba8f066"
+    },
+    "personaBadgeProof": {
+      "badgeDeploy": "0x2437514832fe40444d7d4ce3e081a9339822f4d8dbb892574c884ad0b3260e3f",
+      "seederMint": "0xc41b4fb0784728b8abac4644b659ed19d3bcb08e56460a59513feddd935d4484",
+      "builderMint": "0x842b2788a8c5c7fbcc2c742245587d4a9e943502b589da6f8fcfc80c6e14d871",
+      "stabilizerMint": "0x296ba119b8c276e5d83b1426e3fc72a13b9ad988a58934db472bedf06675d20f",
+      "restrictedMint": "0x183242aeeb354cfebea542ce6094919cea0790b05bd6182d3f15a68b5e60aa66"
     }
   },
   "verification": {

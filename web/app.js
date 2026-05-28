@@ -9,6 +9,8 @@ const selectors = {
   availableAssets: "0x20124bce",
   deployedAssets: "0x1efa1881",
   yieldPool: "0x8f188dd4",
+  getSignal: "0x8dc09e01",
+  badgeOf: "0x26f61604",
 };
 
 const personas = ["Unclassified", "Seeder", "Builder", "Stabilizer", "Restricted"];
@@ -19,6 +21,8 @@ const deployments = {
     poolId: "0x8f8b8bbfaa6be2f4aa115b301e38c2302279f9c702ac6c6c496d352412c62577",
     vault: "0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D",
     rehypothecationVault: "0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb",
+    signalProvider: "0x8d89C6f5d2d961EC39027e5371f6044C96995D98",
+    badgeContract: "0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd",
     rpc: "https://rpc.xlayer.tech",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
     participants: {
@@ -34,6 +38,8 @@ const deployments = {
     poolId: "0x660353cea0aed4458ad5404c32f8033627539819271ca4738d325bd063370ac2",
     vault: "0x90407637D45588F0663b722438C6452c637c51d2",
     rehypothecationVault: "",
+    signalProvider: "",
+    badgeContract: "",
     rpc: "https://testrpc.xlayer.tech/terigon",
     wallet: "0xE66581C8f5B91d257b5EAa90168B547Ba28f8e19",
     participants: {
@@ -57,6 +63,8 @@ const els = {
   poolId: document.querySelector("#poolId"),
   vaultAddress: document.querySelector("#vaultAddress"),
   rehypothecationVault: document.querySelector("#rehypothecationVault"),
+  signalProvider: document.querySelector("#signalProvider"),
+  badgeContract: document.querySelector("#badgeContract"),
   walletAddress: document.querySelector("#walletAddress"),
   rpcUrl: document.querySelector("#rpcUrl"),
   status: document.querySelector("#status"),
@@ -75,6 +83,8 @@ const els = {
   idleDeposits: document.querySelector("#idleDeposits"),
   deployedAssets: document.querySelector("#deployedAssets"),
   claimableYield: document.querySelector("#claimableYield"),
+  walletSignal: document.querySelector("#walletSignal"),
+  personaBadge: document.querySelector("#personaBadge"),
   personaName: document.querySelector("#personaName"),
   personaSummary: document.querySelector("#personaSummary"),
   buyVolume: document.querySelector("#buyVolume"),
@@ -130,6 +140,8 @@ function applyDeployment(name) {
   els.poolId.value = deployment.poolId;
   els.vaultAddress.value = deployment.vault;
   els.rehypothecationVault.value = deployment.rehypothecationVault;
+  els.signalProvider.value = deployment.signalProvider;
+  els.badgeContract.value = deployment.badgeContract;
   els.rpcUrl.value = deployment.rpc;
   els.walletAddress.value = deployment.wallet;
   els.networkBadge.textContent = `Verified on ${deployment.label}`;
@@ -157,6 +169,7 @@ async function refresh() {
     renderWalletStats(decodeWords(walletStats));
     await renderRewards(poolId, wallet);
     await renderRehypothecation(wallet);
+    await renderSignalsAndBadge(poolId, wallet);
     drawSignal();
 
     setStatus("Loaded verified on-chain state.");
@@ -235,6 +248,31 @@ async function renderRehypothecation(wallet) {
   els.idleDeposits.textContent = `${formatTokenUnits(decodeWords(deposits)[0])} CQUOTE`;
   els.deployedAssets.textContent = `${formatTokenUnits(decodeWords(deployed)[0])} CQUOTE`;
   els.claimableYield.textContent = `${formatTokenUnits(decodeWords(yieldAmount)[0])} OKB`;
+}
+
+async function renderSignalsAndBadge(poolId, wallet) {
+  const signalProvider = els.signalProvider.value.trim();
+  const badgeContract = els.badgeContract.value.trim();
+
+  if (signalProvider) {
+    assertAddress(signalProvider, "Signal provider");
+    const result = await ethCall(signalProvider, selectors.getSignal + strip0x(poolId) + padAddress(wallet));
+    const words = decodeWords(result);
+    const walletSignal = signed16(words[1]);
+    const marketSignal = signed16(words[2]);
+    els.walletSignal.textContent = `${walletSignal > 0 ? "+" : ""}${walletSignal.toString()} / ${marketSignal > 0 ? "+" : ""}${marketSignal.toString()} bps`;
+  } else {
+    els.walletSignal.textContent = "Not set";
+  }
+
+  if (badgeContract) {
+    assertAddress(badgeContract, "Persona badge");
+    const result = await ethCall(badgeContract, selectors.badgeOf + strip0x(poolId) + padAddress(wallet));
+    const tokenId = decodeWords(result)[0];
+    els.personaBadge.textContent = tokenId === 0n ? "None" : `#${tokenId.toString()}`;
+  } else {
+    els.personaBadge.textContent = "Not set";
+  }
 }
 
 function renderWalletStats(words) {

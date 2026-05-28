@@ -163,6 +163,9 @@ Current deployed mainnet addresses are recorded in `deployments/xlayer-mainnet.j
 - Rewards vault: `0x95dbE7EE5CF85baB9efcE768a44D1f1c1528488D`
 - Rehypothecation vault: `0xf8875dDE68F71f6BA448C5B58b43D4bCAFe93bdb`
 - Strategy reserve: `0xDc22FfCDfc4d14D35bF64E0c41FB608Ad2912808`
+- Signal provider: `0x8d89C6f5d2d961EC39027e5371f6044C96995D98`
+- Persona badge SBT: `0xD85e011D8F1CFCaA4d379687aA3FAEdc45c858Cd`
+- Aave-ready strategy reserve: `0x87B85324D59E4221f2a37713a85E67a89e2b63b7`
 - Builder agent: `0x0F80054095F3A4cb2A2d14b7326303102B56D137`
 - Stabilizer agent: `0xa1638c2BF6Ef24aAFfBBA11520ED993AcC7Eb3E3`
 - Restricted agent: `0x64dD322ac2eADb4864c014E5206683a73B8055cd`
@@ -177,6 +180,9 @@ Mainnet verification reads:
 - Mainnet personas: Builder `2`, Stabilizer `3`, Restricted `4`.
 - Rewards vault pool balance after real reward accrual: `525076889504992` wei.
 - Rehypothecation proof: `10 CQUOTE` deposited by a positive persona, `3 CQUOTE` currently deployed in the strategy reserve, and `0.0001 OKB` claimable yield accrued on-chain.
+- X Layer intelligence proof: hook is connected to the signal provider; restricted wallet signal is `-3000 bps`, market momentum signal is `+500 bps`.
+- Persona badge proof: Seeder badge `#1`, Builder badge `#2`, Stabilizer badge `#3`, Restricted badge `#4`.
+- Aave integration: an Aave-compatible strategy reserve is deployed and ready for the official X Layer Aave pool address. The current official BGD Aave address book package did not expose an `AaveV3XLayer` constants file, so no unverified Aave pool address is hardcoded.
 
 ## X Layer Testnet Deployment
 
