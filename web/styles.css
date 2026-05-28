@@ -1,6 +1,6 @@
 /* ================================================================
    CoordiFlow — Complete Design System
-   Exact replica of alpha-coordi-flow.lovable.app
+   Exact replica of alpha-coordi-flow UI
    ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -17,7 +17,7 @@
   --text-dim:    rgba(238,242,248,0.85);
   --muted:       #8a9cad;
 
-  /* primary — exact Lovable oklch teal-cyan */
+  /* primary — exact UI oklch teal-cyan */
   --p:           oklch(0.88 0.14 210);
   --p-glow:      oklch(0.88 0.14 210 / 0.28);
   --p-dim:       oklch(0.88 0.14 210 / 0.1);
