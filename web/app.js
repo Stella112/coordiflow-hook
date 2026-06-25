@@ -20,6 +20,7 @@ const selectors = {
   addLiquidity: "0xc9158c51",
   claimRewards: "0xbd66528a",
   deposit: "0xb6b55f25",
+  withdraw: "0x2e1a7d4d",
   claimYieldTx: "0x406cf229",
   badgeMint: "0x509d58f8",
 };
@@ -202,6 +203,7 @@ const els = {
   rehypDepositAmount: one("#rehypDepositAmount"),
   approveRehyp: one("#approveRehyp"),
   depositRehyp: one("#depositRehyp"),
+  withdrawRehyp: one("#withdrawRehyp"),
   claimYieldButton: one("#claimYield"),
   mintBadge: one("#mintBadge"),
   coordinationScore: one("#coordinationScore"),
@@ -301,6 +303,7 @@ on(els.addLiquidity, "click", addLiquidity);
 on(els.claimRewards, "click", claimRewards);
 on(els.approveRehyp, "click", approveRehypothecation);
 on(els.depositRehyp, "click", depositRehypothecation);
+on(els.withdrawRehyp, "click", withdrawRehypothecation);
 on(els.claimYieldButton, "click", claimYield);
 on(els.swapRoute, "change", () => {
   updateSwapRouteUi();
@@ -640,6 +643,12 @@ async function depositRehypothecation() {
   const vault = assertAddress(els.rehypothecationVault.value.trim(), "Rehypothecation vault");
   const amount = parseAmount(els.rehypDepositAmount.value);
   await sendAndTrack(vault, selectors.deposit + encodeUint(amount), "Rehypothecation deposit sent...");
+}
+
+async function withdrawRehypothecation() {
+  const vault = assertAddress(els.rehypothecationVault.value.trim(), "Rehypothecation vault");
+  const amount = parseAmount(els.rehypDepositAmount.value);
+  await sendAndTrack(vault, selectors.withdraw + encodeUint(amount), "Rehypothecation withdrawal sent...");
 }
 
 async function claimYield() {
